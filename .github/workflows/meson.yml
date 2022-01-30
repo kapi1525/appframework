@@ -23,7 +23,7 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: windows-sandbox
         path: ./bin/sandbox.exe
 
 
@@ -46,5 +46,5 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: linux-sandbox
         path: ./bin/sandbox
