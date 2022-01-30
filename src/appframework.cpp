@@ -68,7 +68,7 @@ std::filesystem::path app::get_appdata_path(std::string name) {
     appdata = std::filesystem::path(localappdata) / name;
     #elif __linux__
     std::string home = getpwuid(getuid())->pw_dir;
-    appdata(home / ".config" / name);
+    appdata(home / std::string(".config") / name);
     #endif
     appdata.make_preferred();
     std::filesystem::create_directories(appdata);
