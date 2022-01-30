@@ -70,9 +70,9 @@ std::string app::get_executable_path() {
     #ifdef _WIN32
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
-    return std::filesystem::path(Path).parent_path();
+    return std::filesystem::path(Path).parent_path().c_str();
     #elif __linux__
-    return std::filesystem::read_symlink("/proc/self/exe").parent_path();
+    return std::filesystem::read_symlink("/proc/self/exe").parent_path().c_str();
     #endif
 }
 
