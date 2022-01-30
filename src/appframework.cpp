@@ -77,7 +77,6 @@ std::filesystem::path app::get_appdata_path(std::string name) {
 
 std::filesystem::path app::get_executable_path() {
     #ifdef _WIN32
-    return "";
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
     return std::filesystem::path(Path).parent_path();
