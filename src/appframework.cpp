@@ -67,7 +67,7 @@ std::filesystem::path app::get_appdata_path(std::string name) {
     CoTaskMemFree(pwstr_localappdata);
     appdata = std::filesystem::path(localappdata) / name;
     #elif __linux__
-    std::string home = getpwuid(getuid())->pw_dir;
+    std::filesystem::path home(getpwuid(getuid())->pw_dir);
     appdata(home / std::string(".config") / name);
     #endif
     appdata.make_preferred();
