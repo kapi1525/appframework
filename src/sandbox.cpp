@@ -6,7 +6,8 @@ class sandbox : public app {
 public:
     sandbox(args_t args_f) {
         args = args_f; // save args so they can be used by get_arg() and find_arg()
-        std::cout << get_appdata_path("sandbox");
+        std::cout << get_executable_name() << "\n";
+        std::cout << get_executable_path() << "\n";
     }
 
     void run() {

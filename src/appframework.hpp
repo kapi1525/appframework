@@ -1,7 +1,7 @@
 #pragma once
 // Simple framework to help me with simple terminal programs
-// Theres alot of random stuff here, you shouldnt realy use it.
-// Works on windows and linux
+// I just add random stuff here that i happen need, you shouldnt really use it.
+// Works on windows (msvc and MingW) and linux (gcc probably clang also but i didnt test it).
 
 
 // Standard C++ stuff
@@ -21,7 +21,7 @@
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
-    #include <shlobj.h>
+    #include <shlobj.h>     // SHGetKnownFolderPath
 #endif // _WIN32
 
 // linux stuff
