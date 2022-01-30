@@ -3,10 +3,10 @@
         {
             "name": "windows",
             "includePath": [
-                "${workspaceFolder}/src/**"
+                "${workspaceFolder}/src/**",
+                "/usr/x86_64-w64-mingw32/sys-root/mingw/include"
             ],
-            "defines": [
-            ],
+            "defines": [],
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "windows-gcc-x64",
@@ -17,8 +17,7 @@
             "includePath": [
                 "${workspaceFolder}/src/**"
             ],
-            "defines": [
-            ],
+            "defines": [],
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "linux-gcc-x64",

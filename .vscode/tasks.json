@@ -47,6 +47,21 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "windows cross build",
+            "type": "shell",
+            "windows": {
+                "command": "cls && meson --buildtype release bin && ninja -C bin"
+            },
+            "linux": {
+                "command": "clear && rm bin -r -f && /home/kacper/msvc-wine/vs/bin/x86/msvcenv.sh && WINEDEBUG=-all meson --cross-file ./cross_linux_to_windows.ini --buildtype release bin && ninja -C bin"
+            },
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
