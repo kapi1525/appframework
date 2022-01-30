@@ -58,22 +58,31 @@ std::string app::get_arg(std::string arg) {
 }
 
 
-std::string app::get_appdata_path() {
+std::filesystem::path app::get_appdata_path(std::string name) {
+    std::filesystem::path appdata;
     #ifdef _WIN32
-    return ".";
+    PWSTR pwstr_localappdata;
+    assert(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &pwstr_localappdata) == S_OK);
+    std::wstring localappdata = pwstr_localappdata;
+    CoTaskMemFree(pwstr_localappdata);
+    appdata = std::filesystem::path(localappdata) / name;
     #elif __linux__
-    return std::string(getpwuid(getuid())->pw_dir) + "/.config";
+    std::string home = getpwuid(getuid())->pw_dir;
+    appdata(home / ".config" / name);
     #endif
+    appdata.make_preferred();
+    std::filesystem::create_directories(appdata);
+    return appdata;
 }
 
-std::string app::get_executable_path() {
+std::filesystem::path app::get_executable_path() {
     #ifdef _WIN32
     return "";
-    //TCHAR Path[MAX_PATH];
-    //GetModuleFileName(NULL, Path, MAX_PATH);
-    //return std::string(std::filesystem::path(Path).parent_path().c_str());
+    TCHAR Path[MAX_PATH];
+    GetModuleFileName(NULL, Path, MAX_PATH);
+    return std::filesystem::path(Path).parent_path();
     #elif __linux__
-    return std::filesystem::read_symlink("/proc/self/exe").parent_path().c_str();
+    return std::filesystem::read_symlink("/proc/self/exe").parent_path();
     #endif
 }
 

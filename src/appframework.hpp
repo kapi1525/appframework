@@ -13,11 +13,15 @@
 #include <vector>
 #include <deque>
 
+// Standard C stuff
+#include <assert.h>
+
 
 // windows stuff
 #ifdef _WIN32
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
+    #include <shlobj.h>
 #endif // _WIN32
 
 // linux stuff
@@ -44,11 +48,14 @@ public:
     // stuff you can use
     args_t args;
 
-    bool find_arg(std::string arg);        // Checks if specified argument was passed (will check for "-a" "--arg")
-    std::string get_arg(std::string arg);  // Return string passed with argument (will check for "-a" "--arg")
+    bool find_arg(std::string arg);              // Checks if specified argument was passed (will check for "-a" "--arg")
+    std::string get_arg(std::string arg);        // Return string passed with argument (will check for "-a" "--arg")
 
-    std::string get_appdata_path();        // Returns %appdata% in Windows and /home/user/.config in linux
-    std::string get_executable_path();     // Returns path of executable
-    std::string get_executable_name();     // Returns name of executable
+    // Returns path where you can save configuration files per user.
+    // AppData/Local/Appname in windows and /home/user/.config/Appname in linux
+    std::filesystem::path get_appdata_path(std::string name); 
+                                                              
+    std::filesystem::path get_executable_path(); // Returns path of executable
+    std::string get_executable_name();           // Returns name of executable
 };
 
