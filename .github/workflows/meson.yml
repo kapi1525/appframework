@@ -12,7 +12,7 @@ jobs:
       with:
         python-version: '3.x'
     
-    - run: choco upgrade mingw
+    - run: choco upgrade mingw --version=9.4.0
 
     - run: pip install meson ninja
 
