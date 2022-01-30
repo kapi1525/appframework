@@ -8,14 +8,12 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
-    
-    - run: choco upgrade mingw --version=9.4.0
 
     - run: pip install meson ninja
-
     - run: meson --buildtype release bin
 
     - run:  ninja -C bin
