@@ -8,11 +8,12 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: egor-tensin/setup-mingw@v2
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
     
+    - run: choco upgrade mingw
+
     - run: pip install meson ninja
 
     - run: meson --buildtype release bin
