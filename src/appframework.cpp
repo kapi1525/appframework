@@ -68,9 +68,9 @@ std::string app::get_appdata_path() {
 
 std::string app::get_executable_path() {
     #ifdef _WIN32
-    //TCHAR Path[MAX_PATH];
-    //GetModuleFileName(NULL, Path, MAX_PATH);
-    //return std::filesystem::path(Path).parent_path();
+    TCHAR Path[MAX_PATH];
+    GetModuleFileName(NULL, Path, MAX_PATH);
+    return std::filesystem::path(Path).parent_path();
     #elif __linux__
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
     #endif
