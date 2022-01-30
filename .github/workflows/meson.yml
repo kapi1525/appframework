@@ -1,0 +1,50 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+
+  windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    
+    - run: pip install meson ninja
+
+    - run: meson --buildtype release bin
+      env:
+        CC: gcc
+
+    - run:  ninja -C bin
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: ./bin/sandbox.exe
+
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+
+    - run: pip install meson ninja
+
+    - run: meson --buildtype release bin
+      env:
+        CC: gcc
+
+    - run:  ninja -C bin
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: ./bin/sandbox
