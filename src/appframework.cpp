@@ -87,7 +87,9 @@ std::filesystem::path app::get_executable_path() {
 
 std::string app::get_executable_name() {
     #ifdef _WIN32
-    return ".";
+    TCHAR Path[MAX_PATH];
+    GetModuleFileName(NULL, Path, MAX_PATH);
+    return std::filesystem::path(Path).filename();
     #elif __linux__
     std::string result;
     std::ifstream("/proc/self/comm") >> result;
