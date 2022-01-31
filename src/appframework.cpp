@@ -33,12 +33,38 @@ version_t::operator const char*() {
 terminal::terminal() {
     #ifdef _WIN32
     // Configure windows terminal to handle ANSI escape sequences
-    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    /*HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     assert(hOut != INVALID_HANDLE_VALUE);
     DWORD dwMode = 0;
     assert(GetConsoleMode(hOut, &dwMode));
     dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-    assert(SetConsoleMode(hOut, dwMode));
+    assert(SetConsoleMode(hOut, dwMode));*/
+
+    // Set output mode to handle virtual terminal sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    assert(hOut != INVALID_HANDLE_VALUE);
+    assert(hIn != INVALID_HANDLE_VALUE);
+
+    DWORD dwOriginalOutMode = 0;
+    DWORD dwOriginalInMode = 0;
+    assert(GetConsoleMode(hOut, &dwOriginalOutMode));
+    assert(GetConsoleMode(hIn, &dwOriginalInMode));
+
+    DWORD dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
+    DWORD dwRequestedInModes = ENABLE_VIRTUAL_TERMINAL_INPUT;
+
+    DWORD dwOutMode = dwOriginalOutMode | dwRequestedOutModes;
+    DWORD dwInMode = dwOriginalInMode | ENABLE_VIRTUAL_TERMINAL_INPUT;
+
+    if (!SetConsoleMode(hOut, dwOutMode)) {
+        // we failed to set both modes, try to step down mode gracefully.
+        dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        dwOutMode = dwOriginalOutMode | dwRequestedOutModes;
+        assert(SetConsoleMode(hOut, dwOutMode));
+    }
+
+    assert(SetConsoleMode(hIn, dwInMode));
     #endif // _WIN32
 }
 
@@ -134,7 +160,8 @@ void terminal::reset_back_color() {
 
 
 void terminal::reset() {
-    /*reset_bold();
+    /* :)
+    reset_bold();
     reset_faint();
     reset_italic();
     reset_underline();
@@ -143,7 +170,8 @@ void terminal::reset() {
     reset_invisible();
     reset_strikethrough();
     reset_color();
-    reset_back_color();*/
+    reset_back_color();
+    */
     std::cout << "\x1B[0m";
 }
 
