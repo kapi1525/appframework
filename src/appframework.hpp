@@ -38,6 +38,8 @@
 typedef std::deque<std::string> args_t;    // Arguments type
 args_t create_args(int argc, char const *argv[]);
 
+
+// Use to store version information. Can be converted to string.
 struct version_t {
     int major;
     int minor;
