@@ -58,10 +58,32 @@ struct rgb_t {
 // Terminal class, use to control terminal.
 class terminal {
 public:
+    terminal();
+    ~terminal();
+
+    // Note: Some terminals may not support some of thiese:
+    void set_bold();
+    void set_faint();
+    void set_italic();
+    void set_underline();
+    void set_blinking();
+    void set_inverse();         // Repleaces Foreground(set_color) and background(set_back_color) colors together
+    void set_invisible();
+    void set_strikethrough();
+
+    void reset_bold();          // Resets both bold and faint
+    void reset_faint();         // Resets both bold and faint
+    void reset_italic();
+    void reset_underline();
+    void reset_blinking();
+    void reset_inverse();
+    void reset_invisible();
+    void reset_strikethrough();
+
     // Set terminal output colors using ANSI escape codes
     void set_color(rgb_t color);
-    void reset_color();
     void set_back_color(rgb_t color);
+    void reset_color();
     void reset_back_color();
 
     // Resets everything

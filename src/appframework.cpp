@@ -30,17 +30,102 @@ version_t::operator const char*() {
 }
 
 
+terminal::terminal() {
+    #ifdef _WIN32
+    // Configure windows terminal to handle ANSI escape sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    assert(hOut != INVALID_HANDLE_VALUE);
+    DWORD dwMode = 0;
+    assert(GetConsoleMode(hOut, &dwMode));
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    assert(SetConsoleMode(hOut, dwMode));
+    #endif // _WIN32
+}
+
+terminal::~terminal() {
+    // Reset terminal at the end.
+    reset();
+}
+
+
+void terminal::set_bold() {
+    std::cout << "\x1B[1m";
+}
+
+void terminal::set_faint() {
+    std::cout << "\x1B[2m";
+}
+
+void terminal::set_italic() {
+    std::cout << "\x1B[3m";
+}
+
+void terminal::set_underline() {
+    std::cout << "\x1B[4m";
+}
+
+void terminal::set_blinking() {
+    std::cout << "\x1B[5m";
+}
+
+void terminal::set_inverse() {
+    std::cout << "\x1B[7m";
+}
+
+void terminal::set_invisible() {
+    std::cout << "\x1B[8m";
+}
+
+void terminal::set_strikethrough() {
+    std::cout << "\x1B[9m";
+}
+
+
+void terminal::reset_bold() {
+    std::cout << "\x1B[22m";
+}
+
+void terminal::reset_faint() {
+    std::cout << "\x1B[23m";
+}
+
+void terminal::reset_italic() {
+    std::cout << "\x1B[24m";
+}
+
+void terminal::reset_underline() {
+    std::cout << "\x1B[25m";
+}
+
+void terminal::reset_blinking() {
+    std::cout << "\x1B[26m";
+}
+
+void terminal::reset_inverse() {
+    std::cout << "\x1B[27m";
+}
+
+void terminal::reset_invisible() {
+    std::cout << "\x1B[28m";
+}
+
+void terminal::reset_strikethrough() {
+    std::cout << "\x1B[29m";
+}
+
+
 
 void terminal::set_color(rgb_t color) {
     std::cout << "\x1B[38;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
 }
 
-void terminal::reset_color() {
-    std::cout << "\x1B[39m";
-}
-
 void terminal::set_back_color(rgb_t color) {
     std::cout << "\x1B[48;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
+}
+
+
+void terminal::reset_color() {
+    std::cout << "\x1B[39m";
 }
 
 void terminal::reset_back_color() {
@@ -49,6 +134,16 @@ void terminal::reset_back_color() {
 
 
 void terminal::reset() {
+    /*reset_bold();
+    reset_faint();
+    reset_italic();
+    reset_underline();
+    reset_blinking();
+    reset_inverse();
+    reset_invisible();
+    reset_strikethrough();
+    reset_color();
+    reset_back_color();*/
     std::cout << "\x1B[0m";
 }
 
