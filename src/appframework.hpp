@@ -88,6 +88,21 @@ public:
 
     // Resets everything
     void reset();
+
+    // Logging stuff
+    enum class loglevel {
+        fatal,      // Fatal error that program cant recover from.
+        error,
+        warn,
+        info
+    };
+
+    //loglevel logging_level = loglevel::info;
+
+    void fatal(std::string message);
+    void error(std::string message);
+    void  warn(std::string message);
+    void  info(std::string message);
 };
 
 
