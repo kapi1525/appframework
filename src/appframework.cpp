@@ -30,6 +30,30 @@ version_t::operator const char*() {
 }
 
 
+
+void terminal::set_color(rgb_t color) {
+    std::cout << "\x1B[38;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
+}
+
+void terminal::reset_color() {
+    std::cout << "\x1B[39m";
+}
+
+void terminal::set_back_color(rgb_t color) {
+    std::cout << "\x1B[48;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
+}
+
+void terminal::reset_back_color() {
+    std::cout << "\x1B[49m";
+}
+
+
+void terminal::reset() {
+    std::cout << "\x1B[0m";
+}
+
+
+
 bool app::find_arg(std::string arg) {
     if (arg.size() == 1) {
         for (size_t i = 0; i < args.size(); i++) {

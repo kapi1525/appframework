@@ -47,6 +47,28 @@ struct version_t {
 };
 
 
+// RGB colors
+struct rgb_t {
+    size_t red;
+    size_t green;
+    size_t blue;
+};
+
+
+// Terminal class, use to control terminal.
+class terminal {
+public:
+    // Set terminal output colors using ANSI escape codes
+    void set_color(rgb_t color);
+    void reset_color();
+    void set_back_color(rgb_t color);
+    void reset_back_color();
+
+    // Resets everything
+    void reset();
+};
+
+
 // Main app class
 class app {
 public:
@@ -68,5 +90,7 @@ public:
                                                               
     std::filesystem::path get_executable_path(); // Returns path of executable
     std::string get_executable_name();           // Returns name of executable
+
+    ::terminal terminal;                         // Terminal class, use to control terminal.
 };
 
