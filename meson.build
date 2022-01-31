@@ -6,7 +6,7 @@ project('sandbox', 'c', 'cpp',
 appframework_files = files('src/appframework.cpp')
 appframework_includes = include_directories('src')
 
-libappframework = shared_library('appframework', appframework_files, dependencies: dependency('threads'))
+libappframework = static_library('appframework', appframework_files, dependencies: dependency('threads'))
 
 appframework_dep = declare_dependency(include_directories: appframework_includes, link_with: libappframework)
 
