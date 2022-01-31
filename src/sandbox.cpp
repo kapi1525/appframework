@@ -8,6 +8,7 @@ public:
         args = args_f; // save args so they can be used by get_arg() and find_arg()
         std::cout << get_executable_name() << "\n";
         std::cout << get_executable_path() << "\n";
+        std::cout << version << "\n";
     }
 
     void run() {
@@ -19,7 +20,7 @@ public:
 
 
 private:
-
+    version_t version = {1,0,0};
 };
 
 

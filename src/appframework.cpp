@@ -22,6 +22,12 @@ args_t create_args(int argc, char const *argv[]) {
 }
 
 
+version_t::operator const char*() {
+    temp.clear();
+    temp = "v" + std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
+    return temp.c_str();
+}
+
 
 bool app::find_arg(std::string arg) {
     if (arg.size() == 1) {

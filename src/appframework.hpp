@@ -9,12 +9,14 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <sstream>
 #include <array>
 #include <vector>
 #include <deque>
 
 // Standard C stuff
 #include <assert.h>
+#include <string.h>
 
 
 // windows stuff
@@ -35,6 +37,17 @@
 
 typedef std::deque<std::string> args_t;    // Arguments type
 args_t create_args(int argc, char const *argv[]);
+
+struct version_t {
+    int major;
+    int minor;
+    int patch;
+
+    std::string temp = std::string();
+
+    operator const char*();
+};
+
 
 // Main app class
 class app {
