@@ -9,14 +9,10 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
-#include <sstream>
-#include <array>
-#include <vector>
 #include <deque>
 
 // Standard C stuff
 #include <assert.h>
-#include <string.h>
 
 
 // windows stuff
