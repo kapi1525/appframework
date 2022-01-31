@@ -11,6 +11,11 @@ app::app(args_t args_f) {
 app::~app() {
 }
 
+void app::exit(int status) {
+    delete this;        // Delete app to call destructor on everything
+    ::exit(status);     // Exit
+}
+
 
 
 args_t create_args(int argc, char const *argv[]) {

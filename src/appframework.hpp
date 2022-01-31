@@ -100,6 +100,8 @@ public:
 
     virtual void run() = 0;
 
+    void exit(int status);      // Fancy version of exit() that calls destructor of app for you.
+
     // stuff you can use
     args_t args;
 
