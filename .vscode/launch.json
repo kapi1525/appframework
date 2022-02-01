@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/sandbox",
+            "program": "${workspaceFolder}/${config:mesonbuild.buildFolder}/sandbox",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
