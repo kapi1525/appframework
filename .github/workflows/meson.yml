@@ -12,6 +12,7 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
+        cache: 'pip'
 
     - run: pip install meson ninja
     - run: meson --buildtype release bin
@@ -31,6 +32,7 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
+        cache: 'pip'
 
     - run: pip install meson ninja
 
