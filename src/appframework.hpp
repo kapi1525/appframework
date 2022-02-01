@@ -117,6 +117,9 @@ public:
 
     void exit(int status);      // Fancy version of exit() that calls destructor of app for you.
 
+    // Framework version
+    version_t appframework_version = {0,1,0};
+
     // stuff you can use
     args_t args;
 
