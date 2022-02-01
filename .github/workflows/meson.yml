@@ -8,15 +8,16 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: ilammy/msvc-dev-cmd@v1.10.0
     - uses: actions/setup-python@v2
       with:
         python-version: '3.x'
         cache: 'pip'
+    
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
 
-    - run: pip install meson ninja
+    - run: pip install meson ninja -r requirements.txt
+
     - run: meson --buildtype release bin
-
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
@@ -34,12 +35,12 @@ jobs:
         python-version: '3.x'
         cache: 'pip'
 
-    - run: pip install meson ninja
+    - run: pip install meson ninja -r requirements.txt
 
     - run: meson --buildtype release bin
       env:
         CC: gcc
-
+        
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
