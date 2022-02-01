@@ -4,64 +4,38 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
-            "type": "shell",
-            "windows": {
-                "command": "cls && ninja -C bin"
-            },
-            "linux": {
-                "command": "clear && ninja -C bin"
-            },
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "type": "meson",
+            "mode": "build",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "build"
         },
         {
-            "label": "rebuild",
+            "label": "configure debug",
             "type": "shell",
+            "command": "clear && rm bin -r -f && meson bin",
             "windows": {
-                "command": "cls && meson bin && ninja -C bin"
+                "command": "cls && meson bin"
             },
-            "linux": {
-                "command": "clear && rm bin -r -f && meson bin && ninja -C bin"
-            },
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
-            "label": "release build",
+            "label": "configure release",
             "type": "shell",
+            "command": "clear && rm bin -r -f && meson --buildtype release bin",
             "windows": {
-                "command": "cls && meson --buildtype release bin && ninja -C bin"
+                "command": "cls && meson --buildtype release bin"
             },
-            "linux": {
-                "command": "clear && rm bin -r -f && meson --buildtype release bin && ninja -C bin"
-            },
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
-            "label": "windows cross build",
+            "label": "configure cross to windows",
             "type": "shell",
+            "command": "clear && rm bin -r -f && /home/kacper/msvc-wine/vs/bin/x86/msvcenv.sh && WINEDEBUG=-all meson --cross-file ./cross_linux_to_windows.ini --buildtype release bin",
             "windows": {
-                "command": "cls && meson --buildtype release bin && ninja -C bin"
+                "command": "echo nope"
             },
-            "linux": {
-                "command": "clear && rm bin -r -f && /home/kacper/msvc-wine/vs/bin/x86/msvcenv.sh && WINEDEBUG=-all meson --cross-file ./cross_linux_to_windows.ini --buildtype release bin && ninja -C bin"
-            },
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         }
     ]
 }
