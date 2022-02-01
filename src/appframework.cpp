@@ -182,31 +182,39 @@ void terminal::reset() {
 
 
 void terminal::fatal(std::string message) {
-    set_color({0,0,0});
-    set_back_color({255,0,0});
-    set_bold();
-    std::cout << "[FATAL] " << message;
-    reset();
-    std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
+    if(logging_level >= loglevel::fatal) {
+        set_color({0,0,0});
+        set_back_color({255,0,0});
+        set_bold();
+        std::cout << "[FATAL] " << message;
+        reset();
+        std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
+    }
 }
 
 void terminal::error(std::string message) {
-    set_color({255,0,0});
-    set_bold();
-    std::cout << "[ERROR] " << message;
-    reset();
-    std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
+    if(logging_level >= loglevel::error) {
+        set_color({255,0,0});
+        set_bold();
+        std::cout << "[ERROR] " << message;
+        reset();
+        std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
+    }
 }
 
 void terminal::warn(std::string message) {
-    set_color({255,255,0});
-    std::cout << "[WARN ] " << message;
-    reset();
-    std::cout << "\n";                      // After reseting to fix color glitches in gnome terminal.
+    if(logging_level >= loglevel::warn) {
+        set_color({255,255,0});
+        std::cout << "[WARN ] " << message;
+        reset();
+        std::cout << "\n";                      // After reseting to fix color glitches in gnome terminal.
+    }
 }
 
 void terminal::info(std::string message) {
-    std::cout << "[info ] " << message << "\n";
+    if(logging_level >= loglevel::info) {
+        std::cout << "[info ] " << message << "\n";
+    }
 }
 
 

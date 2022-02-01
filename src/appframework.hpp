@@ -97,7 +97,7 @@ public:
         info
     };
 
-    //loglevel logging_level = loglevel::info;
+    loglevel logging_level = loglevel::info;
 
     void fatal(std::string message);
     void error(std::string message);
