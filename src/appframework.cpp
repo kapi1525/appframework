@@ -147,11 +147,11 @@ void terminal::reset_strikethrough() {
 
 
 void terminal::set_color(rgb_t color) {
-    std::cout << "\x1B[38;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
+    std::cout << "\x1B[38;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
 }
 
 void terminal::set_back_color(rgb_t color) {
-    std::cout << "\x1B[48;2;" << color.red << ";" << color.green << ";" << color.blue << "m";
+    std::cout << "\x1B[48;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
 }
 
 

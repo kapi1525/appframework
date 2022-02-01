@@ -49,9 +49,9 @@ struct version_t {
 
 // RGB colors
 struct rgb_t {
-    size_t red;
-    size_t green;
-    size_t blue;
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
 };
 
 

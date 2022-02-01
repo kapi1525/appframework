@@ -8,41 +8,43 @@ using namespace std::chrono_literals;
 class sandbox : public app {
 public:
     sandbox(args_t args_f) {
+        sizeof(rgb_t);
+
         args = args_f; // save args so they can be used by get_arg() and find_arg()
         std::cout << get_executable_name() << "\n";
         std::cout << get_executable_path() << "\n";
         std::cout << "Sandbox " << version << " build using appframework " << appframework_version << "\n";
 
         // Test RGB
-        for (size_t color = 0; color < 255; color++) {
+        for (uint8_t color = 0; color < 255; color++) {
             terminal.set_color({color, 0, 0});
             std::cout << "█";
         }
 
         std::cout << "\n";
 
-        for (size_t color = 0; color < 255; color++) {
+        for (uint8_t color = 0; color < 255; color++) {
             terminal.set_color({color, color, 0});
             std::cout << "█";
         }
 
         std::cout << "\n";
 
-        for (size_t color = 0; color < 255; color++) {
+        for (uint8_t color = 0; color < 255; color++) {
             terminal.set_color({0, color, color});
             std::cout << "█";
         }
 
         std::cout << "\n";
 
-        for (size_t color = 0; color < 255; color++) {
+        for (uint8_t color = 0; color < 255; color++) {
             terminal.set_color({0, 0, color});
             std::cout << "█";
         }
 
         std::cout << "\n";
 
-        for (size_t color = 0; color < 255; color++) {
+        for (uint8_t color = 0; color < 255; color++) {
             terminal.set_color({color, 0, color});
             std::cout << "█";
         }
