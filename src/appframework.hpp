@@ -32,7 +32,10 @@
 
 
 typedef std::deque<std::string> args_t;    // Arguments type
-args_t create_args(int argc, char const *argv[]);
+
+
+class terminal;
+class app;
 
 
 // Use to store version information. Can be converted to string.
@@ -53,6 +56,10 @@ struct rgb {
     uint8_t green;
     uint8_t blue;
 };
+
+
+args_t create_args(int argc, char const *argv[]);
+void run_appframework(app* app_ptr);
 
 
 // Terminal class, use to control terminal.
@@ -128,8 +135,8 @@ public:
 
     // Returns path where you can save configuration files per user.
     // AppData/Local/Appname in windows and /home/user/.config/Appname in linux
-    std::filesystem::path get_appdata_path(std::string name); 
-                                                              
+    std::filesystem::path get_appdata_path(std::string name);
+    
     std::filesystem::path get_executable_path(); // Returns path of executable
     std::string get_executable_name();           // Returns name of executable
 

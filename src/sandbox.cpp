@@ -145,8 +145,6 @@ private:
 
 
 int main(int argc, char const *argv[]) {
-    app* app = new sandbox(create_args(argc, argv));
-    app->run();
-    delete app;
+    run_appframework(new sandbox(create_args(argc, argv)));
     return 0;
 }

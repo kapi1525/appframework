@@ -26,6 +26,12 @@ args_t create_args(int argc, char const *argv[]) {
     return args;
 }
 
+void run_appframework(app* app_ptr) {
+    app_ptr->run();
+    delete app_ptr;
+}
+
+
 
 version::operator const char*() {
     if (temp == "") {
