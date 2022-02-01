@@ -11,7 +11,7 @@ public:
         args = args_f; // save args so they can be used by get_arg() and find_arg()
         std::cout << get_executable_name() << "\n";
         std::cout << get_executable_path() << "\n";
-        std::cout << version << "\n";
+        std::cout << "Sandbox " << version << " build using appframework " << appframework_version << "\n";
 
         // Test RGB
         for (size_t color = 0; color < 255; color++) {
