@@ -57,7 +57,7 @@ terminal::terminal() {
     assert(GetConsoleMode(hIn, &dwOriginalInMode));
 
     DWORD dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
-    DWORD dwRequestedInModes = ENABLE_VIRTUAL_TERMINAL_INPUT;
+    // DWORD dwRequestedInModes = ENABLE_VIRTUAL_TERMINAL_INPUT;
 
     DWORD dwOutMode = dwOriginalOutMode | dwRequestedOutModes;
     DWORD dwInMode = dwOriginalInMode | ENABLE_VIRTUAL_TERMINAL_INPUT;
