@@ -8,8 +8,6 @@ using namespace std::chrono_literals;
 class sandbox : public app {
 public:
     sandbox(args_t args_f) {
-        sizeof(rgb_t);
-
         args = args_f; // save args so they can be used by get_arg() and find_arg()
         std::cout << get_executable_name() << "\n";
         std::cout << get_executable_path() << "\n";

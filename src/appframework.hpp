@@ -48,7 +48,7 @@ struct version_t {
 
 
 // RGB colors
-struct rgb_t {
+struct rgb {
     uint8_t red;
     uint8_t green;
     uint8_t blue;
@@ -81,8 +81,8 @@ public:
     void reset_strikethrough();
 
     // Set terminal output colors using ANSI escape codes
-    void set_color(rgb_t color);
-    void set_back_color(rgb_t color);
+    void set_color(rgb color);
+    void set_back_color(rgb color);
     void reset_color();
     void reset_back_color();
 
