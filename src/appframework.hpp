@@ -36,7 +36,7 @@ args_t create_args(int argc, char const *argv[]);
 
 
 // Use to store version information. Can be converted to string.
-struct version_t {
+struct version {
     int major;
     int minor;
     int patch;
@@ -118,7 +118,7 @@ public:
     void exit(int status);      // Fancy version of exit() that calls destructor of app for you.
 
     // Framework version
-    version_t appframework_version = {0,1,0};
+    version appframework_version = {0,1,0};
 
     // stuff you can use
     args_t args;

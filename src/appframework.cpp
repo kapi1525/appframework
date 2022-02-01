@@ -27,7 +27,7 @@ args_t create_args(int argc, char const *argv[]) {
 }
 
 
-version_t::operator const char*() {
+version::operator const char*() {
     if (temp == "") {
         temp = "v" + std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
     }

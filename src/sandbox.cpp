@@ -11,7 +11,7 @@ public:
         args = args_f; // save args so they can be used by get_arg() and find_arg()
         std::cout << get_executable_name() << "\n\n";
         std::cout << get_executable_path() << "\n\n";
-        std::cout << "Sandbox " << version << " build using appframework " << appframework_version << "\n\n";
+        std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
         for (size_t i = 0; i < 4; i++) {
             terminal.logging_level = (terminal::loglevel)i;
@@ -139,7 +139,7 @@ public:
 
 
 private:
-    version_t version = {1,0,0};
+    version sandbox_version = {1,0,0};
 };
 
 
