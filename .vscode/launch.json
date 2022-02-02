@@ -9,6 +9,9 @@
             "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "build",
+            "windows": {
+                "program": "${workspaceFolder}/${config:mesonbuild.buildFolder}/sandbox.exe"
+            },
             "program": "${workspaceFolder}/${config:mesonbuild.buildFolder}/sandbox",
             "args": [],
             "stopAtEntry": false,
