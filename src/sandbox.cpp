@@ -13,7 +13,7 @@ public:
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
         for (size_t i = 0; i < 4; i++) {
-            log.logging_level = (log::loglevel)i;
+            log.logging_level = (logs::loglevel)i;
             std::cout << "logging_level == " << (int)log.logging_level << "\n\n";
 
             log.fatal("Fatal error looks like this.");

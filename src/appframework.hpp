@@ -35,7 +35,7 @@ public:
     version appframework_version = {0,2,0};
 
     // stuff you can use
-    ::log log;                  // Use to log stuff.
+    logs log;                  // Use to log stuff.
 };
 
 

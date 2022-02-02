@@ -47,10 +47,10 @@ namespace terminal {
 }
 
 
-class log {
+class logs {
 public:
-    log();
-    ~log();
+    logs();
+    ~logs();
 
     enum class loglevel {
         fatal,      // Fatal error that program cant recover from.
