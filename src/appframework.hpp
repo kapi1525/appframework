@@ -11,9 +11,9 @@
 
 // Use to store version information. Can be converted to string.
 struct version {
-    int major;
-    int minor;
-    int patch;
+    uint16_t major;
+    uint16_t minor;
+    uint16_t patch;
 
     std::string temp = std::string();
 
