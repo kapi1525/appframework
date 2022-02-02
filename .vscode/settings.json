@@ -57,6 +57,7 @@
         "codecvt": "cpp",
         "iomanip": "cpp",
         "numbers": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "cstring": "cpp"
     }
 }

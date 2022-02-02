@@ -4,12 +4,14 @@
             "name": "Win32",
             "cStandard": "c17",
             "cppStandard": "c++17",
+            "intelliSenseMode": "windows-gcc-x64",
             "compileCommands": "./${config:mesonbuild.buildFolder}/compile_commands.json"
         },
         {
             "name": "Linux",
             "cStandard": "c17",
             "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
             "compileCommands": "./${config:mesonbuild.buildFolder}/compile_commands.json"
         }
     ],
