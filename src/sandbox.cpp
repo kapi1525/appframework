@@ -8,8 +8,8 @@ using namespace std::chrono_literals;
 class sandbox : public app {
 public:
     sandbox(::args args) {
-        std::cout << files::get_executable_name() << "\n\n";
-        std::cout << files::get_executable_path() << "\n\n";
+        std::cout << files::user::home() << "\n";
+        std::cout << files::user::appdata("sandbox") << "\n";
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
         for (size_t i = 0; i < 4; i++) {
@@ -144,7 +144,6 @@ private:
 
 
 int main(int argc, char const *argv[]) {
-    std::cout << "test\n";
     run_app(new sandbox(args(argc, argv)));
     return 0;
 }

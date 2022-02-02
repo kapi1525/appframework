@@ -2,24 +2,79 @@
 
 
 
-std::filesystem::path files::get_appdata_path(std::string name) {
+std::filesystem::path files::user::appdata(std::string name) {
     std::filesystem::path appdata;
     #ifdef _WIN32
-    PWSTR pwstr_localappdata;
-    assert(SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &pwstr_localappdata) == S_OK);
-    std::wstring localappdata = pwstr_localappdata;
-    CoTaskMemFree(pwstr_localappdata);
-    appdata = std::filesystem::path(localappdata) / name;
+    appdata = GetKnownFolderPath(FOLDERID_LocalAppData);
     #elif __linux__
-    std::filesystem::path home(getpwuid(getuid())->pw_dir);
-    appdata = std::filesystem::path(home / ".config" / name);
+    appdata = std::filesystem::path(home() / ".config");
     #endif
-    appdata.make_preferred();
+    appdata.append(name).make_preferred();
     std::filesystem::create_directories(appdata);
     return appdata;
 }
 
-std::filesystem::path files::get_executable_path() {
+std::filesystem::path files::user::home() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Profile).make_preferred();
+    #elif __linux__
+    return std::filesystem::path(getpwuid(getuid())->pw_dir).make_preferred();
+    #endif
+}
+
+
+std::filesystem::path files::user::desktop() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+std::filesystem::path files::user::documents() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Documents).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+std::filesystem::path files::user::music() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Music).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+std::filesystem::path files::user::videos() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Videos).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+std::filesystem::path files::user::photos() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+std::filesystem::path files::user::downloads() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
+    #elif __linux__
+    return ""; // TODO: THIS FOR LINUX.
+    #endif
+}
+
+
+
+
+std::filesystem::path files::executable_path() {
     #ifdef _WIN32
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
@@ -29,7 +84,7 @@ std::filesystem::path files::get_executable_path() {
     #endif
 }
 
-std::string files::get_executable_name() {
+std::string files::executable_name() {
     #ifdef _WIN32
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
