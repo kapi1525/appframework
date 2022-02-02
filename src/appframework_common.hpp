@@ -10,6 +10,7 @@
 #include <string_view>
 #include <vector>
 #include <deque>
+#include <map>
 
 // Standard C stuff
 #include <cassert>
