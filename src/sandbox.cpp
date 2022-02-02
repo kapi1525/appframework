@@ -8,6 +8,11 @@ using namespace std::chrono_literals;
 class sandbox : public app {
 public:
     sandbox(::args args) {
+        if(args.has("v")) {
+            std::cout << "sandbox " << sandbox_version << "\n";
+            exit(0);
+        }
+
         std::cout << files::user::home() << "\n";
         std::cout << files::user::appdata("sandbox") << "\n";
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";

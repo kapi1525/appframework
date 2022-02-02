@@ -35,6 +35,9 @@ app::app() {
 }
 
 app::app(::args args) {
+    if(args.has("v")) {
+        std::cout << "appframework " << appframework_version << "\nIdk why but you compiled default app class isntead of actualy using it.\n";
+    }
 }
 
 app::~app() {
