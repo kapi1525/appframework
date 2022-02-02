@@ -12,9 +12,9 @@
             "program": "${workspaceFolder}/${config:mesonbuild.buildFolder}/sandbox",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [
                 {
