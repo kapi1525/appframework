@@ -5,8 +5,9 @@ project('appframework', 'c', 'cpp',
 
 appframework_files = files('src/appframework.cpp', 'src/appframework_terminal.cpp', 'src/appframework_files.cpp')
 appframework_includes = include_directories('src')
+appframework_depends = [dependency('threads')]
 
-libappframework = static_library('appframework', appframework_files, dependencies: dependency('threads'))
+libappframework = static_library('appframework', appframework_files, dependencies: appframework_depends)
 
 appframework_dep = declare_dependency(include_directories: appframework_includes, link_with: libappframework)
 
