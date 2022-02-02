@@ -7,26 +7,25 @@ using namespace std::chrono_literals;
 
 class sandbox : public app {
 public:
-    sandbox(args_t args_f) {
-        args = args_f; // save args so they can be used by get_arg() and find_arg()
-        std::cout << get_executable_name() << "\n\n";
-        std::cout << get_executable_path() << "\n\n";
+    sandbox(::args args) {
+        std::cout << files::get_executable_name() << "\n\n";
+        std::cout << files::get_executable_path() << "\n\n";
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
         for (size_t i = 0; i < 4; i++) {
-            terminal.logging_level = (terminal::loglevel)i;
-            std::cout << "logging_level == " << (int)terminal.logging_level << "\n\n";
+            log.logging_level = (log::loglevel)i;
+            std::cout << "logging_level == " << (int)log.logging_level << "\n\n";
 
-            terminal.fatal("Fatal error looks like this.");
+            log.fatal("Fatal error looks like this.");
             std::cout << "\n";
 
-            terminal.error("Error looks like this.");
+            log.error("Error looks like this.");
             std::cout << "\n";
 
-            terminal.warn("Warn looks like this.");
+            log.warn("Warn looks like this.");
             std::cout << "\n";
 
-            terminal.info("Info looks like this.");
+            log.info("Info looks like this.");
             std::cout << "\n";
             std::cout << "\n";
 
@@ -36,7 +35,7 @@ public:
 
         // Test RGB
         for (uint8_t color = 0; color < 255; color++) {
-            terminal.set_color({color, 0, 0});
+            terminal::color({color, 0, 0});
             std::cout << "█";
         }
 
@@ -44,7 +43,7 @@ public:
         std::this_thread::sleep_for(0.5s);
 
         for (uint8_t color = 0; color < 255; color++) {
-            terminal.set_color({color, color, 0});
+            terminal::color({color, color, 0});
             std::cout << "█";
         }
 
@@ -52,7 +51,7 @@ public:
         std::this_thread::sleep_for(0.5s);
 
         for (uint8_t color = 0; color < 255; color++) {
-            terminal.set_color({0, color, color});
+            terminal::color({0, color, color});
             std::cout << "█";
         }
 
@@ -60,7 +59,7 @@ public:
         std::this_thread::sleep_for(0.5s);
 
         for (uint8_t color = 0; color < 255; color++) {
-            terminal.set_color({0, 0, color});
+            terminal::color({0, 0, color});
             std::cout << "█";
         }
 
@@ -68,7 +67,7 @@ public:
         std::this_thread::sleep_for(0.5s);
 
         for (uint8_t color = 0; color < 255; color++) {
-            terminal.set_color({color, 0, color});
+            terminal::color({color, 0, color});
             std::cout << "█";
         }
         
@@ -77,53 +76,53 @@ public:
 
         // Test difrent terminal modes
 
-        terminal.reset();
+        terminal::reset();
         std::cout << "\ndeafult - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
-        terminal.reset();
-        terminal.set_bold();
+        terminal::reset();
+        terminal::bold();
         std::cout << "\nbold - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_faint();
+        terminal::reset();
+        terminal::faint();
         std::cout << "\nfaint - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_italic();
+        terminal::reset();
+        terminal::italic();
         std::cout << "\nitalic - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_underline();
+        terminal::reset();
+        terminal::underline();
         std::cout << "\nunderline - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
-        terminal.reset();
-        terminal.set_blinking();
+        terminal::reset();
+        terminal::blinking();
         std::cout << "\nblinking - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_inverse();
+        terminal::reset();
+        terminal::inverse();
         std::cout << "\ninverse - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_invisible();
+        terminal::reset();
+        terminal::invisible();
         std::cout << "\ninvisible - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
 
-        terminal.reset();
-        terminal.set_strikethrough();
+        terminal::reset();
+        terminal::strikethrough();
         std::cout << "\nstrikethrough - The quick brown fox jumps over the lazy dog\n";
         std::this_thread::sleep_for(0.5s);
 
@@ -139,12 +138,13 @@ public:
 
 
 private:
-    version sandbox_version = {1,0,0};
+    version sandbox_version = {1,2,3};
 };
 
 
 
 int main(int argc, char const *argv[]) {
-    run_appframework(new sandbox(create_args(argc, argv)));
+    std::cout << "test\n";
+    run_app(new sandbox(args(argc, argv)));
     return 0;
 }
