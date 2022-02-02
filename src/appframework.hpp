@@ -15,7 +15,7 @@ struct version {
     uint16_t minor;
     uint16_t patch;
 
-    std::string temp = std::string();
+    std::string temp;
 
     operator const char*();
 };

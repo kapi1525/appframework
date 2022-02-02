@@ -12,7 +12,7 @@
 #include <deque>
 
 // Standard C stuff
-#include <assert.h>
+#include <cassert>
 
 
 // windows stuff
