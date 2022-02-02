@@ -61,7 +61,6 @@ args::args(int argc, char const *argv[]) {
     data.reserve(argc);
     for (int i = 0; i < argc; i++) {
         data.push_back(argv[i]);
-        std::cout << data[i] << "\n";
     }
 }
 
