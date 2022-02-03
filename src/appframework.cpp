@@ -32,6 +32,7 @@ app::app() {
 
     assert(SetConsoleMode(hIn, dwInMode));
     #endif // _WIN32
+    terminal::reset();
 }
 
 app::app(::args args) {
