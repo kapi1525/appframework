@@ -76,7 +76,6 @@ public:
 
     std::vector<std::string> data;
     
-    // TODO: Rewrite this.
     bool has(std::string_view arg);
     std::string_view get(std::string_view arg);
 };
