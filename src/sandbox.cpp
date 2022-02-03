@@ -13,8 +13,15 @@ public:
             exit(0);
         }
 
-        std::cout << files::user::home() << "\n";
-        std::cout << files::user::appdata("sandbox") << "\n";
+        std::cout << files::user::desktop() << "\n\n";
+        std::cout << files::user::documents() << "\n";
+        std::cout << files::user::music() << "\n";
+        std::cout << files::user::videos() << "\n";
+        std::cout << files::user::photos() << "\n";
+        std::cout << files::user::downloads() << "\n";
+
+        std::cout << files::user::home() << "\n\n";
+        std::cout << files::user::appdata("sandbox") << "\n\n";
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
         for (size_t i = 0; i < 4; i++) {
