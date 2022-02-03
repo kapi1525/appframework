@@ -27,7 +27,10 @@ std::filesystem::path files::user::desktop() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_DESKTOP_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
@@ -35,7 +38,10 @@ std::filesystem::path files::user::documents() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Documents).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_DOCUMENTS_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
@@ -43,7 +49,10 @@ std::filesystem::path files::user::music() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Music).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_MUSIC_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
@@ -51,7 +60,10 @@ std::filesystem::path files::user::videos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Videos).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_VIDEOS_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
@@ -59,7 +71,10 @@ std::filesystem::path files::user::photos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_PICTURES_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
@@ -67,7 +82,10 @@ std::filesystem::path files::user::downloads() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
     #elif __linux__
-    return ""; // TODO: THIS FOR LINUX.
+    ini user_dirs(home() / ".config" / "user-dirs.dirs");
+    std::string desktop = user_dirs.get_item("XDG_DOWNLOAD_DIR");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop.substr(1, desktop.size()-2);
     #endif
 }
 
