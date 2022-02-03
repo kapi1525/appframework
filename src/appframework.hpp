@@ -6,6 +6,7 @@
 #include "appframework_common.hpp"
 #include "appframework_terminal.hpp"
 #include "appframework_files.hpp"
+#include "appframework_ini.hpp"
 
 
 

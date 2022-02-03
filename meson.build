@@ -3,7 +3,7 @@ project('appframework', 'c', 'cpp',
   default_options: ['warning_level=3', 'c_std=c17', 'cpp_std=c++17'],
   license: 'MIT')
 
-appframework_files = files('src/appframework.cpp', 'src/appframework_terminal.cpp', 'src/appframework_files.cpp')
+appframework_files = files('src/appframework.cpp', 'src/appframework_terminal.cpp', 'src/appframework_files.cpp', 'src/appframework_ini.cpp')
 appframework_includes = include_directories('src')
 appframework_depends = [dependency('threads')]
 
