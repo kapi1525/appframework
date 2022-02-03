@@ -64,42 +64,18 @@ args::args(int argc, char const *argv[]) {
     }
 }
 
-
 args::~args() {
 }
 
-// POSIX
-// has("b")   -a     false
-// has("b")   -b     true
-// has("b")   -abc   true
 
-// GNU
-// has("abc") -abc   false
-// has("abc") --abc  true
-bool args::has(std::string_view arg_) {
-    std::string arg(arg_);
+bool args::has(std::string_view arg) {
+    // POSIX options style ( single charachter options that start with "-", can have argument and can be joined together )
     if (arg.size() == 1) {
-        for (size_t i = 0; i < data.size(); i++) {
-            if (!data[i].compare("-"+arg)) {
-                return true;
-            }
-        }
-    } else {
-        for (size_t i = 0; i < data.size(); i++) {
-            if (!data[i].compare("--"+arg)) {
-                return true;
-            }
-        }
-    }
-    return false;
-    /*
-    if (posix_option_style && arg.size() == 1) {
-        for (size_t i = 0; i < data.size(); i++) {
-            if(data[i].at(0) == '-' && data[i].at(1) != '-') {
-                std::cout << data[i][1] << "\n";
-                for (size_t c = 1; c < data[i].size(); c++) {
-                    if(data[i][c] == arg[0]) {
-                        std::cout << "found posix arg " << arg << " in " << data[i] << "\n";
+        for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
+            if (data[arg_i][0] == '-' && data[arg_i][1] != '-') {
+                for (size_t i = 1; i < data[arg_i].size(); i++) {
+                    if (data[arg_i][i] == arg[0]) {
+                        std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
                         return true;
                     }
                 }
@@ -107,18 +83,27 @@ bool args::has(std::string_view arg_) {
         }
     }
     
-    if (gnu_option_style && arg.size() != 1) {
-        for (size_t i = 0; i < data.size(); i++) {
-            if(data[i][0] == '-' && data[i][1] == '-') {
-                if(data[i].substr(2, data.size()) == arg) {
-                    std::cout << "found gnu arg " << arg << " in " << data[i] << "\n";
-                    return true;
-                }
+
+    // GNU options style ( GNU adds long options they start with "--" )
+    if (arg.size() != 1) {
+        for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
+            if((!data[arg_i].compare(0, 2, "--") && !data[arg_i].compare(2, arg.size(), arg)) && (data[arg_i].size() == arg.size()+2 || data[arg_i][arg.size()+2] == '=')) {
+                std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
+                return true;
             }
         }
     }
 
-    return false;*/
+
+    // Windows options style ( starts with "/" options can be longer than 1 character and have arguments by adding ":" )
+    for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
+        if((!data[arg_i].compare(0, 1, "/") && !data[arg_i].compare(1, arg.size(), arg)) && (data[arg_i].size() == arg.size()+1 || data[arg_i][arg.size()+1] == ':')) {
+            std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // get("o")   -a        ""

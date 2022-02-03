@@ -8,7 +8,7 @@ using namespace std::chrono_literals;
 class sandbox : public app {
 public:
     sandbox(::args args) {
-        if(args.has("v")) {
+        if(args.has("v") || args.has("version")) {
             std::cout << "sandbox " << sandbox_version << "\n";
             exit(0);
         }

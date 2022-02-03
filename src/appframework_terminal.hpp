@@ -75,12 +75,7 @@ public:
     ~args();
 
     std::vector<std::string> data;
-
-    // All those can be used together
-    //bool posix_option_style   = true;   // Options can be only one character and can be grouped together ( -a -b -c == -abc, -a abc )
-    //bool gnu_option_style     = true;   // adds long options ( --abc, --abc=argument )
-    //bool windows_option_style = true;   // Options can be multiple characters cant be grouped tohether and they start with '/' ( /option, /option2 )
-
+    
     // TODO: Rewrite this.
     bool has(std::string_view arg);
     std::string_view get(std::string_view arg);
