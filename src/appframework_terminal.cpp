@@ -75,7 +75,7 @@ bool args::has(std::string_view arg) {
             if (data[arg_i][0] == '-' && data[arg_i][1] != '-') {
                 for (size_t i = 1; i < data[arg_i].size(); i++) {
                     if (data[arg_i][i] == arg[0]) {
-                        std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
+                        // std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
                         return true;
                     }
                 }
@@ -88,7 +88,7 @@ bool args::has(std::string_view arg) {
     if (arg.size() != 1) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
             if((!data[arg_i].compare(0, 2, "--") && !data[arg_i].compare(2, arg.size(), arg)) && (data[arg_i].size() == arg.size()+2 || data[arg_i][arg.size()+2] == '=')) {
-                std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
+                // std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
                 return true;
             }
         }
@@ -98,7 +98,7 @@ bool args::has(std::string_view arg) {
     // Windows options style ( starts with "/" options can be longer than 1 character and have arguments by adding ":" )
     for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
         if((!data[arg_i].compare(0, 1, "/") && !data[arg_i].compare(1, arg.size(), arg)) && (data[arg_i].size() == arg.size()+1 || data[arg_i][arg.size()+1] == ':')) {
-            std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
+            // std::cout << "Found arg " << arg << " in " << data[arg_i] << "\n";
             return true;
         }
     }
