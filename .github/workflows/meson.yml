@@ -18,8 +18,8 @@ jobs:
 
     - run: meson bin
     - run: ninja -C bin
-    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
-    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
 
     - uses: actions/upload-artifact@v2
       with:
@@ -41,8 +41,8 @@ jobs:
       env:
         CC: gcc
     - run: ninja -C bin
-    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
-    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
 
     - uses: actions/upload-artifact@v2
       with:
