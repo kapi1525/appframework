@@ -39,7 +39,7 @@ jobs:
       id: linux-cache
       with:
         path: "bin"
-        key: ${{ runner.os }}-${{ GITHUB_REF }}
+        key: ${{ runner.os }}-${{ env.GITHUB_REF }}
 
     - run: meson --buildtype release bin
       if: steps.linux-cache.outputs.cache-hit != 'true'
