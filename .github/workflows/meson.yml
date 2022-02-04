@@ -47,7 +47,8 @@ jobs:
       id: linux-cache
       with:
         path: "bin"
-        key: ${{ runner.os }}-${{ github.ref }}
+        key: ${{ runner.os }}-${{ github.ref }}-${{ hashFiles('./bin/*.*') }}
+        restore-keys: ${{ runner.os }}-${{ github.ref }}
 
     - run: meson --buildtype release bin
       if: steps.linux-cache.outputs.cache-hit != 'true'
