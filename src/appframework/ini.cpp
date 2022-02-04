@@ -145,6 +145,7 @@ std::string ini::remove_comments(std::string_view line) {
             return std::string(line.substr(0, i));
         }
     }
+    return std::string(line);
 }
 
 
