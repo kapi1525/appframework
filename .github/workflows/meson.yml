@@ -35,10 +35,17 @@ jobs:
 
     - run: pip install meson ninja -r requirements.txt
 
+    - uses: actions/cache@v1.0.3
+      id: linux-cache
+      with:
+        path: "bin"
+        key: ${{ runner.os }}-${{ GITHUB_REF }}
+
     - run: meson --buildtype release bin
+      if: steps.linux-cache.outputs.cache-hit != 'true'
       env:
         CC: gcc
-        
+    
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
