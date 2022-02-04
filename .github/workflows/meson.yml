@@ -16,7 +16,15 @@ jobs:
 
     - run: pip install meson ninja -r requirements.txt
 
+    - uses: actions/cache@v1.0.3
+      id: windows-cache
+      with:
+        path: "bin"
+        key: ${{ runner.os }}-${{ github.ref }}
+
     - run: meson --buildtype release bin
+      if: steps.windows-cache.outputs.cache-hit != 'true'
+
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
