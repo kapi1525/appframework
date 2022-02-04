@@ -43,7 +43,7 @@ jobs:
         CC: gcc
     - run: ninja -C bin
     - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
-    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind --tool=helgrind -s'
 
     - uses: actions/upload-artifact@v2
       with:
