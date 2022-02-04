@@ -42,9 +42,9 @@ std::filesystem::path files::user::documents() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Documents).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_DOCUMENTS_DIR");
-    desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop;
+    std::string documents = user_dirs.get_item("XDG_DOCUMENTS_DIR");
+    documents.replace(documents.find("$HOME"), 5, home());
+    return documents;
     #endif
 }
 
@@ -52,9 +52,9 @@ std::filesystem::path files::user::music() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Music).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_MUSIC_DIR");
-    desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop;
+    std::string music = user_dirs.get_item("XDG_MUSIC_DIR");
+    music.replace(music.find("$HOME"), 5, home());
+    return music;
     #endif
 }
 
@@ -62,9 +62,9 @@ std::filesystem::path files::user::videos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Videos).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_VIDEOS_DIR");
-    desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop;
+    std::string videos = user_dirs.get_item("XDG_VIDEOS_DIR");
+    videos.replace(videos.find("$HOME"), 5, home());
+    return videos;
     #endif
 }
 
@@ -72,9 +72,9 @@ std::filesystem::path files::user::photos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_PICTURES_DIR");
-    desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop;
+    std::string photos = user_dirs.get_item("XDG_PICTURES_DIR");
+    photos.replace(photos.find("$HOME"), 5, home());
+    return photos;
     #endif
 }
 
@@ -82,9 +82,9 @@ std::filesystem::path files::user::downloads() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_DOWNLOAD_DIR");
-    desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop;
+    std::string downloads = user_dirs.get_item("XDG_DOWNLOAD_DIR");
+    downloads.replace(downloads.find("$HOME"), 5, home());
+    return downloads;
     #endif
 }
 
