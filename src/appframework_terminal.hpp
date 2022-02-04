@@ -42,9 +42,9 @@ typedef vec2<size_t> uv2;
 typedef vec3<size_t> uv3;
 typedef vec4<size_t> uv4;
 
-typedef vec2<ssize_t> sv2;
-typedef vec3<ssize_t> sv3;
-typedef vec4<ssize_t> sv4;
+typedef vec2<long> sv2;
+typedef vec3<long> sv3;
+typedef vec4<long> sv4;
 
 typedef vec2<float> fv2;
 typedef vec3<float> fv3;
