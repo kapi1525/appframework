@@ -117,7 +117,7 @@ bool ini::save(std::filesystem::path file_path) {
 }
 
 
-bool ini::has_whitespace(std::string text) {
+bool ini::has_whitespace(std::string_view text) {
     for (size_t i = 0; i < text.size(); i++) {
         if(std::isspace(text[i])) {
             return true;
@@ -127,7 +127,7 @@ bool ini::has_whitespace(std::string text) {
 }
 
 
-std::string ini::remove_whitespace(std::string line) {
+std::string ini::remove_whitespace(std::string_view line) {
     // Its probably not the best implementation but it will run only once when parsing ini so it dosent matter
     std::string temp;
     bool quote = false;
@@ -138,7 +138,7 @@ std::string ini::remove_whitespace(std::string line) {
     return temp;
 }
 
-std::string ini::remove_comments(std::string line) {
+std::string ini::remove_comments(std::string_view line) {
     // Standard ini uses ';' for comments but often '#' is also used so remove both unless in quotes
     int comment_start = line.size();
     bool quote = false;
@@ -149,11 +149,11 @@ std::string ini::remove_comments(std::string line) {
             break;
         }
     }
-    return line.substr(0, comment_start);
+    return std::string(line.substr(0, comment_start));
 }
 
 
-ini::ini_item_t ini::try_parse_item(std::string line) {
+ini::ini_item_t ini::try_parse_item(std::string_view line) {
     for (size_t i = 0; i < line.size(); i++) {
         if(line[i]=='=' && i>0 && i<line.size()-1) {
             return {try_remove_quotes(line.substr(0, i)), try_remove_quotes(line.substr(i+1, line.size()-i))};
@@ -162,7 +162,7 @@ ini::ini_item_t ini::try_parse_item(std::string line) {
     return {"", ""};    // returns {"", ""} if failed to parse
 }
 
-std::string ini::try_parse_group(std::string line) {
+std::string ini::try_parse_group(std::string_view line) {
     for (size_t i = 0; i < line.size(); i++) {
         if(line[0]=='[' && line[line.size()-1]==']') {
             return try_remove_quotes(line.substr(1, line.size()-2));
@@ -172,15 +172,15 @@ std::string ini::try_parse_group(std::string line) {
 }
 
 
-std::string ini::try_remove_quotes(std::string line) {
+std::string ini::try_remove_quotes(std::string_view line) {
     if(line[0] == '"' && line[line.size()-1] == '"') {
-        return line.substr(1, line.size()-2);
+        return std::string(line.substr(1, line.size()-2));
     }
-    return line;
+    return std::string(line);
 }
 
 
-bool ini::is_item(std::string line) {
+bool ini::is_item(std::string_view line) {
     for (size_t i = 0; i < line.size(); i++) {
         if(line[i]=='=' && i>0 && i<line.size()-1) {
             return true;
@@ -189,7 +189,7 @@ bool ini::is_item(std::string line) {
     return false;
 }
 
-bool ini::is_group(std::string line) {
+bool ini::is_group(std::string_view line) {
     if(line[0] == '[' && line[line.size()-1] == ']') {
         return true;
     }
@@ -197,17 +197,17 @@ bool ini::is_group(std::string line) {
 }
 
 
-std::string ini::get_item(std::string item) {
+std::string ini::get_item(std::string_view item) {
     return get_item_group("", item);
 }
 
-std::string ini::get_item_group(std::string group, std::string item) {
+std::string ini::get_item_group(std::string_view group, std::string_view item) {
     size_t group_index = 0;
     for (size_t i = 0; i < data.size(); i++) {
         if(data[i].first==group) {
             group_index = i;
         } else if(i == data.size()-1) {
-            log.warn("No such group exists: "+group);
+            log.warn("No such group exists: "+std::string(group));
             return "";
         }
     }
@@ -218,16 +218,16 @@ std::string ini::get_item_group(std::string group, std::string item) {
         }
     }
             
-    log.warn("No such item exists: "+item);
+    log.warn("No such item exists: "+std::string(item));
     return "";
 }
 
 
-void ini::set_item(std::string item, std::string value) {
+void ini::set_item(std::string_view item, std::string_view value) {
     set_item_group("", item, value);
 }
 
-void ini::set_item_group(std::string group, std::string_view item, std::string value) {
+void ini::set_item_group(std::string_view group, std::string_view item, std::string_view value) {
     for (size_t group_i = 0; group_i < data.size(); group_i++) {
         if(data[group_i].first == group) {
             for (size_t item_i = 0; item_i < data[group_i].second.size(); item_i++) {
@@ -241,6 +241,6 @@ void ini::set_item_group(std::string group, std::string_view item, std::string v
         }
     }
 
-    data.push_back({group, std::vector<ini_item_t>()});
+    data.push_back({std::string(group), std::vector<ini_item_t>()});
     data[data.size()-1].second.push_back(ini_item_t{item, value});
 }

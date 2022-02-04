@@ -13,6 +13,8 @@ public:
             exit(0);
         }
 
+        exit(0);
+
         terminal::inverse();
         terminal::cursor::set_pos({10,3});
         std::cout << " ";
