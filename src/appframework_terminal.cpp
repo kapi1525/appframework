@@ -13,7 +13,7 @@ logs::~logs() {}
 
 
 void logs::fatal(std::string_view message) {
-    if(logging_level >= loglevel::fatal) {
+    if(loging_level >= loglevel::fatal) {
         terminal::color({0,0,0});
         terminal::back_color({255,0,0});
         terminal::bold();
@@ -24,7 +24,7 @@ void logs::fatal(std::string_view message) {
 }
 
 void logs::error(std::string_view message) {
-    if(logging_level >= loglevel::error) {
+    if(loging_level >= loglevel::error) {
         terminal::color({255,0,0});
         terminal::bold();
         std::cout << "[ERROR] " << message;
@@ -34,7 +34,7 @@ void logs::error(std::string_view message) {
 }
 
 void logs::warn(std::string_view message) {
-    if(logging_level >= loglevel::warn) {
+    if(loging_level >= loglevel::warn) {
         terminal::color({255,255,0});
         std::cout << "[WARN ] " << message;
         terminal::reset();
@@ -43,7 +43,7 @@ void logs::warn(std::string_view message) {
 }
 
 void logs::info(std::string_view message) {
-    if(logging_level >= loglevel::info) {
+    if(loging_level >= loglevel::info) {
         std::cout << "[info ] " << message << "\n";
     }
 }

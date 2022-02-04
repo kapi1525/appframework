@@ -15,9 +15,74 @@ struct rgb {
 };
 
 
+// Vectors
+template<typename _T>
+struct vec2 {
+    _T x;
+    _T y;
+};
+
+template<typename _T>
+struct vec3 {
+    _T x;
+    _T y;
+    _T z;
+};
+
+template<typename _T>
+struct vec4 {
+    _T x;
+    _T y;
+    _T z;
+    _T w;
+};
+
+
+typedef vec2<size_t> uv2;
+typedef vec3<size_t> uv3;
+typedef vec4<size_t> uv4;
+
+typedef vec2<ssize_t> sv2;
+typedef vec3<ssize_t> sv3;
+typedef vec4<ssize_t> sv4;
+
+typedef vec2<float> fv2;
+typedef vec3<float> fv3;
+typedef vec4<float> fv4;
+
+typedef vec2<double> dv2;
+typedef vec3<double> dv3;
+typedef vec4<double> dv4;
+
+
+
 namespace terminal {
     // Note: Some terminals may not support some of thiese:
-    // TODO: Add functions to control terminal cursor using ANSI escape codes.
+    namespace cursor {
+        inline uv2 get_pos();
+
+        inline void set_pos(uv2 pos);
+        inline void go_home();  // Home aka {0, 0}
+        inline void go_up(size_t cells);
+        inline void go_down(size_t cells);
+        inline void go_right(size_t cells);
+        inline void go_left(size_t cells);
+
+        inline void go_line_begin_up(size_t cells);     // moves cursor to beginning of previous line, # lines up
+        inline void go_line_begin_down(size_t cells);   // moves cursor to beginning of next line, # lines down
+        inline void go_to_column(size_t column);        // moves cursor to column #
+
+        inline void save();
+        inline void restore();
+    }
+
+    inline void erase();                        // erase entire screen
+    inline void erase_start_cursor();           // erase from cursor to beginning of screen
+    inline void erase_cursor_end();             // erase from cursor until end of screen
+    inline void erase_line_start_cursor();      // erase start of line to the cursor
+    inline void erase_cursor_to_line_end();     // erase from cursor to end of line
+    inline void erase_line();                   // erase the entire line
+
     inline void bold();
     inline void faint();
     inline void italic();
@@ -53,13 +118,14 @@ public:
     ~logs();
 
     enum class loglevel {
+        none,
         fatal,      // Fatal error that program cant recover from.
         error,
         warn,
         info
     };
 
-    loglevel logging_level = loglevel::info;
+    loglevel loging_level = loglevel::info;
 
     void fatal(std::string_view message);
     void error(std::string_view message);
@@ -82,8 +148,101 @@ public:
 
 
 
+
 /////////////////////////////
 // Definitions for inline terminal functions
+/////////////////////////////
+
+/////////////////////////////
+// Cursor control
+/////////////////////////////
+
+// TODO: terminal::cursor::get_pos()
+inline uv2 terminal::cursor::get_pos() {
+    return {0,0};
+}
+
+
+inline void terminal::cursor::go_home(){
+    std::cout << "\x1B[H";
+}
+
+inline void terminal::cursor::set_pos(uv2 pos){
+    std::cout << "\x1B[" << pos.y << ";" << pos.x << "f";
+}
+
+inline void terminal::cursor::go_up(size_t cells){
+    std::cout << "\x1B[" << cells << "A";
+}
+
+inline void terminal::cursor::go_down(size_t cells){
+    std::cout << "\x1B[" << cells << "B";
+}
+
+inline void terminal::cursor::go_right(size_t cells){
+    std::cout << "\x1B[" << cells << "C";
+}
+
+inline void terminal::cursor::go_left(size_t cells){
+    std::cout << "\x1B[" << cells << "D";
+}
+
+
+inline void terminal::cursor::go_line_begin_up(size_t cells) {
+    std::cout << "\x1B[" << cells << "F";
+}
+
+inline void terminal::cursor::go_line_begin_down(size_t cells) {
+    std::cout << "\x1B[" << cells << "E";
+}
+
+inline void terminal::cursor::go_to_column(size_t column) {
+    std::cout << "\x1B[" << column << "G";
+}
+
+
+inline void terminal::cursor::save(){
+    std::cout << "\x1B 7";
+}
+
+inline void terminal::cursor::restore(){
+    std::cout << "\x1B 8";
+}
+
+
+
+/////////////////////////////
+// Erase functions
+/////////////////////////////
+
+inline void terminal::erase() {
+    std::cout << "\x1B[2J";
+}
+
+inline void terminal::erase_start_cursor() {
+    std::cout << "\x1B[1J";
+}
+
+inline void terminal::erase_cursor_end() {
+    std::cout << "\x1B[0J";
+}
+
+inline void terminal::erase_line_start_cursor() {
+    std::cout << "\x1B[1K";
+}
+
+inline void terminal::erase_cursor_to_line_end() {
+    std::cout << "\x1B[0K";
+}
+
+inline void terminal::erase_line() {
+    std::cout << "\x1B[2K";
+}
+
+
+
+/////////////////////////////
+// Text control
 /////////////////////////////
 
 inline void terminal::bold() {
