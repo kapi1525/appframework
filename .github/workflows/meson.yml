@@ -16,8 +16,10 @@ jobs:
 
     - uses: ilammy/msvc-dev-cmd@v1.10.0
 
-    - run: meson --buildtype release bin
-    - run:  ninja -C bin
+    - run: meson bin
+    - run: ninja -C bin
+    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
+    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
 
     - uses: actions/upload-artifact@v2
       with:
@@ -35,10 +37,12 @@ jobs:
 
     - run: pip install meson ninja -r requirements.txt
 
-    - run: meson --buildtype release bin
+    - run: meson bin
       env:
         CC: gcc
-    - run:  ninja -C bin
+    - run: ninja -C bin
+    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
+    - run: mmeson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
 
     - uses: actions/upload-artifact@v2
       with:

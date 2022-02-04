@@ -11,6 +11,15 @@
             "label": "build"
         },
         {
+            "label": "run tests",
+            "type": "shell",
+            "command": "cd ${config:mesonbuild.buildFolder} && meson test",
+            "windows": {
+                "command": "cd ${config:mesonbuild.buildFolder} && meson test"
+            },
+            "group": "build"
+        },
+        {
             "label": "configure debug",
             "type": "shell",
             "command": "clear && rm ${config:mesonbuild.buildFolder} -r -f && meson ${config:mesonbuild.buildFolder}",

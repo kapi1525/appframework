@@ -2,18 +2,6 @@
 
 
 
-// Im using this to reduce number of allocations
-#if 0
-size_t alloc_count = 0;
-size_t alloc_size = 0;
-void* operator new(size_t size) {
-    alloc_count++;
-    alloc_size = alloc_size+size;
-    std::cout << "Allocating: " << size << " bytes...  Total memory allocated: " << alloc_size <<" bytes.  Total allocations: " << alloc_count << "\n";
-    return malloc(size);
-}
-#endif
-
 ini::ini() {
 }
 
