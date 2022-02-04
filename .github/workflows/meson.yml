@@ -18,8 +18,8 @@ jobs:
 
     - run: meson bin
     - run: ninja -C bin
-    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
-    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind helgrind -s'
+    - run: meson test -C bin --repeat 10  --print-errorlogs
+    - run: meson test -C bin --repeat 10  --print-errorlogs
 
     - uses: actions/upload-artifact@v2
       with:
@@ -36,6 +36,7 @@ jobs:
         cache: 'pip'
 
     - run: pip install meson ninja -r requirements.txt
+    - run: sudo apt install valgrind -y
 
     - run: meson bin
       env:
