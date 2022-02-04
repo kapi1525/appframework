@@ -34,7 +34,7 @@ std::filesystem::path files::user::desktop() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_DESKTOP_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
@@ -44,7 +44,7 @@ std::filesystem::path files::user::documents() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_DOCUMENTS_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
@@ -54,7 +54,7 @@ std::filesystem::path files::user::music() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_MUSIC_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
@@ -64,7 +64,7 @@ std::filesystem::path files::user::videos() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_VIDEOS_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
@@ -74,7 +74,7 @@ std::filesystem::path files::user::photos() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_PICTURES_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
@@ -84,7 +84,7 @@ std::filesystem::path files::user::downloads() {
     #elif __linux__
     std::string desktop = user_dirs.get_item("XDG_DOWNLOAD_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
-    return desktop.substr(1, desktop.size()-2);
+    return desktop;
     #endif
 }
 
