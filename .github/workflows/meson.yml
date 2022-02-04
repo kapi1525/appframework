@@ -10,21 +10,13 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        cache: 'pip'
     
-    - uses: ilammy/msvc-dev-cmd@v1.10.0
-
     - run: pip install meson ninja -r requirements.txt
 
-    - uses: actions/cache@v1.0.3
-      id: windows-cache
-      with:
-        path: "bin"
-        key: ${{ runner.os }}-${{ github.ref }}
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
 
     - run: meson --buildtype release bin
-      if: steps.windows-cache.outputs.cache-hit != 'true'
-
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
@@ -39,22 +31,13 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        cache: 'pip'
 
     - run: pip install meson ninja -r requirements.txt
 
-    - uses: actions/cache@v1.0.3
-      id: linux-cache
-      with:
-        path: "bin"
-        key: ${{ runner.os }}-${{ github.ref }}-${{ hashFiles('./bin/*.*') }}
-        restore-keys: ${{ runner.os }}-${{ github.ref }}
-
     - run: meson --buildtype release bin
-      if: steps.linux-cache.outputs.cache-hit != 'true'
       env:
         CC: gcc
-    
     - run:  ninja -C bin
 
     - uses: actions/upload-artifact@v2
