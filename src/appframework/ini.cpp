@@ -169,7 +169,7 @@ std::string ini::try_parse_group(std::string_view line) {
 
 
 std::string ini::try_remove_quotes(std::string_view line) {
-    if(line[0] == '"' && line[line.size()-1] == '"') {
+    if((line[0] == '"' && line[line.size()-1] == '"') || line[0] == '\'' && line[line.size()-1] == '\'') {
         return std::string(line.substr(1, line.size()-2));
     }
     return std::string(line);
