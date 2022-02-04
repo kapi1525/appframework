@@ -92,7 +92,7 @@ public:
     args(int argc, char const *argv[]);
     ~args();
 
-    std::vector<std::string> data;
+    std::vector<std::string_view> data;
     
     bool has(std::string_view arg);
     std::string_view get(std::string_view arg);

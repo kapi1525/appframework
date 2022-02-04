@@ -58,8 +58,8 @@ args::args() {
 }
 
 args::args(int argc, char const *argv[]) {
-    data.reserve(argc);
-    for (int i = 0; i < argc; i++) {
+    data.reserve(argc - 1);
+    for (int i = 1; i < argc; i++) {
         data.push_back(argv[i]);
     }
 }
@@ -128,7 +128,8 @@ std::string_view args::get(std::string_view arg) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
             if((!data[arg_i].compare(0, 2, "--") && !data[arg_i].compare(2, arg.size(), arg)) && (data[arg_i].size() == arg.size()+2 || data[arg_i][arg.size()+2] == '=')) {
                 if(data[arg_i][arg.size()+2] == '=') {
-                    std::string_view sv(data[arg_i].c_str(), data[arg_i].size());
+                    // std::string_view sv(data[arg_i].c_str(), data[arg_i].size());
+                    std::string_view sv(data[arg_i]);
                     sv.remove_prefix(arg.size()+3);
                     return sv;
                 }
@@ -141,7 +142,7 @@ std::string_view args::get(std::string_view arg) {
     for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
         if((!data[arg_i].compare(0, 1, "/") && !data[arg_i].compare(1, arg.size(), arg)) && (data[arg_i].size() == arg.size()+1 || data[arg_i][arg.size()+1] == ':')) {
             if(data[arg_i][arg.size()+1] == ':') {
-                std::string_view sv(data[arg_i].c_str(), data[arg_i].size());
+                std::string_view sv(data[arg_i]);
                 sv.remove_prefix(arg.size()+2);
                 return sv;
             }
