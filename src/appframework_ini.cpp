@@ -43,9 +43,7 @@ bool ini::parse(std::filesystem::path file_path) {
         line = remove_whitespace(line);
         line = remove_comments(line);
         
-        if(line != "") {
-            std::cout << "line: " << line << "\n";
-            
+        if(line != "") {            
             if(is_item(line)) {
                 for (size_t i = 0; i < data.size(); i++) {
                     if(data[i].first == current_group) {
