@@ -13,6 +13,22 @@ public:
             exit(0);
         }
 
+        terminal::inverse();
+        terminal::cursor::set_pos({10,3});
+        std::cout << " ";
+        terminal::cursor::set_pos({15,3});
+        std::cout << " ";
+        terminal::cursor::set_pos({8,5});
+        std::cout << " ";
+        terminal::cursor::set_pos({17,5});
+        std::cout << " ";
+        terminal::cursor::set_pos({9,6});
+        std::cout << "        ";
+        terminal::reset();
+        std::cout << "\n\n";
+        
+        std::this_thread::sleep_for(0.5s);
+
         std::cout << files::user::desktop() << "\n\n";
         std::cout << files::user::documents() << "\n";
         std::cout << files::user::music() << "\n";
@@ -24,9 +40,11 @@ public:
         std::cout << files::user::appdata("sandbox") << "\n\n";
         std::cout << "Sandbox " << sandbox_version << " build using appframework " << appframework_version << "\n\n";
 
+        std::this_thread::sleep_for(0.5s);
+
         for (size_t i = 0; i < 4; i++) {
-            log.logging_level = (logs::loglevel)i;
-            std::cout << "logging_level == " << (int)log.logging_level << "\n\n";
+            log.loging_level = (logs::loglevel)i;
+            std::cout << "loging_level == " << (int)log.loging_level << "\n\n";
 
             log.fatal("Fatal error looks like this.");
             std::cout << "\n";
