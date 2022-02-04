@@ -200,8 +200,9 @@ std::string ini::get_item(std::string_view item) {
 std::string ini::get_item_group(std::string_view group, std::string_view item) {
     size_t group_index = 0;
     for (size_t i = 0; i < data.size(); i++) {
-        if(data[i].first==group) {
+        if(data[i].first.compare(group) == 0) {
             group_index = i;
+            break;
         } else if(i == data.size()-1) {
             log.warn("No such group exists: "+std::string(group));
             return "";
