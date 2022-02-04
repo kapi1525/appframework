@@ -129,9 +129,12 @@ std::string ini::remove_whitespace(std::string_view line) {
     // Its probably not the best implementation but it will run only once when parsing ini so it dosent matter
     std::string temp;
     bool quote = false;
+    bool group = false;
     for (size_t i = 0; i < line.size(); i++) {
         if(line[i] == '"' || line[i] == '\'') { quote = !quote; }
-        if(!std::isspace(line[i]) || quote == true) { temp.push_back(line[i]); }
+        if(line[i] == '[') { group = true; }
+        if(line[i] == ']') { group = false; }
+        if(std::isspace(line[i]) == 0 || quote || group) { temp.push_back(line[i]); }
     }
     return temp;
 }
