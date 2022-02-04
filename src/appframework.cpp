@@ -57,12 +57,3 @@ void run_app(app* app_ptr) {
     app_ptr->run();
     delete app_ptr;
 }
-
-
-
-version::operator const char*() {
-    if (temp == "") {
-        temp = "v" + std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
-    }
-    return temp.c_str();
-}

@@ -3,23 +3,12 @@
 // I just add random stuff here that i happen to need, you shouldnt really use it.
 // Works on windows (msvc and MingW) and linux (gcc probably clang also but i didnt test it).
 
-#include "appframework_common.hpp"
-#include "appframework_terminal.hpp"
-#include "appframework_files.hpp"
-#include "appframework_ini.hpp"
+#include "common.hpp"
+#include "types.hpp"
+#include "terminal.hpp"
+#include "files.hpp"
+#include "ini.hpp"
 
-
-
-// Use to store version information. Can be converted to string.
-struct version {
-    uint16_t major;
-    uint16_t minor;
-    uint16_t patch;
-
-    std::string temp = std::string("");
-
-    operator const char*();
-};
 
 
 // Main app class

@@ -3,65 +3,17 @@
 // This header contains declarations for terminal and loggin functions.
 // Terminal functions are inline so their definitions are at the bottom of this file.
 
-#include "appframework_common.hpp"
-
-
-
-// RGB colors
-struct rgb {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-};
-
-
-// Vectors
-template<typename _T>
-struct vec2 {
-    _T x;
-    _T y;
-};
-
-template<typename _T>
-struct vec3 {
-    _T x;
-    _T y;
-    _T z;
-};
-
-template<typename _T>
-struct vec4 {
-    _T x;
-    _T y;
-    _T z;
-    _T w;
-};
-
-
-typedef vec2<size_t> uv2;
-typedef vec3<size_t> uv3;
-typedef vec4<size_t> uv4;
-
-typedef vec2<long> sv2;
-typedef vec3<long> sv3;
-typedef vec4<long> sv4;
-
-typedef vec2<float> fv2;
-typedef vec3<float> fv3;
-typedef vec4<float> fv4;
-
-typedef vec2<double> dv2;
-typedef vec3<double> dv3;
-typedef vec4<double> dv4;
+#include "common.hpp"
+#include "types.hpp"
 
 
 
 namespace terminal {
     // Note: Some terminals may not support some of thiese:
     namespace cursor {
-        inline uv2 get_pos();
+        inline u_vec2_t get_pos();
 
-        inline void set_pos(uv2 pos);
+        inline void set_pos(u_vec2_t pos);
         inline void go_home();  // Home aka {0, 0}
         inline void go_up(size_t cells);
         inline void go_down(size_t cells);
@@ -158,7 +110,7 @@ public:
 /////////////////////////////
 
 // TODO: terminal::cursor::get_pos()
-inline uv2 terminal::cursor::get_pos() {
+inline u_vec2_t terminal::cursor::get_pos() {
     return {0,0};
 }
 
@@ -167,7 +119,7 @@ inline void terminal::cursor::go_home(){
     std::cout << "\x1B[H";
 }
 
-inline void terminal::cursor::set_pos(uv2 pos){
+inline void terminal::cursor::set_pos(u_vec2_t pos){
     std::cout << "\x1B[" << pos.y << ";" << pos.x << "f";
 }
 

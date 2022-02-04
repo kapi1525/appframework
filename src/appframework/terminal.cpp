@@ -1,5 +1,5 @@
-#include "appframework_terminal.hpp"
-// Definitions for terminal functions are at the bottom of appframework_terminal.hpp header.
+#include "terminal.hpp"
+// Definitions for terminal functions are at the bottom of terminal.hpp header.
 // Those functions are inline so they need to be in header file.
 
 

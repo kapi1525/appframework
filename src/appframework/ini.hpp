@@ -1,6 +1,6 @@
 #pragma once
-#include "appframework_common.hpp"
-#include "appframework_terminal.hpp"    // For logging
+#include "common.hpp"
+#include "terminal.hpp"    // For logging
 
 
 
