@@ -138,16 +138,13 @@ std::string ini::remove_whitespace(std::string_view line) {
 
 std::string ini::remove_comments(std::string_view line) {
     // Standard ini uses ';' for comments but often '#' is also used so remove both unless in quotes
-    int comment_start = line.size();
     bool quote = false;
     for (size_t i = 0; i < line.size(); i++) {
         if(line[i] == '"' || line[i] == '\'') { quote = !quote; }
         if((line[i] == ';' || line[i] == '#') && quote == false) {
-            comment_start = i;
-            break;
+            return std::string(line.substr(0, i));
         }
     }
-    return std::string(line.substr(0, comment_start));
 }
 
 
