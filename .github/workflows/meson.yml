@@ -7,6 +7,11 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
+        compiler: [gcc, clang]
+        include:
+          - os: windows-latest
+            compiler: [cl]
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -18,6 +23,8 @@ jobs:
     - run: pip install meson ninja -r requirements.txt
 
     - name: build
+      env:
+        cc: ${{ matrix.compiler }}
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
