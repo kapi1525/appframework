@@ -11,10 +11,10 @@ jobs:
         compiler: [cl, g++, clang++]
         exclude:
         - os: windows-latest
-          compiler: [g++, clang++]
+          compiler: g++
 
         - os: ubuntu-latest
-          compiler: [cl]
+          compiler: cl
           
 
     runs-on: ${{ matrix.os }}
@@ -29,8 +29,8 @@ jobs:
 
     - name: build
       env:
-        CC=${{ matrix.compiler }}
-        CXX=${{ matrix.compiler }}
+        CC: ${{ matrix.compiler }}
+        CXX: ${{ matrix.compiler }}
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
