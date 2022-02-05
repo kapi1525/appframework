@@ -10,7 +10,7 @@ jobs:
         compiler: [gcc, clang]
         include:
           - os: windows-latest
-            compiler: [cl]
+            compiler: cl
 
     runs-on: ${{ matrix.os }}
 
