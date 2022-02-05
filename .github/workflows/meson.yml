@@ -8,8 +8,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        compiler: [cl, gcc, clang]
-        
+        compiler: [cl, g++, clang++]
+
         exclude:
         - os: windows-latest
           compiler: gcc
