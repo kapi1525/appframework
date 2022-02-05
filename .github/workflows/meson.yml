@@ -8,12 +8,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        compiler: [gcc, clang]
+        compiler: [gcc, clang, cl]
         exclude:
           - os: windows-latest
-            compiler: [gcc, clang]
-        include:
-          - os: windows-latest
+            compiler: gcc
+          - os: ubuntu-latest
             compiler: cl
 
     runs-on: ${{ matrix.os }}
