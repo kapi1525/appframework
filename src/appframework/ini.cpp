@@ -2,18 +2,39 @@
 
 
 
-ini::ini() {
-}
+/**
+ * @brief Creates new ini object.
+ */
+ini::ini() {}
 
+
+
+/**
+ * @brief Create ini object and parse specified file.
+ * 
+ * @param file_path Path to file.
+ * @param log_level What errors should be printed (loglevel::fatal by default)
+ */
 ini::ini(std::filesystem::path file_path, logs::loglevel log_level) {
     log.loging_level = log_level;
     parse(file_path);
 }
 
-ini::~ini() {
-}
 
 
+/**
+ * @brief Destroy the ini object
+ */
+ini::~ini() {}
+
+
+
+/**
+ * @brief Parses ini file.
+ * 
+ * @param file_path Path to file which uses ini format.
+ * @return true or false, true if successfuly parsed file, false if failed to open file (Create ini with loglevel::info for better debugging).
+ */
 bool ini::parse(std::filesystem::path file_path) {
     std::ifstream file(file_path);
 
@@ -62,6 +83,15 @@ bool ini::parse(std::filesystem::path file_path) {
     return true;
 }
 
+
+
+/**
+ * @brief Saves ini file to specified path.
+ * @note This overrides all comments.
+ * 
+ * @param file_path Path to file.
+ * @return true or false, true if successfuly saved file, false if failed to save file (Create ini with loglevel::info for better debugging).
+ */
 bool ini::save(std::filesystem::path file_path) {
     std::ofstream file(file_path);
 
@@ -112,6 +142,93 @@ bool ini::has_whitespace(std::string_view text) {
     return false;
 }
 
+
+
+/**
+ * @brief Get value of global ini item.
+ * 
+ * @param item Ini item.
+ * @return Item value
+ */
+std::string ini::get_item(std::string_view item) {
+    return get_item_group("", item);
+}
+
+
+
+/**
+ * @brief Get value of ini item from specified group.
+ * 
+ * @param group Ini group.
+ * @param item Ini item.
+ * @return Item value
+ */
+std::string ini::get_item_group(std::string_view group, std::string_view item) {
+    size_t group_index = 0;
+    for (size_t i = 0; i < data.size(); i++) {
+        if(data[i].first.compare(group) == 0) {
+            group_index = i;
+            break;
+        } else if(i == data.size()-1) {
+            log.warn("No such group exists: "+std::string(group));
+            return "";
+        }
+    }
+    
+    for (size_t i = 0; i < data[group_index].second.size(); i++) {
+        if(data[group_index].second[i].first == item) {
+            return data[group_index].second[i].second;
+        }
+    }
+            
+    log.warn("No such item exists: "+std::string(item));
+    return "";
+}
+
+
+
+/**
+ * @brief Set global ini item value.
+ * 
+ * @param item Ini item.
+ * @param value Value.
+ */
+void ini::set_item(std::string_view item, std::string_view value) {
+    set_item_group("", item, value);
+}
+
+
+
+/**
+ * @brief Set ini item value from specified group.
+ * 
+ * @param group Ini group.
+ * @param item Ini item.
+ * @param value Value.
+ */
+void ini::set_item_group(std::string_view group, std::string_view item, std::string_view value) {
+    for (size_t group_i = 0; group_i < data.size(); group_i++) {
+        if(data[group_i].first == group) {
+            for (size_t item_i = 0; item_i < data[group_i].second.size(); item_i++) {
+                if (data[group_i].second[item_i].first == item) {
+                    data[group_i].second[item_i].second = value;
+                    return;
+                }
+            }
+            data[group_i].second.push_back(ini_item_t{item, value});
+            return;
+        }
+    }
+
+    data.push_back({std::string(group), std::vector<ini_item_t>()});
+    data[data.size()-1].second.push_back(ini_item_t{item, value});
+}
+
+
+
+/**
+ * Functions bellow are private and are used for parsing ini.
+ */
 
 std::string ini::remove_whitespace(std::string_view line) {
     // Its probably not the best implementation but it will run only once when parsing ini so it dosent matter
@@ -181,54 +298,4 @@ bool ini::is_group(std::string_view line) {
         return true;
     }
     return false;
-}
-
-
-std::string ini::get_item(std::string_view item) {
-    return get_item_group("", item);
-}
-
-std::string ini::get_item_group(std::string_view group, std::string_view item) {
-    size_t group_index = 0;
-    for (size_t i = 0; i < data.size(); i++) {
-        if(data[i].first.compare(group) == 0) {
-            group_index = i;
-            break;
-        } else if(i == data.size()-1) {
-            log.warn("No such group exists: "+std::string(group));
-            return "";
-        }
-    }
-    
-    for (size_t i = 0; i < data[group_index].second.size(); i++) {
-        if(data[group_index].second[i].first == item) {
-            return data[group_index].second[i].second;
-        }
-    }
-            
-    log.warn("No such item exists: "+std::string(item));
-    return "";
-}
-
-
-void ini::set_item(std::string_view item, std::string_view value) {
-    set_item_group("", item, value);
-}
-
-void ini::set_item_group(std::string_view group, std::string_view item, std::string_view value) {
-    for (size_t group_i = 0; group_i < data.size(); group_i++) {
-        if(data[group_i].first == group) {
-            for (size_t item_i = 0; item_i < data[group_i].second.size(); item_i++) {
-                if (data[group_i].second[item_i].first == item) {
-                    data[group_i].second[item_i].second = value;
-                    return;
-                }
-            }
-            data[group_i].second.push_back(ini_item_t{item, value});
-            return;
-        }
-    }
-
-    data.push_back({std::string(group), std::vector<ini_item_t>()});
-    data[data.size()-1].second.push_back(ini_item_t{item, value});
 }
