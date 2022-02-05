@@ -3,49 +3,21 @@ name: build
 on: [push, pull_request]
 
 jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
-  windows:
-    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v2
-      with:
-        cache: 'pip'
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
+      if: ${{ matrix.os }} == windows-latest
     
     - run: pip install meson ninja -r requirements.txt
 
-    - uses: ilammy/msvc-dev-cmd@v1.10.0
-
-    - run: meson bin
-    - run: ninja -C bin
-    - run: meson test -C bin --repeat 10  --print-errorlogs
-    - run: meson test -C bin --repeat 10  --print-errorlogs
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: windows-sandbox
-        path: ./bin/sandbox.exe
-
-
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-python@v2
-      with:
-        cache: 'pip'
-
-    - run: pip install meson ninja -r requirements.txt
-    - run: sudo apt install valgrind -y
-
-    - run: meson bin
-      env:
-        CC: gcc
-    - run: ninja -C bin
-    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind -s'
-    - run: meson test -C bin --repeat 10  --print-errorlogs --wrap='valgrind --tool=helgrind -s'
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: linux-sandbox
-        path: ./bin/sandbox
+    - run: |
+        meson bin
+        ninja -C bin
+        meson test -C bin -t 10 --repeat 10 --print-errorlogs
