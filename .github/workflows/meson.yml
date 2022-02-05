@@ -17,7 +17,10 @@ jobs:
     
     - run: pip install meson ninja -r requirements.txt
 
-    - run: |
-        meson bin
+    - name: build
+      run: |
+        meson --buildtype=debugoptimized bin
         ninja -C bin
-        meson test -C bin -t 10 --repeat 10 --print-errorlogs
+
+    - name: run tests
+      run: meson test -C bin -t 10 --repeat 10 --print-errorlogs
