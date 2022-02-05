@@ -9,19 +9,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         compiler: [cl, gcc, clang]
-        cxx-compier: null
-
-        include:
-        - compiler: cl
-          cxx-compier: cl
-
-        - compiler: gcc
-          cxx-compier: g++
-
-        - compiler: clang
-          cxx-compier: clang++
-
-
+        
         exclude:
         - os: windows-latest
           compiler: gcc
@@ -42,8 +30,7 @@ jobs:
 
     - name: build
       env:
-        CC: ${{ matrix.compiler }}
-        CXX: ${{ matrix.cxx-compiler }}
+        CXX: ${{ matrix.compiler }}
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
