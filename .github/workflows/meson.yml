@@ -11,6 +11,9 @@ jobs:
         include:
           - os: windows-latest
             compiler: cl
+        exclude:
+          - os: windows-latest
+            compiler: [gcc, clang]
 
     runs-on: ${{ matrix.os }}
 
