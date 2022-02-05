@@ -8,8 +8,19 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        compiler: [cl, g++, clang++]
-        
+        compiler: [cl, gcc, clang]
+
+        include:
+        - compiler: cl
+          cxx-compier: cl
+
+        - compiler: gcc
+          cxx-compier: g++
+
+        - compiler: clang
+          cxx-compier: clang++
+
+
         exclude:
         - os: windows-latest
           compiler: g++
@@ -30,7 +41,8 @@ jobs:
 
     - name: build
       env:
-        CXX: ${{ matrix.compiler }}
+        CC: ${{ matrix.compiler }}
+        CXX: ${{ matrix.cxx-compiler }}
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
