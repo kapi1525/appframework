@@ -14,8 +14,12 @@ app::app() {
 
     DWORD dwOriginalOutMode = 0;
     DWORD dwOriginalInMode = 0;
-    assert(GetConsoleMode(hOut, &dwOriginalOutMode));
-    assert(GetConsoleMode(hIn, &dwOriginalInMode));
+    if(!GetConsoleMode(hOut, &dwOriginalOutMode)) {
+        std::cerr << "Failed to get console mode.\n";
+    }
+    if(!GetConsoleMode(hIn, &dwOriginalInMode)) {
+        std::cerr << "Failed to get console mode.\n";
+    }
 
     DWORD dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING | DISABLE_NEWLINE_AUTO_RETURN;
     // DWORD dwRequestedInModes = ENABLE_VIRTUAL_TERMINAL_INPUT;
@@ -28,12 +32,13 @@ app::app() {
         dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
         dwOutMode = dwOriginalOutMode | dwRequestedOutModes;
         if(!SetConsoleMode(hOut, dwOutMode)) {
-            std::cerr << "Failed to set console mode, without it colors and other fancy terminal stuff wont be available.\n";
+            std::cerr << "Failed to set console mode.\n";
         }
     }
 
     if(!SetConsoleMode(hIn, dwInMode)) {
-        std::cerr << "Failed to set console mode, without it colors and other fancy terminal stuff wont be available.\n";
+        std::cerr << "Failed to set console mode.\n";
+        std::cerr << "No colors and other fancy stuff will be working and you may se some random glitches.\n";
     }
     #endif // _WIN32
     terminal::reset();
