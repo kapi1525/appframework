@@ -39,4 +39,4 @@ jobs:
         ninja -C bin
 
     - name: run tests
-      run: meson test -C bin --repeat 100 --print-errorlogs
+      run: meson test -C bin --repeat 100 --num-processes 1 --print-errorlogs
