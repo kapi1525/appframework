@@ -27,10 +27,14 @@ app::app() {
         // we failed to set both modes, try to step down mode gracefully.
         dwRequestedOutModes = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
         dwOutMode = dwOriginalOutMode | dwRequestedOutModes;
-        assert(SetConsoleMode(hOut, dwOutMode));
+        if(assert(SetConsoleMode(hOut, dwOutMode)) {
+            std::cerr << "Failed to set console mode, without it colors and other fancy terminal stuff wont be available.\n"
+        }
     }
 
-    assert(SetConsoleMode(hIn, dwInMode));
+    if(!SetConsoleMode(hIn, dwInMode)) {
+        std::cerr << "Failed to set console mode, without it colors and other fancy terminal stuff wont be available.\n"
+    }
     #endif // _WIN32
     terminal::reset();
 }
