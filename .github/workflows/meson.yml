@@ -27,8 +27,8 @@ jobs:
 
     - name: build
       env:
-        cc: ${{ matrix.compiler }}
-        cxx: ${{ matrix.compiler }}
+        CC: ${{ matrix.compiler }}
+        CXX: ${{ matrix.compiler }}
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
