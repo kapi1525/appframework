@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
         compiler: [cl, g++, clang++]
 
         exclude:
@@ -15,6 +15,9 @@ jobs:
           compiler: g++
 
         - os: ubuntu-latest
+          compiler: cl
+
+        - os: macos-latest
           compiler: cl
           
 
