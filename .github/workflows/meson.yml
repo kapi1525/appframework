@@ -9,9 +9,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         compiler: [cl, g++, clang++]
-        include:
-
-
+        
         exclude:
         - os: windows-latest
           compiler: g++
