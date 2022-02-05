@@ -9,6 +9,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         compiler: [cl, gcc, clang]
+        cxx-compier: null
 
         include:
         - compiler: cl
@@ -23,7 +24,7 @@ jobs:
 
         exclude:
         - os: windows-latest
-          compiler: g++
+          compiler: gcc
 
         - os: ubuntu-latest
           compiler: cl
