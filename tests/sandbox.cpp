@@ -13,6 +13,8 @@ public:
             exit(0);
         }
 
+        terminal::erase();
+
         terminal::inverse();
         terminal::cursor::set_pos({10,3});
         std::cout << " ";
@@ -42,7 +44,7 @@ public:
 
         std::this_thread::sleep_for(0.5s);
 
-        for (size_t i = 0; i < 4; i++) {
+        for (size_t i = 0; i < 5; i++) {
             log.loging_level = (logs::loglevel)i;
             std::cout << "loging_level == " << (int)log.loging_level << "\n\n";
 
