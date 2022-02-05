@@ -26,12 +26,14 @@
 
 #endif // _WIN32
 
-// linux stuff
-#ifdef __linux__
+
+// unix stuff
+#ifdef __unix__
     #include <unistd.h>
     #include <pwd.h>
     #include <sys/types.h>
-#endif // __linux__
+#endif // __unix__
+
 
 // Dont mind this.
 #if 0

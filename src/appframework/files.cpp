@@ -17,7 +17,7 @@ std::filesystem::path files::user::appdata(std::string name) {
 std::filesystem::path files::user::home() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Profile).make_preferred();
-    #elif __linux__
+    #elif __unix__
     return std::filesystem::path(getpwuid(getuid())->pw_dir).make_preferred();
     #endif
 }
