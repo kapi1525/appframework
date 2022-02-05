@@ -8,10 +8,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        compiler: [cl, g++, clang++]
+        compiler: [cl, gcc, clang]
+        include:
+
         exclude:
         - os: windows-latest
-          compiler: g++
+          compiler: gcc
 
         - os: ubuntu-latest
           compiler: cl
@@ -27,10 +29,12 @@ jobs:
     
     - run: pip install meson ninja -r requirements.txt
 
-    - name: build
+    - if: ${{ matrix.compiler }} == gcc
       env:
         CC: ${{ matrix.compiler }}
-        CXX: ${{ matrix.compiler }}
+        CXX: g++
+
+    - name: build
       run: |
         meson --buildtype=debugoptimized bin
         ninja -C bin
