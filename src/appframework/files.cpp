@@ -24,7 +24,7 @@ std::filesystem::path files::user::home() {
 
 
 #ifdef __linux__
-    ini user_dirs = std::filesystem::path(files::user::home() / ".config" / "user-dirs.dirs");
+    ini xdg_user_dirs = std::filesystem::path(files::user::home() / ".config" / "user-dirs.dirs");
 #endif // __linux__
 
 
@@ -32,7 +32,7 @@ std::filesystem::path files::user::public_folder() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Public).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_PUBLICSHARE");
+    std::string desktop = xdg_user_dirs.get_item("XDG_PUBLICSHARE");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
     #endif
@@ -43,7 +43,7 @@ std::filesystem::path files::user::desktop() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
     #elif __linux__
-    std::string desktop = user_dirs.get_item("XDG_DESKTOP_DIR");
+    std::string desktop = xdg_user_dirs.get_item("XDG_DESKTOP_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
     #endif
@@ -53,7 +53,7 @@ std::filesystem::path files::user::documents() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Documents).make_preferred();
     #elif __linux__
-    std::string documents = user_dirs.get_item("XDG_DOCUMENTS_DIR");
+    std::string documents = xdg_user_dirs.get_item("XDG_DOCUMENTS_DIR");
     documents.replace(documents.find("$HOME"), 5, home());
     return documents;
     #endif
@@ -63,7 +63,7 @@ std::filesystem::path files::user::music() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Music).make_preferred();
     #elif __linux__
-    std::string music = user_dirs.get_item("XDG_MUSIC_DIR");
+    std::string music = xdg_user_dirs.get_item("XDG_MUSIC_DIR");
     music.replace(music.find("$HOME"), 5, home());
     return music;
     #endif
@@ -73,7 +73,7 @@ std::filesystem::path files::user::videos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Videos).make_preferred();
     #elif __linux__
-    std::string videos = user_dirs.get_item("XDG_VIDEOS_DIR");
+    std::string videos = xdg_user_dirs.get_item("XDG_VIDEOS_DIR");
     videos.replace(videos.find("$HOME"), 5, home());
     return videos;
     #endif
@@ -83,7 +83,7 @@ std::filesystem::path files::user::photos() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
     #elif __linux__
-    std::string photos = user_dirs.get_item("XDG_PICTURES_DIR");
+    std::string photos = xdg_user_dirs.get_item("XDG_PICTURES_DIR");
     photos.replace(photos.find("$HOME"), 5, home());
     return photos;
     #endif
@@ -93,7 +93,7 @@ std::filesystem::path files::user::downloads() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
     #elif __linux__
-    std::string downloads = user_dirs.get_item("XDG_DOWNLOAD_DIR");
+    std::string downloads = xdg_user_dirs.get_item("XDG_DOWNLOAD_DIR");
     downloads.replace(downloads.find("$HOME"), 5, home());
     return downloads;
     #endif
