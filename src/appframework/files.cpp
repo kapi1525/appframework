@@ -124,9 +124,9 @@ std::filesystem::path files::executable_path() {
     #elif __linux__
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
     #elif __APPLE__
-    char* buff = malloc(sizeof(char) * 1024);
-    _NSGetExecutablePath(buff, 1024);
-    return buff;
+    std::cerr << "Function: " << __func__ << "() is not implemented for MacOS yet.\n";
+    std::cerr << "Calling abort().\n";
+    abort();
     #endif
 }
 
@@ -139,5 +139,9 @@ std::string files::executable_name() {
     std::string result;
     std::ifstream("/proc/self/comm") >> result;
     return result;
+    #elif __APPLE__
+    std::cerr << "Function: " << __func__ << "() is not implemented for MacOS yet.\n";
+    std::cerr << "Calling abort().\n";
+    abort();
     #endif
 }
