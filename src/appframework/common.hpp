@@ -28,8 +28,8 @@
 
 
 // unix stuff
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
     #include <unistd.h>
     #include <pwd.h>
     #include <sys/types.h>
-#endif // __unix__
+#endif // defined(__unix__) || defined(__APPLE__)
