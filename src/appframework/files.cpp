@@ -123,6 +123,10 @@ std::filesystem::path files::executable_path() {
     return std::filesystem::path(Path).parent_path();
     #elif __linux__
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
+    #elif __APPLE__
+    char buff[MAXPATHLEN];
+    _NSGetExecutablePath(&buff, sizeof(buff));
+    return buff;
     #endif
 }
 

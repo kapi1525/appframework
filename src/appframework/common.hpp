@@ -33,3 +33,9 @@
     #include <pwd.h>
     #include <sys/types.h>
 #endif // defined(__unix__) || defined(__APPLE__)
+
+
+// apple stuff
+#ifdef __APPLE__
+    #include <mach-o/dyld.h>
+#endif
