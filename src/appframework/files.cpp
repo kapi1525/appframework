@@ -28,6 +28,17 @@ std::filesystem::path files::user::home() {
 #endif // __linux__
 
 
+std::filesystem::path files::user::public_folder() {
+    #ifdef _WIN32
+    return  GetKnownFolderPath(FOLDERID_Public).make_preferred();
+    #elif __linux__
+    std::string desktop = user_dirs.get_item("XDG_PUBLICSHARE");
+    desktop.replace(desktop.find("$HOME"), 5, home());
+    return desktop;
+    #endif
+}
+
+
 std::filesystem::path files::user::desktop() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Desktop).make_preferred();

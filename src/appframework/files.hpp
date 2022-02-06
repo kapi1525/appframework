@@ -15,12 +15,14 @@ namespace files {
         std::filesystem::path home();                    // User home directory ( /home/user, C:/Users/user )
         
         // TODO: Make linux implementations better.
-        std::filesystem::path desktop();   // User desktop folder
-        std::filesystem::path documents(); // User documents folder
-        std::filesystem::path music();     // User music folder
-        std::filesystem::path videos();    // User videos folder
-        std::filesystem::path photos();    // User photos folder
-        std::filesystem::path downloads(); // User downloads folder
+        std::filesystem::path public_folder();  // User public folder (i cant name this "public()" cause of "public" keyword)
+
+        std::filesystem::path desktop();        // User desktop folder
+        std::filesystem::path documents();      // User documents folder
+        std::filesystem::path music();          // User music folder
+        std::filesystem::path videos();         // User videos folder
+        std::filesystem::path photos();         // User photos folder
+        std::filesystem::path downloads();      // User downloads folder
 
         #ifdef _WIN32
         // If someone uses this framwork you dont wanna use this function since its windows only and may be deleted anytime.
