@@ -124,8 +124,8 @@ std::filesystem::path files::executable_path() {
     #elif __linux__
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
     #elif __APPLE__
-    char buff[1024];
-    _NSGetExecutablePath(&buff, sizeof(buff));
+    char* buff = malloc(sizeof(char) * 1024);
+    _NSGetExecutablePath(&buff, 1024);
     return buff;
     #endif
 }
