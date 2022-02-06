@@ -35,7 +35,7 @@ std::filesystem::path files::user::public_folder() {
     std::string desktop = xdg_user_dirs.get_item("XDG_PUBLICSHARE");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Public";
     #endif
 }
@@ -48,7 +48,7 @@ std::filesystem::path files::user::desktop() {
     std::string desktop = xdg_user_dirs.get_item("XDG_DESKTOP_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Desktop";
     #endif
 }
@@ -60,7 +60,7 @@ std::filesystem::path files::user::documents() {
     std::string documents = xdg_user_dirs.get_item("XDG_DOCUMENTS_DIR");
     documents.replace(documents.find("$HOME"), 5, home());
     return documents;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Documents";
     #endif
 }
@@ -72,7 +72,7 @@ std::filesystem::path files::user::music() {
     std::string music = xdg_user_dirs.get_item("XDG_MUSIC_DIR");
     music.replace(music.find("$HOME"), 5, home());
     return music;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Music";
     #endif
 }
@@ -84,7 +84,7 @@ std::filesystem::path files::user::videos() {
     std::string videos = xdg_user_dirs.get_item("XDG_VIDEOS_DIR");
     videos.replace(videos.find("$HOME"), 5, home());
     return videos;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Movies";
     #endif
 }
@@ -96,7 +96,7 @@ std::filesystem::path files::user::photos() {
     std::string photos = xdg_user_dirs.get_item("XDG_PICTURES_DIR");
     photos.replace(photos.find("$HOME"), 5, home());
     return photos;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Pictures";
     #endif
 }
@@ -108,7 +108,7 @@ std::filesystem::path files::user::downloads() {
     std::string downloads = xdg_user_dirs.get_item("XDG_DOWNLOAD_DIR");
     downloads.replace(downloads.find("$HOME"), 5, home());
     return downloads;
-    #elif APPLE
+    #elif __APPLE__
     return home()/"Downloads";
     #endif
 }
