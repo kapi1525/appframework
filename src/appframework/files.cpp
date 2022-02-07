@@ -10,9 +10,9 @@
  */
 std::filesystem::path files::user::appdata(std::string name) {
     std::filesystem::path appdata;
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     appdata = GetKnownFolderPath(FOLDERID_LocalAppData);
-    #elif __linux__
+    #elif APF_LINUX
     appdata = std::filesystem::path(home() / ".config");
     #endif
     appdata.append(name).make_preferred();
@@ -28,17 +28,17 @@ std::filesystem::path files::user::appdata(std::string name) {
  * @return Path to user directory.
  */
 std::filesystem::path files::user::home() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return  GetKnownFolderPath(FOLDERID_Profile).make_preferred();
-    #elif defined(__unix__) || defined(__APPLE__)
+    #elif APF_POSIX
     return std::filesystem::path(getpwuid(getuid())->pw_dir).make_preferred();
     #endif
 }
 
 
-#ifdef __linux__
+#ifdef APF_LINUX
     ini xdg_user_dirs = std::filesystem::path(files::user::home() / ".config" / "user-dirs.dirs");
-#endif // __linux__
+#endif // APF_LINUX
 
 
 
@@ -47,13 +47,13 @@ std::filesystem::path files::user::home() {
  * 
  * @return Path to users public folder.directory
 std::filesystem::path files::user::public_folder() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Public).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string desktop = xdg_user_dirs.get_item("XDG_PUBLICSHARE");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Public";
     #endif
 }
@@ -66,13 +66,13 @@ std::filesystem::path files::user::public_folder() {
  * @return Path to users desktop folder.
  */
 std::filesystem::path files::user::desktop() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string desktop = xdg_user_dirs.get_item("XDG_DESKTOP_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Desktop";
     #endif
 }
@@ -85,13 +85,13 @@ std::filesystem::path files::user::desktop() {
  * @return Path to users documents folder.
  */
 std::filesystem::path files::user::documents() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Documents).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string documents = xdg_user_dirs.get_item("XDG_DOCUMENTS_DIR");
     documents.replace(documents.find("$HOME"), 5, home());
     return documents;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Documents";
     #endif
 }
@@ -104,13 +104,13 @@ std::filesystem::path files::user::documents() {
  * @return Path to users music folder.
  */
 std::filesystem::path files::user::music() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Music).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string music = xdg_user_dirs.get_item("XDG_MUSIC_DIR");
     music.replace(music.find("$HOME"), 5, home());
     return music;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Music";
     #endif
 }
@@ -123,13 +123,13 @@ std::filesystem::path files::user::music() {
  * @return Path to users videos folder.
  */
 std::filesystem::path files::user::videos() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Videos).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string videos = xdg_user_dirs.get_item("XDG_VIDEOS_DIR");
     videos.replace(videos.find("$HOME"), 5, home());
     return videos;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Movies";
     #endif
 }
@@ -142,13 +142,13 @@ std::filesystem::path files::user::videos() {
  * @return Path to users photos folder.
  */
 std::filesystem::path files::user::photos() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string photos = xdg_user_dirs.get_item("XDG_PICTURES_DIR");
     photos.replace(photos.find("$HOME"), 5, home());
     return photos;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Pictures";
     #endif
 }
@@ -161,13 +161,13 @@ std::filesystem::path files::user::photos() {
  * @return Path to users downloads directory.
  */
 std::filesystem::path files::user::downloads() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
-    #elif __linux__
+    #elif APF_LINUX
     std::string downloads = xdg_user_dirs.get_item("XDG_DOWNLOAD_DIR");
     downloads.replace(downloads.find("$HOME"), 5, home());
     return downloads;
-    #elif __APPLE__
+    #elif APF_MAC
     return home()/"Downloads";
     #endif
 }
@@ -180,13 +180,13 @@ std::filesystem::path files::user::downloads() {
  * @return Path to executable
  */
 std::filesystem::path files::executable_path() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
     return std::filesystem::path(Path).parent_path();
-    #elif __linux__
+    #elif APF_LINUX
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
-    #elif __APPLE__
+    #elif APF_MAC
     std::cerr << "Function: " << __func__ << "() is not implemented for MacOS yet.\n";
     std::cerr << "Calling abort().\n";
     abort();
@@ -201,15 +201,15 @@ std::filesystem::path files::executable_path() {
  * @return Name of executable.
  */
 std::string files::executable_name() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
     return std::filesystem::path(Path).filename().string();
-    #elif __linux__
+    #elif APF_LINUX
     std::string result;
     std::ifstream("/proc/self/comm") >> result;
     return result;
-    #elif __APPLE__
+    #elif APF_MAC
     std::cerr << "Function: " << __func__ << "() is not implemented for MacOS yet.\n";
     std::cerr << "Calling abort().\n";
     abort();

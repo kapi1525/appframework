@@ -2,7 +2,7 @@
 
 
 app::app() {
-    #ifdef _WIN32
+    #ifdef APF_WINDOWS
     // Configure windows terminal to handle ANSI escape sequences
     // I put it here cause i dont hava a better place for it since removal of terminal class.
 
@@ -40,7 +40,7 @@ app::app() {
         std::cerr << "Failed to set console mode.\n";
         std::cerr << "No colors and other fancy stuff will be working and you may se some random glitches.\n";
     }
-    #endif // _WIN32
+    #endif // APF_WINDOWS
     terminal::reset();
 }
 

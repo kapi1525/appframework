@@ -14,8 +14,28 @@
 #include <cassert>
 
 
-// windows stuff
+
+// Platform specific macros that are little bit easier to remember
 #ifdef _WIN32
+    #define APF_WINDOWS
+#endif
+
+#if defined(__unix__) || defined(__APPLE__)
+    #define APF_POSIX
+#endif
+
+#ifdef __linux__
+    #define APF_LINUX
+#endif
+
+#ifdef __APPLE__
+    #define APF_MAC
+#endif
+
+
+
+// windows stuff
+#ifdef APF_WINDOWS
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
     #include <shlobj.h>     // SHGetKnownFolderPath
@@ -24,18 +44,18 @@
         #include <BaseTsd.h>
     #endif // _MSC_VER
 
-#endif // _WIN32
+#endif // APF_WINDOWS
 
 
-// unix stuff
-#if defined(__unix__) || defined(__APPLE__)
+// posix stuff
+#ifdef APF_POSIX
     #include <unistd.h>
     #include <pwd.h>
     #include <sys/types.h>
-#endif // defined(__unix__) || defined(__APPLE__)
+#endif // APF_POSIX
 
 
-// apple stuff
-#ifdef __APPLE__
+// mac stuff
+#ifdef APF_MAC
     #include <mach-o/dyld.h>
-#endif
+#endif // APF_MAC

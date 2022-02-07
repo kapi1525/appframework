@@ -1,11 +1,12 @@
 #pragma once
 #include "common.hpp"
+#include "terminal.hpp" // For logs
 
-#ifdef __linux__
+#ifdef APF_LINUX
     // In linux to get path to translated versions of Desktop and other default folders i need to parse
     // user-dirs.dirs file which has simmilar syntax to ini so ini parser will do it.
     #include "ini.hpp"
-#endif // __linux__
+#endif // APF_LINUX
 
 
 
@@ -24,7 +25,7 @@ namespace files {
         std::filesystem::path photos();         // User photos folder
         std::filesystem::path downloads();      // User downloads folder
 
-        #ifdef _WIN32
+        #ifdef APF_WINDOWS
         // If someone uses this framwork you dont wanna use this function since its windows only and may be deleted anytime.
         inline std::filesystem::path GetKnownFolderPath(REFKNOWNFOLDERID folderid) {
             PWSTR pwstr;
@@ -33,9 +34,11 @@ namespace files {
             CoTaskMemFree(pwstr);
             return temp;
         }
-        #endif // _WIN32
+        #endif // APF_WINDOWS
     }
 
     std::filesystem::path executable_path(); // Returns path of executable
     std::string executable_name();           // Returns name of executable ( includes file extension )
+
+    // TODO: class file_lock; - simmilar to std::mutex but for locking files so only one process can use it at once.
 }
