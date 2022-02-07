@@ -12,7 +12,7 @@ std::filesystem::path files::user::appdata(std::string name) {
     std::filesystem::path appdata;
     #ifdef APF_WINDOWS
     appdata = GetKnownFolderPath(FOLDERID_LocalAppData);
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     appdata = std::filesystem::path(home() / ".config");
     #endif
     appdata.append(name).make_preferred();
@@ -30,7 +30,7 @@ std::filesystem::path files::user::appdata(std::string name) {
 std::filesystem::path files::user::home() {
     #ifdef APF_WINDOWS
     return  GetKnownFolderPath(FOLDERID_Profile).make_preferred();
-    #elif APF_POSIX
+    #elif defined(APF_POSIX)
     return std::filesystem::path(getpwuid(getuid())->pw_dir).make_preferred();
     #endif
 }
@@ -46,10 +46,11 @@ std::filesystem::path files::user::home() {
  * @brief Returns path to users public folder.
  * 
  * @return Path to users public folder.directory
+ */
 std::filesystem::path files::user::public_folder() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Public).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string desktop = xdg_user_dirs.get_item("XDG_PUBLICSHARE");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
@@ -68,7 +69,7 @@ std::filesystem::path files::user::public_folder() {
 std::filesystem::path files::user::desktop() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string desktop = xdg_user_dirs.get_item("XDG_DESKTOP_DIR");
     desktop.replace(desktop.find("$HOME"), 5, home());
     return desktop;
@@ -87,7 +88,7 @@ std::filesystem::path files::user::desktop() {
 std::filesystem::path files::user::documents() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Documents).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string documents = xdg_user_dirs.get_item("XDG_DOCUMENTS_DIR");
     documents.replace(documents.find("$HOME"), 5, home());
     return documents;
@@ -106,7 +107,7 @@ std::filesystem::path files::user::documents() {
 std::filesystem::path files::user::music() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Music).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string music = xdg_user_dirs.get_item("XDG_MUSIC_DIR");
     music.replace(music.find("$HOME"), 5, home());
     return music;
@@ -125,7 +126,7 @@ std::filesystem::path files::user::music() {
 std::filesystem::path files::user::videos() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Videos).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string videos = xdg_user_dirs.get_item("XDG_VIDEOS_DIR");
     videos.replace(videos.find("$HOME"), 5, home());
     return videos;
@@ -144,7 +145,7 @@ std::filesystem::path files::user::videos() {
 std::filesystem::path files::user::photos() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string photos = xdg_user_dirs.get_item("XDG_PICTURES_DIR");
     photos.replace(photos.find("$HOME"), 5, home());
     return photos;
@@ -163,7 +164,7 @@ std::filesystem::path files::user::photos() {
 std::filesystem::path files::user::downloads() {
     #ifdef APF_WINDOWS
     return GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string downloads = xdg_user_dirs.get_item("XDG_DOWNLOAD_DIR");
     downloads.replace(downloads.find("$HOME"), 5, home());
     return downloads;
@@ -184,7 +185,7 @@ std::filesystem::path files::executable_path() {
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
     return std::filesystem::path(Path).parent_path();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     return std::filesystem::read_symlink("/proc/self/exe").parent_path();
     #elif APF_MAC
     std::cerr << "Function: " << __func__ << "() is not implemented for MacOS yet.\n";
@@ -205,7 +206,7 @@ std::string files::executable_name() {
     TCHAR Path[MAX_PATH];
     GetModuleFileName(NULL, Path, MAX_PATH);
     return std::filesystem::path(Path).filename().string();
-    #elif APF_LINUX
+    #elif defined(APF_LINUX)
     std::string result;
     std::ifstream("/proc/self/comm") >> result;
     return result;
