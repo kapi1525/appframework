@@ -31,7 +31,7 @@ public:
 
 private:
     bool has_whitespace(std::string_view text);                     // True if has whitespace
-    std::string remove_whitespace(std::string_view line);           // Removes whitespaces at start and end
+    std::string remove_whitespace(std::string_view line);           // Removes whitespaces
     std::string remove_comments(std::string_view line);             // Removes comments
 
     ini_item_t try_parse_item(std::string_view line);               // If passed line is item returns ini_item_t
