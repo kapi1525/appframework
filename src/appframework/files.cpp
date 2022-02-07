@@ -288,8 +288,9 @@ bool files::lock::try_lock_file(std::filesystem::path file_path) {
 
 
 bool files::lock::lock_file(std::filesystem::path file_path) {
+    bool return_value;
     while (true) {
-        try_lock_file(file_path);
+        return_value = try_lock_file(file_path);
         if(locked) {
             break;
         } else if(error == lock_error::already_locked) {
@@ -297,6 +298,7 @@ bool files::lock::lock_file(std::filesystem::path file_path) {
             std::this_thread::sleep_for(200ms);
         }
     }
+    return return_value;
 }
 
 
@@ -326,6 +328,8 @@ bool files::lock::unlock_file() {
     log.info("Unlocked file");
 
     locked = false;
+    return true;
+    
     #else // APF_POSIX
     return true;
     #endif
