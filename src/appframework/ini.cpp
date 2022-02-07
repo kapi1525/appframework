@@ -79,7 +79,15 @@ bool ini::parse(std::filesystem::path file_path) {
             }
         }
     }
+
+    file.close();
     
+    if(!file.good()) {
+        log.error("file.good() returned false.");
+        //std::abort(); ABORT!!!!!!!!
+        return false;
+    }
+
     return true;
 }
 
