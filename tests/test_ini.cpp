@@ -49,10 +49,8 @@ public:
 
         assert(file.good());
         file.flush();
-        assert(file.good());
 
         ini ini_file("test_ini.ini", logs::loglevel::info);
-        file.close();
 
         for (size_t group_i = 0; group_i < ini_file.data.size(); group_i++) {
             std::cout << "group: " << ini_file.data[group_i].first << "\n";
