@@ -36,7 +36,6 @@ namespace files {
         #endif // _WIN32
     }
 
-
     std::filesystem::path executable_path(); // Returns path of executable
     std::string executable_name();           // Returns name of executable ( includes file extension )
 }

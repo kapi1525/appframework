@@ -2,6 +2,12 @@
 
 
 
+/**
+ * @brief Creates folder with passed name where you can save configuration files, its created in %appdata% in windows, home/user/.config in linux, no mac implementation yet.
+ * 
+ * @param name Name of the folder.
+ * @return Path to created folder.
+ */
 std::filesystem::path files::user::appdata(std::string name) {
     std::filesystem::path appdata;
     #ifdef _WIN32
@@ -14,6 +20,13 @@ std::filesystem::path files::user::appdata(std::string name) {
     return appdata;
 }
 
+
+
+/**
+ * @brief Returns path to user directory.
+ * 
+ * @return Path to user directory.
+ */
 std::filesystem::path files::user::home() {
     #ifdef _WIN32
     return  GetKnownFolderPath(FOLDERID_Profile).make_preferred();
@@ -28,6 +41,11 @@ std::filesystem::path files::user::home() {
 #endif // __linux__
 
 
+
+/**
+ * @brief Returns path to users public folder.
+ * 
+ * @return Path to users public folder.directory
 std::filesystem::path files::user::public_folder() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Public).make_preferred();
@@ -41,6 +59,12 @@ std::filesystem::path files::user::public_folder() {
 }
 
 
+
+/**
+ * @brief Returns path to users desktop folder.
+ * 
+ * @return Path to users desktop folder.
+ */
 std::filesystem::path files::user::desktop() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Desktop).make_preferred();
@@ -53,6 +77,13 @@ std::filesystem::path files::user::desktop() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns path to users documents folder.
+ * 
+ * @return Path to users documents folder.
+ */
 std::filesystem::path files::user::documents() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Documents).make_preferred();
@@ -65,6 +96,13 @@ std::filesystem::path files::user::documents() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns path to users music folder.
+ * 
+ * @return Path to users music folder.
+ */
 std::filesystem::path files::user::music() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Music).make_preferred();
@@ -77,6 +115,13 @@ std::filesystem::path files::user::music() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns path to users videos folder.
+ * 
+ * @return Path to users videos folder.
+ */
 std::filesystem::path files::user::videos() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Videos).make_preferred();
@@ -89,6 +134,13 @@ std::filesystem::path files::user::videos() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns path to users photos folder.
+ * 
+ * @return Path to users photos folder.
+ */
 std::filesystem::path files::user::photos() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Pictures).make_preferred();
@@ -101,6 +153,13 @@ std::filesystem::path files::user::photos() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns path to users downloads folder.
+ * 
+ * @return Path to users downloads directory.
+ */
 std::filesystem::path files::user::downloads() {
     #ifdef _WIN32
     return GetKnownFolderPath(FOLDERID_Downloads).make_preferred();
@@ -115,7 +174,11 @@ std::filesystem::path files::user::downloads() {
 
 
 
-
+/**
+ * @brief Returns path to executable (without executable name).
+ * 
+ * @return Path to executable
+ */
 std::filesystem::path files::executable_path() {
     #ifdef _WIN32
     TCHAR Path[MAX_PATH];
@@ -130,6 +193,13 @@ std::filesystem::path files::executable_path() {
     #endif
 }
 
+
+
+/**
+ * @brief Returns name of executable.
+ * 
+ * @return Name of executable.
+ */
 std::string files::executable_name() {
     #ifdef _WIN32
     TCHAR Path[MAX_PATH];
