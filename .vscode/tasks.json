@@ -13,10 +13,7 @@
         {
             "label": "run tests",
             "type": "shell",
-            "command": "cd ${config:mesonbuild.buildFolder} && meson test",
-            "windows": {
-                "command": "cd ${config:mesonbuild.buildFolder} && meson test"
-            },
+            "command": "meson test -C bin --repeat 1000 --num-processes 20 --print-errorlogs --gdb",
             "group": "build"
         },
         {
