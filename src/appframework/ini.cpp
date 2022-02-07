@@ -233,6 +233,7 @@ void ini::set_item_group(std::string_view group, std::string_view item, std::str
 std::string ini::remove_whitespace(std::string_view line) {
     // Its probably not the best implementation but it will run only once when parsing ini so it dosent matter
     std::string temp;
+    temp.reserve(line.size());
     bool quote = false;
     bool group = false;
     for (size_t i = 0; i < line.size(); i++) {
