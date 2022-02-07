@@ -216,3 +216,122 @@ std::string files::executable_name() {
     abort();
     #endif
 }
+
+
+
+
+files::lock::lock() {
+    clear_error();
+}
+
+files::lock::lock(logs::loglevel level) {
+    log.loging_level = level;
+}
+
+files::lock::lock(std::filesystem::path file_path, bool block, logs::loglevel level) {
+    log.loging_level = level;
+
+    if(block) {
+        lock_file(file_path);
+    } else {
+        try_lock_file(file_path);
+    }
+}
+
+files::lock::~lock() {
+    unlock_file();
+}
+
+
+bool files::lock::try_lock_file(std::filesystem::path file_path) {
+    #ifdef APF_POSIX
+    if(locked) {
+        log.warn("File already locked, unlocking...");
+        unlock_file();
+    }
+
+    error = lock_error::none;
+
+    file_descriptor = open(file_path.string().c_str(), O_RDWR);
+    if(file_descriptor == -1) {
+        log.warn("Failed to obtain valid file descriptor, file maybe dosent exist.");
+        error = lock_error::invalid_file;
+        return false;
+    }
+
+    file_lock.l_type = F_WRLCK;
+    file_lock.l_whence = SEEK_SET;
+    file_lock.l_start = 0;
+    file_lock.l_len = 0;
+
+    if(fcntl(file_descriptor, F_SETLK, &file_lock) == -1) {
+        if (errno == EACCES || errno == EAGAIN) {
+            log.info("Failed to lock file: File is already locked by other process.");
+            error = lock_error::already_locked;
+        } else {
+            log.error("Failed to lock file: Unknown error.");
+            error = lock_error::unknown;
+        }
+        
+        close(file_descriptor); // TODO: Handle close() errors.
+        return false;
+    }
+
+    locked = true;
+
+    log.info("Locked file.");
+    return true;
+    #else // APF_POSIX
+    return true;
+    #endif
+}
+
+
+bool files::lock::lock_file(std::filesystem::path file_path) {
+    while (true) {
+        try_lock_file(file_path);
+        if(locked) {
+            break;
+        } else if(error == lock_error::already_locked) {
+            log.info("File is already locked, going to sleep and trying again...");
+            std::this_thread::sleep_for(200ms);
+        }
+    }
+}
+
+
+bool files::lock::unlock_file() {
+    #ifdef APF_POSIX
+    if(!locked) {
+        log.warn("File is not locked, no need for unlock_file().");
+        return false;
+    }
+
+    file_lock.l_type = F_UNLCK;
+    file_lock.l_whence = SEEK_SET;
+    file_lock.l_start = 0;
+    file_lock.l_len = 0;
+
+    if(fcntl(file_descriptor, F_SETLK, &file_lock) == -1) {        
+        log.error("Failed to unlock file: Unknown error.");
+
+        close(file_descriptor); // TODO: Handle close() errors.
+
+        error = lock_error::unknown;
+        return false;
+    }
+
+    close(file_descriptor); // TODO: Handle close() errors.
+
+    log.info("Unlocked file");
+
+    locked = false;
+    #else // APF_POSIX
+    return true;
+    #endif
+}
+
+
+void files::lock::clear_error() {
+    error = lock_error::none;
+}

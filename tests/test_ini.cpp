@@ -1,11 +1,17 @@
 #include "appframework.hpp"
 
+using namespace std::chrono_literals;
+
 
 
 class test_args : public app {
 public:
     test_args(::args args) {
         std::ofstream file("test_ini.ini");
+        files::lock lock("test_ini.ini", true, logs::loglevel::info);
+        if(lock.error != files::lock::lock_error::none) {
+            exit(-1);
+        }
 
         assert(file.good());
 
@@ -39,11 +45,14 @@ public:
         file << "# [commented group with spaces]\n";
         file << "; item = abc\n";
 
-        file.close();
+        //std::cin.get();
 
+        assert(file.good());
+        file.flush();
         assert(file.good());
 
         ini ini_file("test_ini.ini", logs::loglevel::info);
+        file.close();
 
         for (size_t group_i = 0; group_i < ini_file.data.size(); group_i++) {
             std::cout << "group: " << ini_file.data[group_i].first << "\n";

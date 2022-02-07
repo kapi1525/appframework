@@ -9,6 +9,10 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <thread>
+#include <chrono>
+
+using namespace std::chrono_literals;
 
 // Standard C stuff
 #include <cassert>
@@ -49,10 +53,19 @@
 
 // posix stuff
 #ifdef APF_POSIX
+    #include <stdlib.h>
     #include <unistd.h>
+    #include <fcntl.h>
+    #include <errno.h>
+    #include <stdio.h>
     #include <pwd.h>
     #include <sys/types.h>
 #endif // APF_POSIX
+
+
+// linux stuff
+#ifdef APF_LINUX
+#endif
 
 
 // mac stuff

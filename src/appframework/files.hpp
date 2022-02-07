@@ -40,5 +40,38 @@ namespace files {
     std::filesystem::path executable_path(); // Returns path of executable
     std::string executable_name();           // Returns name of executable ( includes file extension )
 
-    // TODO: class file_lock; - simmilar to std::mutex but for locking files so only one process can use it at once.
+
+    class lock {
+    public:
+        lock();
+        lock(logs::loglevel level);
+        lock(std::filesystem::path file_path, bool block = false, logs::loglevel level = logs::loglevel::fatal);
+        ~lock();
+
+        // Very descriptive errors :)
+        enum class lock_error {
+            none,
+            invalid_file,
+            already_locked,
+            unknown,
+        };
+
+        lock_error error = lock_error::none;
+        bool locked = false;
+
+        bool try_lock_file(std::filesystem::path file_path);    // Try to lock file return false if failed
+        bool lock_file(std::filesystem::path file_path);        // Lock file wait if already locked
+        bool unlock_file();
+
+        void clear_error();
+
+    private:
+        logs log;
+
+    #ifdef APF_POSIX
+        struct flock file_lock;
+        int file_descriptor = 0;
+    #endif // APF_POSIX
+
+    };
 }
