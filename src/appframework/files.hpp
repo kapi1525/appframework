@@ -88,6 +88,8 @@ namespace files {
                     break;
                 }
             }
+
+            return true;
         }
 
         inline bool _close() {
@@ -112,6 +114,7 @@ namespace files {
                     return false;
                 }
             }
+            
             return true;
         }
 
