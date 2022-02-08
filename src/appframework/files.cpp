@@ -252,7 +252,9 @@ bool files::lock::try_lock_file(std::filesystem::path file_path) {
 
     error = lock_error::none;
 
-    _open(file_path);
+    if(!_open(file_path)) {
+        return false;
+    }
 
     file_lock.l_type = F_WRLCK;
     file_lock.l_whence = SEEK_SET;

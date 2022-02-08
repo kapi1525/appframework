@@ -8,6 +8,8 @@ class test_args : public app {
 public:
     test_args(::args args) {
         std::ofstream file("test_ini.ini");
+
+        
         files::lock lock("test_ini.ini", true, logs::loglevel::info);
         if(lock.error != files::lock::lock_error::none) {
             exit(-1);
