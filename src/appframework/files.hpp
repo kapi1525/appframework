@@ -53,6 +53,8 @@ namespace files {
             none,
             invalid_file,
             already_locked,
+            internal,
+            io,
             unknown,
         };
 
@@ -68,7 +70,44 @@ namespace files {
     private:
         logs log;
 
+    #ifdef APF_WINDOWS
+
+    #endif // APF_WINDOWS
+
     #ifdef APF_POSIX
+        inline bool _open(std::filesystem::path file_path) {
+            file_descriptor = open(file_path.string().c_str(), O_RDWR);
+            if(file_descriptor == -1) {
+                log.error("open() returned an error: Bad file descriptor.");
+                error = lock_error::invalid_file;
+                return false;
+            }
+        }
+
+        inline bool _close() {
+            if(close(file_descriptor) == -1) {
+                switch (errno) {
+                    case EBADF:
+                        log.error("close() returned an error: Bad file descriptor.");
+                        error = lock_error::internal;
+                        return false;
+                    case EINTR:
+                        log.error("close() returned an error: Interupted by signal.");
+                        error = lock_error::internal;
+                        return false;
+                    case EIO:
+                        log.error("close() returned an error: IO error.");
+                        error = lock_error::io;
+                        return false;
+                    default:
+                        log.error("close() returned an error: Unknown error.");
+                        error = lock_error::unknown;
+                        return false;
+                }
+            }
+            return true;
+        }
+
         struct flock file_lock;
         int file_descriptor = 0;
     #endif // APF_POSIX

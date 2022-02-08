@@ -252,12 +252,7 @@ bool files::lock::try_lock_file(std::filesystem::path file_path) {
 
     error = lock_error::none;
 
-    file_descriptor = open(file_path.string().c_str(), O_RDWR);
-    if(file_descriptor == -1) {
-        log.warn("Failed to obtain valid file descriptor, file maybe dosent exist.");
-        error = lock_error::invalid_file;
-        return false;
-    }
+    _open(file_path);
 
     file_lock.l_type = F_WRLCK;
     file_lock.l_whence = SEEK_SET;
@@ -273,7 +268,7 @@ bool files::lock::try_lock_file(std::filesystem::path file_path) {
             error = lock_error::unknown;
         }
         
-        close(file_descriptor); // TODO: Handle close() errors.
+        _close();
         return false;
     }
 
@@ -295,7 +290,7 @@ bool files::lock::lock_file(std::filesystem::path file_path) {
             break;
         } else if(error == lock_error::already_locked) {
             log.info("File is already locked, going to sleep and trying again...");
-            std::this_thread::sleep_for(200ms);
+            std::this_thread::sleep_for(100ms);
         }
     }
     return return_value;
@@ -317,13 +312,13 @@ bool files::lock::unlock_file() {
     if(fcntl(file_descriptor, F_SETLK, &file_lock) == -1) {        
         log.error("Failed to unlock file: Unknown error.");
 
-        close(file_descriptor); // TODO: Handle close() errors.
+        _close();
 
         error = lock_error::unknown;
         return false;
     }
 
-    close(file_descriptor); // TODO: Handle close() errors.
+    _close();
 
     log.info("Unlocked file");
 
