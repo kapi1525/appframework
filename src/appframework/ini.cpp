@@ -23,7 +23,7 @@ ini::ini(std::filesystem::path file_path, logs::loglevel log_level) {
         if(return_value) {
             return;
         } else {
-            std::this_thread::sleep_for(100ms);
+            //std::this_thread::sleep_for(500ms);
         }
     }
 }
@@ -85,6 +85,11 @@ bool ini::parse(std::filesystem::path file_path) {
                     }
                 }
             }
+        }
+
+        if(!file.good()) {
+            log.error("file.good() returned false.");
+            return false;
         }
     }
 
