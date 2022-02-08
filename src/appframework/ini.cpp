@@ -2,10 +2,15 @@
 
 
 
+
 /**
- * @brief Creates new ini object.
+ * @brief Creates new ini object with optional log level.
+ * 
+ * @param log_level What errors should be printed (loglevel::fatal by default)
  */
-ini::ini() {}
+ini::ini(logs::loglevel log_level) {
+    log.loging_level = log_level;
+}
 
 
 

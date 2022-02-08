@@ -9,7 +9,7 @@
 // Simple .ini parser
 class ini {
 public:
-    ini();
+    ini(logs::loglevel log_level = logs::loglevel::fatal);
     ini(std::filesystem::path file_path, logs::loglevel log_level = logs::loglevel::fatal);
     ~ini();
 
