@@ -13,7 +13,7 @@
         {
             "label": "run tests",
             "type": "shell",
-            "command": "meson test -C bin --repeat 1000 --num-processes 20 --print-errorlogs --gdb",
+            "command": "meson test -C bin --repeat 10000 --num-processes 25 --print-errorlogs",
             "group": "build"
         },
         {

@@ -17,7 +17,15 @@ ini::ini() {}
  */
 ini::ini(std::filesystem::path file_path, logs::loglevel log_level) {
     log.loging_level = log_level;
-    parse(file_path);
+    bool return_value = false;
+    for (size_t i = 0; i < 10; i++) {
+        return_value = parse(file_path);
+        if(return_value) {
+            return;
+        } else {
+            std::this_thread::sleep_for(100ms);
+        }
+    }
 }
 
 
@@ -84,7 +92,6 @@ bool ini::parse(std::filesystem::path file_path) {
     
     if(!file.good()) {
         log.error("file.good() returned false.");
-        //std::abort(); ABORT!!!!!!!!
         return false;
     }
 
@@ -127,6 +134,11 @@ bool ini::save(std::filesystem::path file_path) {
             } else {
                 file << data[group_i].second[item_i].second << "\n";
             }
+        }
+
+        if(!file.good()) {
+            log.error("file.good() returned false.");
+            return false;
         }
     }
 
