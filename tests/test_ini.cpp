@@ -9,7 +9,6 @@ public:
     test_args(::args args) {
         std::ofstream file("test_ini.ini");
 
-        
         files::lock lock("test_ini.ini", true, logs::loglevel::info);
         if(lock.error != files::lock::lock_error::none) {
             exit(-1);
@@ -46,8 +45,6 @@ public:
         file << "\n";
         file << "# [commented group with spaces]\n";
         file << "; item = abc\n";
-
-        //std::cin.get();
 
         assert(file.good());
         file.flush();

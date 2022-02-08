@@ -288,14 +288,13 @@ bool files::lock::lock_file(std::filesystem::path file_path) {
     bool return_value;
     while (true) {
         return_value = try_lock_file(file_path);
-        if(locked) {
-            break;
+        if(return_value) {
+            return return_value;
         } else if(error == lock_error::already_locked) {
             log.info("File is already locked, going to sleep and trying again...");
             std::this_thread::sleep_for(100ms);
         }
     }
-    return return_value;
 }
 
 
