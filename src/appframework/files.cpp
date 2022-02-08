@@ -323,8 +323,6 @@ bool files::lock::unlock_file() {
     _close();
 
     log.info("Unlocked file");
-
-    locked = false;
     return true;
     
     #else // APF_POSIX

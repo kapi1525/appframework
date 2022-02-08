@@ -53,8 +53,8 @@ namespace files {
             none,
             invalid_file,
             already_locked,
-            internal,
             io,
+            internal,
             unknown,
         };
 
@@ -115,6 +115,7 @@ namespace files {
                 }
             }
             
+            locked = false;
             return true;
         }
 
