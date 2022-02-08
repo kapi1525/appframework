@@ -4,16 +4,15 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "meson",
-            "mode": "build",
-            "group": "build",
-            "problemMatcher": [],
-            "label": "build"
+            "label": "build",
+            "type": "shell",
+            "command": "ninja -C ${config:mesonbuild.buildFolder} -j 4",
+            "group": "build"
         },
         {
             "label": "run tests",
             "type": "shell",
-            "command": "meson test -C bin --repeat 10000 --num-processes 25 --print-errorlogs -t 0.2",
+            "command": "meson test -C ${config:mesonbuild.buildFolder} --repeat 10000 --num-processes 25 --print-errorlogs -t 0.2",
             "group": "build"
         },
         {
