@@ -38,9 +38,4 @@ jobs:
         ninja -C bin
 
     - name: run tests
-      if: ${{ matrix.os }} != windows-latest
-      run: meson test -C bin --repeat 100 --num-processes 6 --print-errorlogs
-
-    - name: run tests
-      if: ${{ matrix.os }} == windows-latest
       run: meson test -C bin --repeat 100 --num-processes 1 --print-errorlogs
