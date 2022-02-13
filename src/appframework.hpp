@@ -25,14 +25,6 @@ namespace apf {
         // Framework version
         version appframework_version = {0,3,0};
     };
-
-
-    inline void run_app(app* app_ptr) {
-        app_ptr->start();
-        app_ptr->run();
-        app_ptr->end();
-        delete app_ptr;
-    }
 };
 
 
