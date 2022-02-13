@@ -2,7 +2,7 @@
 
 
 
-class test_args : public app {
+class test_args : public apf::app {
 public:
 
     // -posix
@@ -13,7 +13,7 @@ public:
     // /windows
     // /windows-with-arg:argument
 
-    test_args(::args args) {
+    test_args(apf::args args) {
         assert(args.has("p"));
         assert(args.has("o"));
         assert(args.has("s"));
@@ -39,6 +39,6 @@ public:
 
 
 int main(int argc, char const *argv[]) {
-    run_app(new test_args(args(argc, argv)));
+    apf::run_app(new test_args(apf::args(argc, argv)));
     return 0;
 }

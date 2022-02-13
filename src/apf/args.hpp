@@ -1,74 +1,36 @@
-#include "terminal.hpp"
-// Definitions for terminal functions are at the bottom of terminal.hpp header.
-// Those functions are inline so they need to be in header file.
+#pragma once
+#include "common.hpp"
 
 
 
-/////////////////////////////
-// Logging stuff
-/////////////////////////////
+namespace apf {
+    class args {
+    public:
+        args(int argc = 1, char const *argv[] = 0);
+        ~args();
 
-logs::logs() {}
-logs::~logs() {}
+        bool has(std::string_view arg);
+        std::string_view get(std::string_view arg);
 
-
-void logs::fatal(std::string_view message) {
-    if(loging_level >= loglevel::fatal) {
-        terminal::color({0,0,0});
-        terminal::back_color({255,0,0});
-        terminal::bold();
-        std::cout << "[FATAL] " << message;
-        terminal::reset();
-        std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
-    }
-}
-
-void logs::error(std::string_view message) {
-    if(loging_level >= loglevel::error) {
-        terminal::color({255,0,0});
-        terminal::bold();
-        std::cout << "[ERROR] " << message;
-        terminal::reset();
-        std::cout << std::endl;                 // endl to make sure buffer is flushed. After reseting to fix color glitches in gnome terminal.
-    }
-}
-
-void logs::warn(std::string_view message) {
-    if(loging_level >= loglevel::warn) {
-        terminal::color({255,255,0});
-        std::cout << "[WARN ] " << message;
-        terminal::reset();
-        std::cout << "\n";                      // After reseting to fix color glitches in gnome terminal.
-    }
-}
-
-void logs::info(std::string_view message) {
-    if(loging_level >= loglevel::info) {
-        std::cout << "[info ] " << message << "\n";
-    }
+    private:
+        std::vector<std::string_view> data;
+    };
 }
 
 
 
-/////////////////////////////
-// Args stuff
-/////////////////////////////
-
-args::args() {
-}
-
-args::args(int argc, char const *argv[]) {
+apf::args::args(int argc, char const *argv[]) {
     data.reserve(argc - 1);
     for (int i = 1; i < argc; i++) {
         data.push_back(argv[i]);
     }
 }
 
-args::~args() {
+apf::args::~args() {
 }
 
 
-bool args::has(std::string_view arg) {
+bool apf::args::has(std::string_view arg) {
     // POSIX options style ( single charachter options that start with "-", can have argument and can be joined together )
     if (arg.size() == 1) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
@@ -106,7 +68,7 @@ bool args::has(std::string_view arg) {
     return false;
 }
 
-std::string_view args::get(std::string_view arg) {
+std::string_view apf::args::get(std::string_view arg) {
     // POSIX options style ( single charachter options that start with "-", can have argument and can be joined together )
     if (arg.size() == 1) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {

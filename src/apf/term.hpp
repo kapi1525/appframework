@@ -4,11 +4,10 @@
 // Terminal functions are inline so their definitions are at the bottom of this file.
 
 #include "common.hpp"
-#include "types.hpp"
 
 
 
-namespace terminal {
+namespace apf::term {
     // Note: Some terminals may not support some of thiese:
     namespace cursor {
         inline u_vec2_t get_pos();
@@ -64,42 +63,6 @@ namespace terminal {
 }
 
 
-class logs {
-public:
-    logs();
-    ~logs();
-
-    enum class loglevel {
-        none,
-        fatal,      // Fatal error that program cant recover from.
-        error,
-        warn,
-        info
-    };
-
-    loglevel loging_level = loglevel::info;
-
-    void fatal(std::string_view message);
-    void error(std::string_view message);
-    void  warn(std::string_view message);
-    void  info(std::string_view message);
-};
-
-
-class args {
-public:
-    args();
-    args(int argc, char const *argv[]);
-    ~args();
-
-    std::vector<std::string_view> data;
-    
-    bool has(std::string_view arg);
-    std::string_view get(std::string_view arg);
-};
-
-
-
 
 /////////////////////////////
 // Definitions for inline terminal functions
@@ -109,55 +72,55 @@ public:
 // Cursor control
 /////////////////////////////
 
-// TODO: terminal::cursor::get_pos()
-inline u_vec2_t terminal::cursor::get_pos() {
+// TODO: apf::term::cursor::get_pos()
+inline u_vec2_t apf::term::cursor::get_pos() {
     return {0,0};
 }
 
 
-inline void terminal::cursor::go_home(){
+inline void apf::term::cursor::go_home(){
     std::cout << "\x1B[H";
 }
 
-inline void terminal::cursor::set_pos(u_vec2_t pos){
+inline void apf::term::cursor::set_pos(u_vec2_t pos){
     std::cout << "\x1B[" << pos.y << ";" << pos.x << "f";
 }
 
-inline void terminal::cursor::go_up(size_t cells){
+inline void apf::term::cursor::go_up(size_t cells){
     std::cout << "\x1B[" << cells << "A";
 }
 
-inline void terminal::cursor::go_down(size_t cells){
+inline void apf::term::cursor::go_down(size_t cells){
     std::cout << "\x1B[" << cells << "B";
 }
 
-inline void terminal::cursor::go_right(size_t cells){
+inline void apf::term::cursor::go_right(size_t cells){
     std::cout << "\x1B[" << cells << "C";
 }
 
-inline void terminal::cursor::go_left(size_t cells){
+inline void apf::term::cursor::go_left(size_t cells){
     std::cout << "\x1B[" << cells << "D";
 }
 
 
-inline void terminal::cursor::go_line_begin_up(size_t cells) {
+inline void apf::term::cursor::go_line_begin_up(size_t cells) {
     std::cout << "\x1B[" << cells << "F";
 }
 
-inline void terminal::cursor::go_line_begin_down(size_t cells) {
+inline void apf::term::cursor::go_line_begin_down(size_t cells) {
     std::cout << "\x1B[" << cells << "E";
 }
 
-inline void terminal::cursor::go_to_column(size_t column) {
+inline void apf::term::cursor::go_to_column(size_t column) {
     std::cout << "\x1B[" << column << "G";
 }
 
 
-inline void terminal::cursor::save(){
+inline void apf::term::cursor::save(){
     std::cout << "\x1B 7";
 }
 
-inline void terminal::cursor::restore(){
+inline void apf::term::cursor::restore(){
     std::cout << "\x1B 8";
 }
 
@@ -167,27 +130,27 @@ inline void terminal::cursor::restore(){
 // Erase functions
 /////////////////////////////
 
-inline void terminal::erase() {
+inline void apf::term::erase() {
     std::cout << "\x1B[2J";
 }
 
-inline void terminal::erase_start_cursor() {
+inline void apf::term::erase_start_cursor() {
     std::cout << "\x1B[1J";
 }
 
-inline void terminal::erase_cursor_end() {
+inline void apf::term::erase_cursor_end() {
     std::cout << "\x1B[0J";
 }
 
-inline void terminal::erase_line_start_cursor() {
+inline void apf::term::erase_line_start_cursor() {
     std::cout << "\x1B[1K";
 }
 
-inline void terminal::erase_cursor_to_line_end() {
+inline void apf::term::erase_cursor_to_line_end() {
     std::cout << "\x1B[0K";
 }
 
-inline void terminal::erase_line() {
+inline void apf::term::erase_line() {
     std::cout << "\x1B[2K";
 }
 
@@ -197,35 +160,35 @@ inline void terminal::erase_line() {
 // Text control
 /////////////////////////////
 
-inline void terminal::bold() {
+inline void apf::term::bold() {
     std::cout << "\x1B[1m";
 }
 
-inline void terminal::faint() {
+inline void apf::term::faint() {
     std::cout << "\x1B[2m";
 }
 
-inline void terminal::italic() {
+inline void apf::term::italic() {
     std::cout << "\x1B[3m";
 }
 
-inline void terminal::underline() {
+inline void apf::term::underline() {
     std::cout << "\x1B[4m";
 }
 
-inline void terminal::blinking() {
+inline void apf::term::blinking() {
     std::cout << "\x1B[5m";
 }
 
-inline void terminal::inverse() {
+inline void apf::term::inverse() {
     std::cout << "\x1B[7m";
 }
 
-inline void terminal::invisible() {
+inline void apf::term::invisible() {
     std::cout << "\x1B[8m";
 }
 
-inline void terminal::strikethrough() {
+inline void apf::term::strikethrough() {
     std::cout << "\x1B[9m";
 }
 
@@ -235,40 +198,40 @@ inline void terminal::strikethrough() {
 // Reseting terminal stuff
 /////////////////////////////
 
-inline void terminal::no_bold() {
+inline void apf::term::no_bold() {
     std::cout << "\x1B[22m";
 }
 
-inline void terminal::no_faint() {
+inline void apf::term::no_faint() {
     std::cout << "\x1B[23m";
 }
 
-inline void terminal::no_italic() {
+inline void apf::term::no_italic() {
     std::cout << "\x1B[24m";
 }
 
-inline void terminal::no_underline() {
+inline void apf::term::no_underline() {
     std::cout << "\x1B[25m";
 }
 
-inline void terminal::no_blinking() {
+inline void apf::term::no_blinking() {
     std::cout << "\x1B[26m";
 }
 
-inline void terminal::no_inverse() {
+inline void apf::term::no_inverse() {
     std::cout << "\x1B[27m";
 }
 
-inline void terminal::no_invisible() {
+inline void apf::term::no_invisible() {
     std::cout << "\x1B[28m";
 }
 
-inline void terminal::no_strikethrough() {
+inline void apf::term::no_strikethrough() {
     std::cout << "\x1B[29m";
 }
 
 
-inline void terminal::reset() {
+inline void apf::term::reset() {
     std::cout << "\x1B[0m";
 }
 
@@ -278,19 +241,19 @@ inline void terminal::reset() {
 // Colors
 /////////////////////////////
 
-inline void terminal::color(rgb color) {
+inline void apf::term::color(rgb color) {
     std::cout << "\x1B[38;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
 }
 
-inline void terminal::back_color(rgb color) {
+inline void apf::term::back_color(rgb color) {
     std::cout << "\x1B[48;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
 }
 
 
-inline void terminal::default_color() {
+inline void apf::term::default_color() {
     std::cout << "\x1B[39m";
 }
 
-inline void terminal::default_back_color() {
+inline void apf::term::default_back_color() {
     std::cout << "\x1B[49m";
 }
