@@ -39,9 +39,8 @@
 
 // windows stuff
 #ifdef APF_WINDOWS
-    #define WIN32_LEAN_AND_MEAN
-    #include <windows.h>
-    #include <shlobj.h>     // for SHGetKnownFolderPath
+    //#define WIN32_LEAN_AND_MEAN
+    //#include <windows.h>
 
     #ifdef _MSC_VER
         #include <BaseTsd.h> // for SSIZE_T
@@ -53,26 +52,18 @@
 
 // posix stuff
 #ifdef APF_POSIX
-    #include <stdlib.h>
-    #include <unistd.h>
-    #include <fcntl.h>
-    #include <errno.h>
-    #include <stdio.h>
-    #include <pwd.h>
-    #include <sys/types.h>
 #endif // APF_POSIX
 
 
 
 // linux stuff
 #ifdef APF_LINUX
-#endif
+#endif // APF_LINUX
 
 
 
 // mac stuff
 #ifdef APF_MAC
-    #include <mach-o/dyld.h>
 #endif // APF_MAC
 
 
