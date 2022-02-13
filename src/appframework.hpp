@@ -14,17 +14,13 @@ namespace apf {
     class app {
     public:
         app() {}
-        app(args args) {}
-        virtual void run() = 0;
         virtual ~app() {};
 
+        virtual void start() = 0;
+        virtual void run() = 0;
+        virtual void end() = 0;
 
-        // Fancy version of exit() that calls destructor of app for you.
-        void exit(int status) {
-            delete this;        // Delete app to call destructor on everything
-            ::exit(status);     // Exit
-        }
-
+        args arguments;
 
         // Framework version
         version appframework_version = {0,3,0};
@@ -32,8 +28,26 @@ namespace apf {
 
 
     inline void run_app(app* app_ptr) {
+        app_ptr->start();
         app_ptr->run();
+        app_ptr->end();
         delete app_ptr;
     }
-
 };
+
+
+
+// Beautiful macros
+#define APF_RUN(app_class)                          \
+    apf::app* app_ptr = new app_class;              \
+    app_ptr->arguments = apf::args(argc, argv);     \
+    app_ptr->start();                               \
+    app_ptr->run();                                 \
+    app_ptr->end();                                 \
+    delete app_ptr;
+
+
+#define APF_MAIN(app_class)                         \
+    int main(int argc, char const *argv[]) {        \
+        APF_RUN(app_class);                         \
+    }

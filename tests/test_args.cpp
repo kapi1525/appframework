@@ -13,32 +13,30 @@ public:
     // /windows
     // /windows-with-arg:argument
 
-    test_args(apf::args args) {
-        assert(args.has("p"));
-        assert(args.has("o"));
-        assert(args.has("s"));
-        assert(args.has("i"));
-        assert(args.has("x"));
+    void start() {
+        assert(arguments.has("p"));
+        assert(arguments.has("o"));
+        assert(arguments.has("s"));
+        assert(arguments.has("i"));
+        assert(arguments.has("x"));
 
-        assert(args.get("a") == "argument");
-        assert(args.get("b") == "very long option");
+        assert(arguments.get("a") == "argument");
+        assert(arguments.get("b") == "very long option");
         
-        assert(args.has("long-option"));
-        assert(args.get("long-option-with-arg") == "argument");
+        assert(arguments.has("long-option"));
+        assert(arguments.get("long-option-with-arg") == "argument");
 
-        assert(args.has("windows"));
-        assert(args.get("windows-with-arg") == "argument");
+        assert(arguments.has("windows"));
+        assert(arguments.get("windows-with-arg") == "argument");
     }
 
     void run() {
     }
 
-    ~test_args() {
+    void end() {
     }
 };
 
 
-int main(int argc, char const *argv[]) {
-    apf::run_app(new test_args(apf::args(argc, argv)));
-    return 0;
-}
+
+APF_MAIN(test_args)

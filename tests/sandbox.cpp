@@ -10,8 +10,8 @@ using namespace std::chrono_literals;
 
 class sandbox : public apf::app {
 public:
-    sandbox(apf::args args) {
-        if(args.has("v") || args.has("version")) {
+    void start() {
+        if(arguments.has("v") || arguments.has("version")) {
             std::cout << "sandbox " << sandbox_version << "\n";
             exit(0);
         }
@@ -153,7 +153,7 @@ public:
 
     }
 
-    ~sandbox() {
+    void end() {
         apf::term::reset();
         std::cout << "\n";
     }
@@ -165,7 +165,4 @@ private:
 
 
 
-int main(int argc, char const *argv[]) {
-    apf::run_app(new sandbox(apf::args(argc, argv)));
-    return 0;
-}
+APF_MAIN(sandbox)
