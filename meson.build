@@ -7,9 +7,10 @@ appframework_files = files()
 appframework_includes = include_directories('src')
 appframework_depends = [dependency('threads')]
 
-libappframework = static_library('appframework', appframework_files, include_directories: appframework_includes, dependencies: appframework_depends)
+# libappframework = static_library('appframework', appframework_files, include_directories: appframework_includes, dependencies: appframework_depends)
 
-appframework_dep = declare_dependency(include_directories: appframework_includes, link_with: libappframework)
+# appframework_dep = declare_dependency(include_directories: appframework_includes, link_with: libappframework)
+appframework_dep = declare_dependency(include_directories: appframework_includes)
 
 # build sandbox if not subproject
 if not meson.is_subproject()
