@@ -11,8 +11,6 @@ Fully works on:
 - Linux:
   - gcc
   - clang
-
-Semi working on:
-- MacOS:    (many things are not implemented like files.cpp)
+- MacOS:
   - clang
   - gcc
