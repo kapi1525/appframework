@@ -19,18 +19,18 @@ namespace apf {
 
 
 
-apf::args::args(int argc, char const *argv[]) {
+inline apf::args::args(int argc, char const *argv[]) {
     data.reserve(argc - 1);
     for (int i = 1; i < argc; i++) {
         data.push_back(argv[i]);
     }
 }
 
-apf::args::~args() {
+inline apf::args::~args() {
 }
 
 
-bool apf::args::has(std::string_view arg) {
+inline bool apf::args::has(std::string_view arg) {
     // POSIX options style ( single charachter options that start with "-", can have argument and can be joined together )
     if (arg.size() == 1) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
@@ -68,7 +68,7 @@ bool apf::args::has(std::string_view arg) {
     return false;
 }
 
-std::string_view apf::args::get(std::string_view arg) {
+inline std::string_view apf::args::get(std::string_view arg) {
     // POSIX options style ( single charachter options that start with "-", can have argument and can be joined together )
     if (arg.size() == 1) {
         for (size_t arg_i = 0; arg_i < data.size(); arg_i++) {
