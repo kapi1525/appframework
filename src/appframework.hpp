@@ -41,5 +41,5 @@ namespace apf {
 
 #define APF_MAIN(app_class)                         \
     int main(int argc, char const *argv[]) {        \
-        APF_RUN(app_class);                         \
+        APF_RUN(app_class)                          \
     }
