@@ -25,7 +25,7 @@ namespace apf {
         // Framework version
         version appframework_version = {0,3,0};
     };
-};
+}
 
 
 
