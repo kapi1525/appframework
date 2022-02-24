@@ -11,7 +11,7 @@ namespace apf {
         inline void  warn(std::string_view message);
         inline void  info(std::string_view message);
     }
-};
+}
 
 
 
