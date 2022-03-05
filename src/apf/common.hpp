@@ -6,6 +6,7 @@
 // Standard C++ stuff
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <filesystem>
 #include <string>
 #include <string_view>
