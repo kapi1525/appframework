@@ -10,6 +10,7 @@ namespace apf {
         inline void error(std::string_view message);
         inline void  warn(std::string_view message);
         inline void  info(std::string_view message);
+        inline void  note(std::string_view message);
     }
 }
 
@@ -67,4 +68,15 @@ void apf::log::warn(std::string_view message) {
  */
 void apf::log::info(std::string_view message) {
     std::cout << "[info ] " << message << "\n";
+}
+
+
+
+/**
+ * @brief Prints message.
+ * 
+ * @param message 
+ */
+void apf::log::note(std::string_view message) {
+    std::cout << "[note ] " << message << "\n";
 }
