@@ -7,13 +7,13 @@
 namespace apf::file {
     // Simple functions for safe text file reading and writing.
     // On error reports error and calls abort();
-    inline std::string_view read(std::filesystem::path file_path);
+    inline std::string read(std::filesystem::path file_path);
     inline void write(std::filesystem::path file_path,  std::string_view text);
 }
 
 
 
-inline std::string_view apf::file::read(std::filesystem::path file_path) {
+inline std::string apf::file::read(std::filesystem::path file_path) {
     file_path = std::filesystem::absolute(file_path).make_preferred();
 
     if(!std::filesystem::exists(file_path)) {
