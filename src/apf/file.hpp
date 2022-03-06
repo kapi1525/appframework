@@ -46,13 +46,8 @@ inline std::string_view apf::file::read(std::filesystem::path file_path) {
 inline void apf::file::write(std::filesystem::path file_path,  std::string_view text) {
     file_path = std::filesystem::absolute(file_path).make_preferred();
 
-    if(!std::filesystem::exists(file_path)) {
-        apf::log::fatal("Specified file or directory dosent exist: \"" + file_path.string() + "\".");
-        abort();
-    }
-
-    if(!std::filesystem::is_regular_file(file_path)) {
-        apf::log::fatal("Specified path is not a file: \"" + file_path.string() + "\".");
+    if(!std::filesystem::exists(file_path.parent_path())) {
+        apf::log::fatal("Specified file or directory dosent exist: \"" + file_path.parent_path().string() + "\".");
         abort();
     }
 
