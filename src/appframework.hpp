@@ -39,7 +39,4 @@ namespace apf {
     delete app_ptr;
 
 
-#define APF_MAIN(app_class)                         \
-    int main(int argc, char const *argv[]) {        \
-        APF_RUN(app_class)                          \
-    }
+#define APF_MAIN(app_class) int main(int argc, char const *argv[]) { APF_RUN(app_class) }
