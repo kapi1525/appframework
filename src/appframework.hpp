@@ -30,13 +30,24 @@ namespace apf {
 
 
 // Beautiful macros
-#define APF_RUN(app_class)                          \
-    apf::app* app_ptr = new app_class;              \
-    app_ptr->arguments = apf::args(argc, argv);     \
-    app_ptr->start();                               \
-    app_ptr->run();                                 \
-    app_ptr->end();                                 \
+#define APF_RUN(app_class)                                      \
+    apf::app* app_ptr = new app_class;                          \
+    app_ptr->arguments = apf::args(argc, argv);                 \
+    app_ptr->start();                                           \
+    app_ptr->run();                                             \
+    app_ptr->end();                                             \
+    delete app_ptr;
+
+
+#define APF_TEST_RUN(app_class)                                 \
+    apf::app* app_ptr = new app_class;                          \
+    apf::log::info("apf" + app_ptr->appframework_version.temp); \
+    app_ptr->arguments = apf::args(argc, argv);                 \
+    app_ptr->start();                                           \
+    app_ptr->run();                                             \
+    app_ptr->end();                                             \
     delete app_ptr;
 
 
 #define APF_MAIN(app_class) int main(int argc, char const *argv[]) { APF_RUN(app_class) }
+#define APF_TEST_MAIN(app_class) int main(int argc, char const *argv[]) { APF_TEST_RUN(app_class) }

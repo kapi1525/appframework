@@ -3,22 +3,21 @@ project('appframework', 'cpp',
   default_options: ['warning_level=3', 'cpp_std=c++17'],
   license: 'MIT')
 
-appframework_files = files()
-appframework_includes = include_directories('src')
-appframework_depends = [dependency('threads')]
+apf_files     = files()
+apf_includes  = include_directories('src')
+apf_deps      = [dependency('threads')]
 
-# libappframework = static_library('appframework', appframework_files, include_directories: appframework_includes, dependencies: appframework_depends)
+apf_dep = declare_dependency(
+  dependencies          : apf_deps,
+  include_directories   : apf_includes,
+  sources               : apf_files
+)
 
-# appframework_dep = declare_dependency(include_directories: appframework_includes, link_with: libappframework)
-appframework_dep = declare_dependency(include_directories: appframework_includes)
+appframework_dep = apf_dep
 
-# build sandbox if not subproject
+
 if not meson.is_subproject()
-  test_depends = [appframework_dep, dependency('threads')]
+  sandbox_exe = executable('sandbox', files('tests/sandbox.cpp'), dependencies: apf_dep)
 
-  sandbox_exe = executable('sandbox', files('tests/sandbox.cpp'), dependencies: test_depends)
-
-  test_args_exe = executable('test_args', files('tests/test_args.cpp'), dependencies: test_depends)
-
-  test('args', test_args_exe, args: ['-posix', '-a', 'argument', '-b', 'very long option', '--long-option', '--long-option-with-arg=argument', '/windows', '/windows-with-arg:argument'])
+  test('files', executable('test_files', files('tests/files/test.cpp'), dependencies: apf_dep))
 endif
