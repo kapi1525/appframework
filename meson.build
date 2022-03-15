@@ -3,14 +3,14 @@ project('appframework', 'cpp',
   default_options: ['warning_level=3', 'cpp_std=c++17'],
   license: 'MIT')
 
-apf_files     = files()
-apf_includes  = include_directories('src')
-apf_deps      = [dependency('threads')]
+files     = files()
+includes  = include_directories('src')
+deps      = [dependency('threads')]
 
 apf_dep = declare_dependency(
-  dependencies          : apf_deps,
-  include_directories   : apf_includes,
-  sources               : apf_files
+  dependencies          : deps,
+  include_directories   : includes,
+  sources               : files
 )
 
 appframework_dep = apf_dep
