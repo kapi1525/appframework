@@ -1,5 +1,5 @@
 #pragma once
-// appframework_terminal.hpp
+// term.hpp
 // This header contains declarations for terminal and loggin functions.
 // Terminal functions are inline so their definitions are at the bottom of this file.
 
