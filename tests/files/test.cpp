@@ -3,7 +3,7 @@
 #include "apf/file.hpp"
 
 
-class sandbox : public apf::app {
+class test : public apf::app {
 public:
     void start() {
         std::filesystem::path path = "test_file";
@@ -22,4 +22,4 @@ public:
 
 
 
-APF_TEST_MAIN(sandbox)
+APF_TEST_MAIN(test)
