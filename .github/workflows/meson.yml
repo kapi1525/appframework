@@ -52,11 +52,11 @@ jobs:
 
     - name: configure
       if: matrix.cross-file == null
-      run: meson --buildtype=release bin ${{ matrix.meson-configure-args }}
+      run: meson configure --buildtype=release bin ${{ matrix.meson-configure-args }}
     
     - name: (cross) configure
       if: matrix.cross-file != null
-      run: meson --buildtype=release bin ${{ matrix.meson-configure-args }} --cross-file ${{ matrix.cross-file }}
+      run: meson configure --buildtype=release bin ${{ matrix.meson-configure-args }} --cross-file ${{ matrix.cross-file }}
     
     - name: compile
       run: meson compile -C bin -j 10
