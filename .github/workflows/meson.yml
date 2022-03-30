@@ -8,24 +8,25 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        meson-configure-args: ['', '-werror']
         include:
           # Windows
           - os: windows-latest
             os-fancy-name: 'windows'
             target-arch: 'x86_64'
             msvc-target-arch: 'x86_64'
+            meson-configure-args: ['', '-werror']
 
           # Linux
           - os: ubuntu-latest
             os-fancy-name: 'linux'
             target-arch: 'x86_64'
+            meson-configure-args: ['', '-werror']
 
           # MacOS
           - os: macos-latest
             os-fancy-name: 'macos'
             target-arch: 'x86_64'
+            meson-configure-args: ['', '-werror']
     
 
     runs-on: ${{ matrix.os }}
