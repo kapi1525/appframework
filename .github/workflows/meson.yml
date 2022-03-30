@@ -2,40 +2,62 @@ name: build
 
 on: [push, pull_request]
 
+
 jobs:
   build:
     strategy:
+      fail-fast: true
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        compiler: [cl, g++, clang++]
+        include:
+          # Windows
+          - os: windows-latest
+            os-fancy-name: 'windows'
+            target-arch: 'x86_64'
+            msvc-target-arch: 'x86_64'
 
-        exclude:
-        - os: windows-latest
-          compiler: g++
+          # Linux
+          - os: ubuntu-latest
+            os-fancy-name: 'linux'
+            target-arch: 'x86_64'
 
-        - os: ubuntu-latest
-          compiler: cl
-
-        - os: macos-latest
-          compiler: cl
-          
+          # MacOS
+          - os: macos-latest
+            os-fancy-name: 'macos'
+            target-arch: 'x86_64'
+    
 
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
-    - uses: ilammy/msvc-dev-cmd@v1.10.0
-      if: ${{ matrix.os }} == windows-latest
     
-    - run: pip install meson ninja -r requirements.txt
+    - uses: ilammy/msvc-dev-cmd@v1.10.0
+      if: matrix.os-fancy-name == 'windows'
+    
+    - uses: hendrikmuhs/ccache-action@v1
+      if: matrix.os-fancy-name != 'windows'
+      with:
+        key: ${{ matrix.os }}-${{ matrix.target-arch }}
+    
+    - uses: actions/setup-python@v3
+      with:
+        cache: 'pip'
 
-    - name: build
-      env:
-        CXX: ${{ matrix.compiler }}
-      run: |
-        meson --buildtype=debugoptimized bin
-        ninja -C bin
+    - name: Install meson
+      run: pip install meson ninja -r requirements.txt
+
+
+    - name: configure.
+      if: matrix.cross-file == null
+      run: meson --buildtype=release bin
+    
+    - name: (cross) configure.
+      if: matrix.cross-file != null
+      run: meson --buildtype=release bin --cross-file ${{ matrix.cross-file }}
+    
+    - name: compile.
+      run: meson compile -C bin -j 10
+
 
     - name: run tests
       run: meson test -C bin --repeat 1 --num-processes 1 --print-errorlogs -t 0.2
