@@ -8,6 +8,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
+        meson-configure-args: ['', '-werror']
         include:
           # Windows
           - os: windows-latest
@@ -47,15 +48,15 @@ jobs:
       run: pip install meson ninja -r requirements.txt
 
 
-    - name: configure.
+    - name: configure
       if: matrix.cross-file == null
-      run: meson --buildtype=release bin
+      run: meson --buildtype=release bin ${{ matrix.meson-configure-args }}
     
-    - name: (cross) configure.
+    - name: (cross) configure
       if: matrix.cross-file != null
-      run: meson --buildtype=release bin --cross-file ${{ matrix.cross-file }}
+      run: meson --buildtype=release bin ${{ matrix.meson-configure-args }} --cross-file ${{ matrix.cross-file }}
     
-    - name: compile.
+    - name: compile
       run: meson compile -C bin -j 10
 
 
