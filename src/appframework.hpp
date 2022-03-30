@@ -31,7 +31,7 @@ namespace apf {
 
 // Beautiful macros
 #define APF_RUN(app_class)                                      \
-    apf::app* app_ptr = new app_class;                          \
+    apf::app* app_ptr = (apf::app*)new app_class;               \
     app_ptr->arguments = apf::args(argc, argv);                 \
     app_ptr->start();                                           \
     app_ptr->run();                                             \
@@ -40,7 +40,7 @@ namespace apf {
 
 
 #define APF_TEST_RUN(app_class)                                 \
-    apf::app* app_ptr = new app_class;                          \
+    apf::app* app_ptr = (apf::app*)new app_class;               \
     apf::log::info("apf" + app_ptr->appframework_version.temp); \
     app_ptr->arguments = apf::args(argc, argv);                 \
     app_ptr->start();                                           \
