@@ -12,7 +12,7 @@
         {
             "label": "run tests",
             "type": "shell",
-            "command": "meson test -C ${config:mesonbuild.buildFolder} --repeat 100 --print-errorlogs -t 0.2",
+            "command": "meson test -C ${config:mesonbuild.buildFolder} --repeat 10 --print-errorlogs -t 0.2",
             "group": "build"
         },
         {
