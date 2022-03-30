@@ -13,6 +13,13 @@ public:
         assert(tree.size() == 0);
         tree.set(675);
         assert(tree == 675 && tree.get() == 675);
+
+        tree_ptr->push_back(123);
+        assert(tree_ptr->size() == 1 && tree_ptr->at(0) == 123 && tree_ptr->at(0).get() == 123);
+        tree_ptr->clear();
+        assert(tree_ptr->size() == 0);
+        tree_ptr->set(675);
+        assert(tree_ptr->get() == 675);
     }
 
     void run() {
@@ -23,6 +30,7 @@ public:
 
 private:
     apf::tree<int> tree;
+    apf::tree<int>* tree_ptr = new apf::tree<int>;
 };
 
 
