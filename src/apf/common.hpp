@@ -37,6 +37,20 @@
 #endif
 
 
+// Compiler macros that are also easier to remember
+#ifdef _MSC_VER
+    #define APF_MSVC
+#endif
+
+#ifdef __GNUC__
+    #define APF_GCC
+#endif
+
+#ifdef __clang__
+    #define APF_CLANG
+#endif
+
+
 
 // windows stuff
 #ifdef APF_WINDOWS
