@@ -8,65 +8,95 @@
 
 namespace apf {
 
-    template<typename type, template<typename> class container>
-    class tree_impl : public container<tree_impl<type, container>> {
+    // TODO: I wanted to add a way of changing container which is used to store data, but clang didnt like that, so std::deque it is... for now.
+    template<typename type>
+    class tree {
     public:
-        tree_impl();
-        tree_impl(type new_data);
-        ~tree_impl();
+        tree();
+        tree(type new_data);
+        ~tree();
 
         operator type();
+
+        tree<type>& operator[](size_t index);
+        tree<type>& at(size_t index);
 
         type& get();
         void set(type&& new_data);
 
+        size_t size();
+
+        void push_back(type&& new_data);
+
+        void clear();
+
     private:
         type data;
+        std::shared_ptr<std::deque<tree<type>>> branches = std::make_shared<std::deque<tree<type>>>();
     };
-    
-
-    // Weird hack to stop clang from complaining
-    #ifdef APF_CLANG
-        template<typename type>
-        using deque = std::deque<type>;
-
-        template<typename type>
-        using tree = tree_impl<type, deque>;
-    #else
-        template<typename type>
-        using tree = tree_impl<type, std::deque>;
-    #endif
 }
 
 
 
-template<typename type, template<typename> class container>
-inline apf::tree_impl<type, container>::tree_impl::tree_impl() {
+template<typename type>
+inline apf::tree<type>::tree::tree() {
 }
 
-template<typename type, template<typename> class container>
-inline apf::tree_impl<type, container>::tree_impl::tree_impl(type new_data) {
+template<typename type>
+inline apf::tree<type>::tree::tree(type new_data) {
     data = new_data;
 }
 
-template<typename type, template<typename> class container>
-inline apf::tree_impl<type, container>::tree_impl::~tree_impl() {
+template<typename type>
+inline apf::tree<type>::tree::~tree() {
 }
 
 
 
-template<typename type, template<typename> class container>
-inline apf::tree_impl<type, container>::tree_impl::operator type() {
+template<typename type>
+inline apf::tree<type>::tree::operator type() {
     return data;
 }
 
+template<typename type>
+inline apf::tree<type>& apf::tree<type>::tree::operator[](size_t index) {
+    return branches->at(index);
+}
 
-template<typename type, template<typename> class container>
-inline type& apf::tree_impl<type, container>::tree_impl::get() {
+template<typename type>
+inline apf::tree<type>& apf::tree<type>::tree::at(size_t index) {
+    return branches->at(index);
+}
+
+
+
+template<typename type>
+inline type& apf::tree<type>::tree::get() {
     return data;
 }
 
-template<typename type, template<typename> class container>
-inline void apf::tree_impl<type, container>::tree_impl::set(type&& new_data) {
+template<typename type>
+inline void apf::tree<type>::tree::set(type&& new_data) {
     data = new_data;
 }
+
+
+
+template<typename type>
+inline size_t apf::tree<type>::tree::size() {
+    return branches->size();
+}
+
+
+
+template<typename type>
+inline void apf::tree<type>::tree::push_back(type&& new_data) {
+    branches->push_back(tree<type>(new_data));
+}
+
+
+
+template<typename type>
+inline void apf::tree<type>::tree::clear() {
+    branches->clear();
+} 
