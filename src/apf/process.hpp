@@ -81,6 +81,7 @@ inline apf::process::~process() {
 
 #ifdef APF_POSIX
 
+// Macro to automaticaly call perror() when posix functions fail
 #define PTRY(x) if(x == -1) { std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__; perror(ss.str().c_str()); abort(); }
 
 
