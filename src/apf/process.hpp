@@ -1,7 +1,9 @@
 #include "common.hpp"
+#include <cstdio>
 
 
 #ifdef APF_POSIX
+    #include <fcntl.h>
     #include <unistd.h>
     #include <signal.h>
     #include <sys/wait.h>
@@ -51,7 +53,7 @@ namespace apf {
 
         #ifdef APF_POSIX
             pid_t child_pid;
-            //int output_pipe_fd, input_pipe_fd;
+            int output_pipe_fd, input_pipe_fd;
             void process_start(std::filesystem::path executable, std::vector<std::string> args);
         #endif
     };
@@ -79,6 +81,10 @@ inline apf::process::~process() {
 
 #ifdef APF_POSIX
 
+#define PTRY(x) if(x == -1) { std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__; perror(ss.str().c_str()); abort(); }
+
+
+
 inline apf::process::process(std::filesystem::path executable, std::vector<std::string> args) {
     process_start(executable, args);
 }
@@ -93,13 +99,23 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     state_running = false;
     state_ended   = false;
 
+    int in_pipe[2];
+    int out_pipe[2];
+
+    PTRY(pipe(in_pipe));
+    //PTRY(pipe(out_pipe));
+
     child_pid = fork();
     if(child_pid == 0) {
+        PTRY(dup2(out_pipe[0], STDIN_FILENO));
+        PTRY(dup2(in_pipe[1], STDOUT_FILENO));
+        PTRY(dup2(in_pipe[1], STDERR_FILENO));
+
         // Child process
-        setpgid(0, 0);                      // Create new group id for child process
+        PTRY(setpgid(0, 0));                      // Create new group id for child process
 
         #ifdef APF_LINUX
-        prctl(PR_SET_PDEATHSIG, SIGTERM);   // Terminate child if parent dies
+        PTRY(prctl(PR_SET_PDEATHSIG, SIGTERM));   // Terminate child if parent dies
         #endif
 
         // Convert std::vector to char array that can be passed to execv()
@@ -113,10 +129,17 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
         temp_argv[args.size()+1] = NULL;
 
         // Execute
-        execvp(executable.c_str(), (char *const *)temp_argv);
-        perror("execvp() failed");
-        exit(-1);
+        PTRY(execvp(executable.c_str(), (char *const *)temp_argv));
     }
+
+    PTRY(close(out_pipe[0]));
+    PTRY(close(in_pipe[1]));
+
+    output_pipe_fd = out_pipe[1];
+    input_pipe_fd = in_pipe[0];
+
+    PTRY(fcntl(output_pipe_fd, F_SETFL, O_NONBLOCK));
+    PTRY(fcntl(input_pipe_fd, F_SETFL, O_NONBLOCK));
 
     state_started = true;
     update_state();
@@ -139,8 +162,8 @@ inline bool apf::process::finished() {
 inline int apf::process::join() {
     update_state();
     if(!state_ended) {
-        killpg(child_pid, SIGINT);
-        waitpid(child_pid, &exit_code, WCONTINUED);
+        PTRY(killpg(child_pid, SIGINT));
+        PTRY(waitpid(child_pid, &exit_code, WCONTINUED));
         return exit_code;
     }
     if(!state_started) {
@@ -153,8 +176,8 @@ inline int apf::process::join() {
 inline void apf::process::terminate() {
     update_state();
     if(!state_ended) {
-        killpg(child_pid, SIGTERM);
-        waitpid(child_pid, &exit_code, WCONTINUED);
+        PTRY(killpg(child_pid, SIGTERM));
+        PTRY(waitpid(child_pid, &exit_code, WCONTINUED));
     }
     if(!state_started) {
         std::cerr << "You cannot call join() or terminate() when process is not even started yet!\n";
@@ -189,6 +212,11 @@ inline void apf::process::update_state() {
         state_running = true;
         state_ended = false;
     }
+    if(result == -1) {
+        perror("waitpid() failed");
+    }
 }
+
+#undef PTRY
 
 #endif
