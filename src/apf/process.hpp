@@ -90,7 +90,7 @@ inline apf::process::process(std::filesystem::path executable, std::vector<std::
 }
 
 inline apf::process::process(std::string command) {
-    process_start(command, {command});
+    process_start("/bin/sh", {"-c", command});
 }
 
 
@@ -103,7 +103,7 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     int out_pipe[2];
 
     PTRY(pipe(in_pipe));
-    //PTRY(pipe(out_pipe));
+    PTRY(pipe(out_pipe));
 
     child_pid = fork();
     if(child_pid == 0) {
@@ -129,7 +129,7 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
         temp_argv[args.size()+1] = NULL;
 
         // Execute
-        PTRY(execvp(executable.c_str(), (char *const *)temp_argv));
+        PTRY(execv(executable.c_str(), (char *const *)temp_argv));
     }
 
     PTRY(close(out_pipe[0]));
