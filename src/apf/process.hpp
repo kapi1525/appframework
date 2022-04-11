@@ -1,5 +1,6 @@
 #include "common.hpp"
 #include <cstdio>
+#include <cstring>
 
 
 #ifdef APF_POSIX
@@ -103,6 +104,8 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     int in_pipe[2];
     int out_pipe[2];
 
+    // I honestly dont know how but randomly pipes started to magicaly work...
+    // I hate pipes... never again.
     PTRY(pipe(in_pipe));
     PTRY(pipe(out_pipe));
 
@@ -111,6 +114,9 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
         PTRY(dup2(out_pipe[0], STDIN_FILENO));
         PTRY(dup2(in_pipe[1], STDOUT_FILENO));
         PTRY(dup2(in_pipe[1], STDERR_FILENO));
+
+        PTRY(close(out_pipe[1]));
+        PTRY(close(in_pipe[0]));
 
         // Child process
         PTRY(setpgid(0, 0));                      // Create new group id for child process
@@ -188,12 +194,34 @@ inline void apf::process::terminate() {
 
 
 
-void apf::process::send(std::string str) {
-    
+inline void apf::process::send(std::string str) {
+    if(running()) {
+        write(output_pipe_fd, str.c_str(), str.size());
+    }
 }
 
-std::string apf::process::get() {
-    return "";
+inline std::string apf::process::get() {
+    const size_t buffer_size = 1000000;     // FIXME: Dont create ~1MB buffer for read(), btw 10MB buffer segfaults lol.
+    char buffer[buffer_size];
+    std::string str;
+
+
+    while (true) {
+        memset(buffer, 0, buffer_size);
+        int result = read(input_pipe_fd, buffer, buffer_size);
+
+        if (result == -1 && errno != EAGAIN) {
+            PTRY(-1);
+        }
+
+        if (result == 0) {
+            break;
+        }
+
+        str.append(buffer);
+    }
+
+    return str;
 }
 
 
