@@ -37,8 +37,10 @@ namespace apf {
         bool finished();
 
         // Finish
-        int join();
-        void terminate();
+        int join();         // Wait for a process to finish (To avoid infinite loop use interrupt or other command before)
+        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process
+        void terminate();   // Sends terminate request to a process
+        void kill();        // Kill a child                          (process)
 
         // Process communication
         void send(std::string str);
@@ -169,25 +171,45 @@ inline bool apf::process::finished() {
 inline int apf::process::join() {
     update_state();
     if(!state_ended) {
-        PTRY(killpg(child_pid, SIGINT));
         PTRY(waitpid(child_pid, &exit_code, WCONTINUED));
         return exit_code;
     }
     if(!state_started) {
-        std::cerr << "You cannot call join() or terminate() when process is not even started yet!\n";
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
         abort();
     }
     return exit_code;
+}
+
+inline void apf::process::interrupt() {
+    update_state();
+    if(!state_ended) {
+        PTRY(killpg(child_pid, SIGINT));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
 }
 
 inline void apf::process::terminate() {
     update_state();
     if(!state_ended) {
         PTRY(killpg(child_pid, SIGTERM));
-        PTRY(waitpid(child_pid, &exit_code, WCONTINUED));
     }
     if(!state_started) {
-        std::cerr << "You cannot call join() or terminate() when process is not even started yet!\n";
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+}
+
+inline void apf::process::kill() {
+    update_state();
+    if(!state_ended) {
+        PTRY(killpg(child_pid, SIGKILL));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
         abort();
     }
 }
