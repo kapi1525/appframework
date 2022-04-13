@@ -250,7 +250,7 @@ inline std::string apf::process::get() {
 
 
 inline void apf::process::update_state() {
-    if(state_ended) {
+    if(state_ended || !state_started) {
         return;
     }
 
@@ -266,6 +266,7 @@ inline void apf::process::update_state() {
     }
     if(result == -1) {
         perror("waitpid() failed");
+        abort();
     }
 }
 
