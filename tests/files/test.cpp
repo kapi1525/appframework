@@ -13,7 +13,8 @@ public:
         assert(apf::file::read(path) == str);
     }
 
-    void run() {
+    int run() {
+        return 1;
     }
 
     void end() {
