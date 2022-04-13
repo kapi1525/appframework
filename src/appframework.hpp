@@ -17,8 +17,10 @@ namespace apf {
         virtual ~app() {};
 
         virtual void start() = 0;
-        virtual void run() = 0;
         virtual void end() = 0;
+
+        virtual int run() = 0;
+
 
         args arguments;
 
@@ -34,7 +36,7 @@ namespace apf {
     apf::app* app_ptr = (apf::app*)new app_class;               \
     app_ptr->arguments = apf::args(argc, argv);                 \
     app_ptr->start();                                           \
-    app_ptr->run();                                             \
+    while(app_ptr->run() == 0) {}                               \
     app_ptr->end();                                             \
     delete app_ptr;
 
