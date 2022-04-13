@@ -27,8 +27,8 @@ public:
         std::cout << tree[2][0][0].get() << "\n";
     }
 
-    void run() {
-
+    int run() {
+        return 1;
     }
 
     void end() {

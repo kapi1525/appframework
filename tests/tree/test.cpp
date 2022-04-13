@@ -22,7 +22,8 @@ public:
         assert(tree_ptr->get() == 675);
     }
 
-    void run() {
+    int run() {
+        return 1;
     }
 
     void end() {
