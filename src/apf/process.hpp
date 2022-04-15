@@ -175,6 +175,8 @@ inline int apf::process::join() {
         PTRY(waitpid(child_pid, &exit_code, WCONTINUED));
         PTRY(close(output_pipe_fd));
         PTRY(close(input_pipe_fd));
+        state_ended = true;
+        state_running = false;
         return exit_code;
     }
     if(!state_started) {
@@ -261,7 +263,7 @@ inline void apf::process::update_state() {
     if(result == child_pid) {
         state_running = false;
         state_ended = true;
-    } 
+    }
     if(result == 0) {
         state_running = true;
         state_ended = false;
