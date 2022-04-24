@@ -1,8 +1,4 @@
-#include "appframework.hpp"
-#include "apf/args.hpp"
-#include "apf/term.hpp"
-#include "apf/logs.hpp"
-#include "apf/tree.hpp"
+#include "apf/all.hpp"
 #include <thread>
 #include <chrono>
 
@@ -10,21 +6,23 @@ using namespace std::chrono_literals;
 
 
 
+void create_join_process() {
+    std::filesystem::current_path("test");
+    apf::process p("./start.sh");
+    std::this_thread::sleep_for(10s);
+    std::cout << p.running() << std::endl;
+    p.interrupt();
+    std::cout << p.get() << std::endl;
+    std::cout << p.join() << std::endl;
+}
+
+
 
 class sandbox : public apf::app {
 public:
     void start() {
-        tree.push_back(123);
-        tree.push_back(456);
-        tree.push_back(789);
-        tree[2].push_back(1);
-        tree[2][0].push_back(2);
-        std::cout << tree.size() << "\n";
-        std::cout << tree[0] << "\n";
-        std::cout << tree[1].get() << "\n";
-        std::cout << tree[2].get() << "\n";
-        std::cout << tree[2][0].get() << "\n";
-        std::cout << tree[2][0][0].get() << "\n";
+        std::thread t(&create_join_process);
+        t.join();
     }
 
     int run() {
@@ -38,8 +36,6 @@ public:
 
 
 private:
-    apf::tree<int> tree;
-
     version sandbox_version = {1,2,3};
 };
 

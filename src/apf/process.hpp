@@ -23,6 +23,10 @@
 
 namespace apf {
 
+    /**
+     * @brief Create and manage child processes.
+     * @note Maybe thread safe?
+     */
     class process {
     public:
         // Default constructor and destructor
