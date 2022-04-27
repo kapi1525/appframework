@@ -6,11 +6,13 @@
 version: 2
 updates:
   - package-ecosystem: "github-actions"
+    target-branch: "master"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "pip"
+    target-branch: "master"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
