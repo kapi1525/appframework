@@ -259,23 +259,7 @@ inline void apf::process::update_state() {
         else {
             WERR
         }
-    }  
-
-
-    //int result = waitpid(child_pid, &exit_code, WCONTINUED || WNOHANG);
-
-    //if(result == child_pid) {
-        //state_running = false;
-        //state_ended = true;
-    //}
-    //if(result == 0) {
-        //state_running = true;
-        //state_ended = false;
-    //}
-    //if(result == -1) {
-        //perror("waitpid() failed");
-        //abort();
-    //}
+    }
 }
 
 #undef WTRY
