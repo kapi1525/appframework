@@ -9,12 +9,8 @@ using namespace std::chrono_literals;
 class sandbox : public apf::app {
 public:
     void start() {
-        apf::log::note("test");
-        apf::log::info("test");
-        apf::log::warn("test");
-        apf::log::error("test");
-        apf::log::fatal("test");
-        std::cout << "end" << std::endl;
+        apf::process p("notepad.exe", {});
+        p.join();
     }
 
     int run() {

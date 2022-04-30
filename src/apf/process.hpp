@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <cstring>
 
-
 #ifdef APF_POSIX
     #include <fcntl.h>
     #include <unistd.h>
@@ -59,10 +58,17 @@ namespace apf {
         bool state_ended   = false;
         void update_state();
 
+        void process_start(std::filesystem::path executable, std::vector<std::string> args);
+
+
+        #ifdef APF_WINDOWS
+            STARTUPINFO startup_info;
+            PROCESS_INFORMATION process_info;
+        #endif
+
         #ifdef APF_POSIX
             pid_t child_pid;
             int output_pipe_fd, input_pipe_fd;
-            void process_start(std::filesystem::path executable, std::vector<std::string> args);
         #endif
     };
 }
@@ -81,6 +87,198 @@ inline apf::process::~process() {
 
 }
 
+
+
+/////////////////////////////////////////////////////
+// Function definitions for Windows.
+/////////////////////////////////////////////////////
+
+#ifdef APF_WINDOWS
+
+#define WTRY(x) if(x == FALSE) { std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__ << ". Something went wrong, error: " << GetLastError() << ".\n"; std::cerr << ss.str(); abort(); }
+
+
+inline apf::process::process(std::filesystem::path executable, std::vector<std::string> args) {
+    process_start(executable, args);
+}
+
+inline apf::process::process(std::string command) {
+    process_start(command, {});
+}
+
+
+inline void apf::process::process_start(std::filesystem::path executable, std::vector<std::string> args) {
+    state_started = false;
+    state_running = false;
+    state_ended   = false;
+
+    std::memset(&startup_info, 0, sizeof(startup_info));
+    std::memset(&process_info, 0, sizeof(process_info));
+    startup_info.cb = sizeof(startup_info);
+
+    std::string cmd = "\"" + executable.string() + "\"";
+    for (size_t i = 0; i < args.size(); i++) {
+        cmd = cmd + " " + args[i].c_str();
+    }
+
+    std::cout << cmd;
+
+    WTRY(CreateProcessA(
+        NULL,                       // No module name (use command line)
+        (char*)cmd.c_str(),         // Command line
+        NULL,                       // Process handle not inheritable
+        NULL,                       // Thread handle not inheritable
+        FALSE,                      // Set handle inheritance to FALSE
+        0,                          // No creation flags
+        NULL,                       // Use parent's environment block
+        NULL,                       // Use parent's starting directory
+        &startup_info,              // Pointer to STARTUPINFO structure
+        &process_info               // Pointer to PROCESS_INFORMATION structure
+    ))
+
+    state_started = true;
+    update_state();
+}
+
+
+
+inline bool apf::process::running() {
+    update_state();
+    return state_running;
+}
+
+inline bool apf::process::finished() {
+    update_state();
+    return state_ended;
+}
+
+
+
+inline int apf::process::join() {
+    update_state();
+    if(!state_ended) {
+        {
+            DWORD ret = WaitForSingleObject(process_info.hProcess, INFINITE);
+
+            if(ret == WAIT_OBJECT_0) {
+                state_running = false;
+                state_ended = true;
+                
+                DWORD a;
+                WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+                exit_code = a;
+            }
+
+            else {
+                WTRY(FALSE)
+            }
+        }  
+
+        state_ended = true;
+        state_running = false;
+        return exit_code;
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+    return exit_code;
+}
+
+inline void apf::process::interrupt() {
+    update_state();
+    if(!state_ended) {
+        //PTRY(killpg(child_pid, SIGINT));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+}
+
+inline void apf::process::terminate() {
+    update_state();
+    if(!state_ended) {
+        //PTRY(killpg(child_pid, SIGTERM));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+}
+
+inline void apf::process::kill() {
+    update_state();
+    if(!state_ended) {
+        //PTRY(killpg(child_pid, SIGKILL));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+}
+
+
+
+inline void apf::process::send(std::string str) {
+    if(running()) {
+    }
+}
+
+inline std::string apf::process::get() {
+    return "";
+}
+
+
+
+inline void apf::process::update_state() {
+    if(state_ended || !state_started) {
+        return;
+    }
+    
+
+    {
+        DWORD ret = WaitForSingleObject(process_info.hProcess, 0);
+
+        if(ret == WAIT_TIMEOUT) {
+            state_running = true;
+            state_ended = false;
+        }
+
+        else if(ret == WAIT_OBJECT_0) {
+            state_running = false;
+            state_ended = true;
+            
+            DWORD a;
+            WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+            exit_code = a;
+        }
+
+        else {
+            WTRY(FALSE)
+        }
+    }  
+
+
+    //int result = waitpid(child_pid, &exit_code, WCONTINUED || WNOHANG);
+
+    //if(result == child_pid) {
+        //state_running = false;
+        //state_ended = true;
+    //}
+    //if(result == 0) {
+        //state_running = true;
+        //state_ended = false;
+    //}
+    //if(result == -1) {
+        //perror("waitpid() failed");
+        //abort();
+    //}
+}
+
+#undef WTRY
+
+#endif
 
 
 /////////////////////////////////////////////////////
