@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstring>
 
+
 #ifdef APF_POSIX
     #include <fcntl.h>
     #include <unistd.h>
@@ -95,7 +96,8 @@ inline apf::process::~process() {
 
 #ifdef APF_WINDOWS
 
-#define WTRY(x) if(x == FALSE) { std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__ << ". Something went wrong, error: " << GetLastError() << ".\n"; std::cerr << ss.str(); abort(); }
+#define WERR std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__ << ". Something went wrong, error: " << GetLastError() << ".\n"; std::cerr << ss.str(); abort();
+#define WTRY(x) if(x == FALSE) { WERR }
 
 
 inline apf::process::process(std::filesystem::path executable, std::vector<std::string> args) {
@@ -170,7 +172,7 @@ inline int apf::process::join() {
             }
 
             else {
-                WTRY(FALSE)
+                WERR
             }
         }  
 
@@ -255,7 +257,7 @@ inline void apf::process::update_state() {
         }
 
         else {
-            WTRY(FALSE)
+            WERR
         }
     }  
 
