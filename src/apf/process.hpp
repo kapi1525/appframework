@@ -266,6 +266,7 @@ inline void apf::process::update_state() {
     }
 }
 
+#undef WERR
 #undef WTRY
 
 #endif
