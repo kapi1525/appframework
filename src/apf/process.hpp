@@ -178,6 +178,10 @@ inline int apf::process::join() {
 
         state_ended = true;
         state_running = false;
+
+        WTRY(CloseHandle(process_info.hProcess));
+        WTRY(CloseHandle(process_info.hThread));
+
         return exit_code;
     }
     if(!state_started) {
