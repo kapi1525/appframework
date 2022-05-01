@@ -42,9 +42,9 @@ namespace apf {
         bool finished();
 
         // Finish
-        int join();         // Wait for a process to finish (To avoid infinite loop use interrupt or other command before)
-        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process
-        void terminate();   // Sends terminate request to a process
+        int join();         // Wait for a process to finish (To avoid endless waiting use interrupt or other function before)
+        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process    (Acts like kill() in Windows!)
+        void terminate();   // Sends terminate request to a process                     (Acts like kill() in Windows!)
         void kill();        // Kill a child                          (process)
 
         // Process communication
@@ -80,6 +80,8 @@ namespace apf {
 
 
 
+
+
 /////////////////////////////////////////////////////
 // Global function definitions.
 /////////////////////////////////////////////////////
@@ -91,6 +93,8 @@ inline apf::process::process() {
 inline apf::process::~process() {
 
 }
+
+
 
 
 
@@ -260,6 +264,9 @@ inline void apf::process::update_state() {
 #undef WTRY
 
 #endif
+
+
+
 
 
 /////////////////////////////////////////////////////

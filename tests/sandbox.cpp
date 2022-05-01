@@ -10,6 +10,8 @@ class sandbox : public apf::app {
 public:
     void start() {
         apf::process p("notepad.exe", {});
+        std::this_thread::sleep_for(2s);
+        p.kill();
         p.join();
     }
 
