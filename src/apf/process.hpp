@@ -65,11 +65,15 @@ namespace apf {
         #ifdef APF_WINDOWS
             STARTUPINFO startup_info;
             PROCESS_INFORMATION process_info;
+            
+            HANDLE output_pipe_handle = NULL;   // Child STDIN
+            HANDLE input_pipe_handle = NULL;    // Child STDOUT
         #endif
 
         #ifdef APF_POSIX
             pid_t child_pid;
-            int output_pipe_fd, input_pipe_fd;
+            int output_pipe_fd;                 // Child STDIN
+            int input_pipe_fd;                  // Child STDOUT
         #endif
     };
 }
@@ -192,31 +196,17 @@ inline int apf::process::join() {
 }
 
 inline void apf::process::interrupt() {
-    update_state();
-    if(!state_ended) {
-        //PTRY(killpg(child_pid, SIGINT));
-    }
-    if(!state_started) {
-        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
-        abort();
-    }
+    kill();
 }
 
 inline void apf::process::terminate() {
-    update_state();
-    if(!state_ended) {
-        //PTRY(killpg(child_pid, SIGTERM));
-    }
-    if(!state_started) {
-        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
-        abort();
-    }
+    kill();
 }
 
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
-        //PTRY(killpg(child_pid, SIGKILL));
+        TerminateProcess(process_info.hProcess, 0);
     }
     if(!state_started) {
         std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
