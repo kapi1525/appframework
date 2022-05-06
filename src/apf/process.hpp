@@ -45,6 +45,8 @@ namespace apf {
         int join();         // Wait for a process to finish (To avoid endless waiting use interrupt or other function before)
         void kill();        // Kill a child                          (process)
 
+        void send_signal(int sig);  // Send signal to process (only LINUX and other posix OS'es)
+
         // Process communication
         void send(std::string str);
         std::string get();
@@ -225,15 +227,7 @@ inline int apf::process::join() {
     }
     return exit_code;
 }
-/*
-inline void apf::process::interrupt() {
-    kill();
-}
 
-inline void apf::process::terminate() {
-    kill();
-}
-*/
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
@@ -267,6 +261,13 @@ inline std::string apf::process::get() {
     }
         
     return str;
+}
+
+
+
+inline void apf::process::send_signal(int sig) {
+    std::cerr << "Funcion \"void apf::process::send_signal(int)\" is linux and posix exclusive, you cannot use it in windows :/\n";
+    abort();
 }
 
 
@@ -415,29 +416,7 @@ inline int apf::process::join() {
     }
     return exit_code;
 }
-/*
-inline void apf::process::interrupt() {
-    update_state();
-    if(!state_ended) {
-        PTRY(killpg(child_pid, SIGINT));
-    }
-    if(!state_started) {
-        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
-        abort();
-    }
-}
 
-inline void apf::process::terminate() {
-    update_state();
-    if(!state_ended) {
-        PTRY(killpg(child_pid, SIGTERM));
-    }
-    if(!state_started) {
-        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
-        abort();
-    }
-}
-*/
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
@@ -479,6 +458,19 @@ inline std::string apf::process::get() {
     }
 
     return str;
+}
+
+
+
+inline void apf::process::send_signal(int sig) {
+    update_state();
+    if(!state_ended) {
+        PTRY(killpg(child_pid, sig));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
 }
 
 
