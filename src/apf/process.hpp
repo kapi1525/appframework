@@ -45,7 +45,12 @@ namespace apf {
         int join();         // Wait for a process to finish (To avoid endless waiting use interrupt or other function before)
         void kill();        // Kill a child                          (process)
 
-        void send_signal(int sig);  // Send signal to process (only LINUX and other posix OS'es)
+
+        #ifdef APF_POSIX
+            void send_signal(int sig);  // Send signal to process (only LINUX and other posix OS'es)
+        #else
+            void send_signal(int sig) = delete;  // posix and linux exclusive :)
+        #endif
 
         // Process communication
         void send(std::string str);
@@ -261,13 +266,6 @@ inline std::string apf::process::get() {
     }
         
     return str;
-}
-
-
-
-inline void apf::process::send_signal(int sig) {
-    std::cerr << "Funcion \"void apf::process::send_signal(int)\" is linux and posix exclusive, you cannot use it in windows :/\n";
-    abort();
 }
 
 
