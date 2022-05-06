@@ -224,11 +224,11 @@ inline int apf::process::join() {
         state_ended = true;
         state_running = false;
 
-        WTRY(CloseHandle(output_pipe_handle));
-        WTRY(CloseHandle(input_pipe_handle));
-
         WTRY(CloseHandle(process_info.hProcess));
         WTRY(CloseHandle(process_info.hThread));
+
+        WTRY(CloseHandle(output_pipe_handle));
+        WTRY(CloseHandle(input_pipe_handle));
 
         return exit_code;
     }
@@ -273,8 +273,7 @@ inline std::string apf::process::get() {
     DWORD read;
 
     while (true) {
-        WTRY(ReadFile(input_pipe_handle, buffer, buffer_size, &read, NULL));
-        if(read == 0) {
+        if(ReadFile(input_pipe_handle, buffer, buffer_size, &read, NULL) == -1 || read == 0) {
             break;
         }
         str.append(buffer);
