@@ -29,9 +29,9 @@ namespace apf {
      */
     class process {
     public:
-        // Default constructor and destructor
-        process();
-        ~process();
+        // Default constructor and destructor, they do nothing.
+        process() = default;
+        ~process() = default;
 
         // Constructors (Safe to call again after join() or terminate(), otherwise it can lead to some weird stuff)
         process(std::filesystem::path executable, std::vector<std::string> args);
@@ -43,8 +43,6 @@ namespace apf {
 
         // Finish
         int join();         // Wait for a process to finish (To avoid endless waiting use interrupt or other function before)
-        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process    (Acts like kill() in Windows!)
-        void terminate();   // Sends terminate request to a process                     (Acts like kill() in Windows!)
         void kill();        // Kill a child                          (process)
 
         // Process communication
@@ -57,14 +55,14 @@ namespace apf {
         bool state_started = false;
         bool state_running = false;
         bool state_ended   = false;
-        void update_state();
+        void update_state();            // Updates state booleans and exit_code.
 
         void process_start(std::filesystem::path executable, std::vector<std::string> args);
 
 
         #ifdef APF_WINDOWS
-            STARTUPINFOA startup_info;
-            PROCESS_INFORMATION process_info;           // Holds child process handle
+            HANDLE process_handle = NULL;
+            HANDLE thread_handle = NULL;
             
             HANDLE output_pipe_handle = NULL;   // Child STDIN
             HANDLE input_pipe_handle = NULL;    // Child STDOUT
@@ -77,24 +75,6 @@ namespace apf {
         #endif
     };
 }
-
-
-
-
-
-/////////////////////////////////////////////////////
-// Global function definitions.
-/////////////////////////////////////////////////////
-
-inline apf::process::process() {
-
-}
-
-inline apf::process::~process() {
-
-}
-
-
 
 
 
@@ -122,21 +102,22 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     state_running = false;
     state_ended   = false;
 
+    SECURITY_ATTRIBUTES security_attributes;    // Required to allow child process to inherit pipe handles
+    STARTUPINFOA startup_info;
+    PROCESS_INFORMATION process_info;           // Holds process and thread handle
+
+    // Pipe ends that will be inherited by child process
+    HANDLE output_pipe_handle_rd;
+    HANDLE input_pipe_handle_wr;
 
 
-    SECURITY_ATTRIBUTES security_attributes;    // Atributes of child process, used to allow child to inherit pipe handles
-    
+    // Init security_attributes
     std::memset(&security_attributes, 0, sizeof(security_attributes));
     security_attributes.nLength = sizeof(security_attributes);
     security_attributes.bInheritHandle = true;  // Allow child to inherit pipe handles. 
     security_attributes.lpSecurityDescriptor = NULL;
 
 
-    // Pipe ends that will be inherited by child process
-    HANDLE output_pipe_handle_rd;
-    HANDLE input_pipe_handle_wr;
-
-    
     // Create pipes for childs STDIN and STDOUT.
     WTRY(CreatePipe(&output_pipe_handle_rd, &output_pipe_handle, &security_attributes, 0))
     WTRY(CreatePipe(&input_pipe_handle, &input_pipe_handle_wr, &security_attributes, 0))
@@ -146,9 +127,8 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     WTRY(SetHandleInformation(input_pipe_handle, HANDLE_FLAG_INHERIT, 0))
 
 
-
+    // Setup startup_info
     std::memset(&startup_info, 0, sizeof(startup_info));
-    std::memset(&process_info, 0, sizeof(process_info));
     startup_info.cb = sizeof(startup_info);
     startup_info.hStdError = input_pipe_handle_wr;
     startup_info.hStdOutput = input_pipe_handle_wr;
@@ -156,13 +136,15 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     startup_info.dwFlags |= STARTF_USESTDHANDLES;
 
 
+    // Setup process_info
+    std::memset(&process_info, 0, sizeof(process_info));
 
+
+    // Convert cmd + args to entire command.
     std::string cmd = "\"" + executable.string() + "\"";
     for (size_t i = 0; i < args.size(); i++) {
         cmd = cmd + " " + args[i].c_str();
     }
-
-    std::cout << cmd;
 
     WTRY(CreateProcessA(
         NULL,                       // No module name (use command line)
@@ -176,6 +158,11 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
         &startup_info,              // Pointer to STARTUPINFO structure
         &process_info               // Pointer to PROCESS_INFORMATION structure
     ))
+
+
+    // Copy process handles
+    process_handle = process_info.hProcess;
+    thread_handle = process_info.hThread;
 
 
     // Close unused pipe ends.
@@ -205,27 +192,27 @@ inline int apf::process::join() {
     update_state();
     if(!state_ended) {
         {
-            DWORD ret = WaitForSingleObject(process_info.hProcess, INFINITE);
+            DWORD ret = WaitForSingleObject(process_handle, INFINITE);
 
             if(ret == WAIT_OBJECT_0) {
                 state_running = false;
                 state_ended = true;
                 
                 DWORD a;
-                WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+                WTRY(GetExitCodeProcess(process_handle, &a))
                 exit_code = a;
             }
 
             else {
                 WERR
             }
-        }  
+        }
 
         state_ended = true;
         state_running = false;
 
-        WTRY(CloseHandle(process_info.hProcess));
-        WTRY(CloseHandle(process_info.hThread));
+        WTRY(CloseHandle(process_handle));
+        WTRY(CloseHandle(thread_handle));
 
         WTRY(CloseHandle(output_pipe_handle));
         WTRY(CloseHandle(input_pipe_handle));
@@ -238,7 +225,7 @@ inline int apf::process::join() {
     }
     return exit_code;
 }
-
+/*
 inline void apf::process::interrupt() {
     kill();
 }
@@ -246,11 +233,11 @@ inline void apf::process::interrupt() {
 inline void apf::process::terminate() {
     kill();
 }
-
+*/
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
-        WTRY(TerminateProcess(process_info.hProcess, 0));
+        WTRY(TerminateProcess(process_handle, 0));
     }
     if(!state_started) {
         std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
@@ -291,7 +278,7 @@ inline void apf::process::update_state() {
     
 
     {
-        DWORD ret = WaitForSingleObject(process_info.hProcess, 0);
+        DWORD ret = WaitForSingleObject(process_handle, 0);
 
         if(ret == WAIT_TIMEOUT) {
             state_running = true;
@@ -303,7 +290,7 @@ inline void apf::process::update_state() {
             state_ended = true;
             
             DWORD a;
-            WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+            WTRY(GetExitCodeProcess(process_handle, &a))
             exit_code = a;
         }
 
@@ -428,7 +415,7 @@ inline int apf::process::join() {
     }
     return exit_code;
 }
-
+/*
 inline void apf::process::interrupt() {
     update_state();
     if(!state_ended) {
@@ -450,7 +437,7 @@ inline void apf::process::terminate() {
         abort();
     }
 }
-
+*/
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
