@@ -9,9 +9,9 @@ using namespace std::chrono_literals;
 class sandbox : public apf::app {
 public:
     void start() {
-        apf::process p("notepad.exe", {});
-        std::this_thread::sleep_for(2s);
-        p.kill();
+        apf::process p("test.exe", {});
+        std::this_thread::sleep_for(1s);
+        p.send("stop\n");
         p.join();
     }
 

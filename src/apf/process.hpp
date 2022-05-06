@@ -64,7 +64,7 @@ namespace apf {
 
         #ifdef APF_WINDOWS
             STARTUPINFO startup_info;
-            PROCESS_INFORMATION process_info;
+            PROCESS_INFORMATION process_info;           // Holds child process handle
             
             HANDLE output_pipe_handle = NULL;   // Child STDIN
             HANDLE input_pipe_handle = NULL;    // Child STDOUT
@@ -122,9 +122,40 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     state_running = false;
     state_ended   = false;
 
+
+
+    SECURITY_ATTRIBUTES security_attributes;    // Atributes of child process, used to allow child to inherit pipe handles
+    
+    std::memset(&security_attributes, 0, sizeof(security_attributes));
+    security_attributes.nLength = sizeof(security_attributes);
+    security_attributes.bInheritHandle = true;  // Allow child to inherit pipe handles. 
+    security_attributes.lpSecurityDescriptor = NULL;
+
+
+    // Pipe ends that will be inherited by child process
+    HANDLE output_pipe_handle_rd;
+    HANDLE input_pipe_handle_wr;
+
+    
+    // Create pipes for childs STDIN and STDOUT.
+    WTRY(CreatePipe(&output_pipe_handle_rd, &output_pipe_handle, &security_attributes, 0))
+    WTRY(CreatePipe(&input_pipe_handle, &input_pipe_handle_wr, &security_attributes, 0))
+
+    // Ensure the right pipe ends are not inherited.
+    WTRY(SetHandleInformation(output_pipe_handle, HANDLE_FLAG_INHERIT, 0))
+    WTRY(SetHandleInformation(input_pipe_handle_wr, HANDLE_FLAG_INHERIT, 0))
+
+
+
     std::memset(&startup_info, 0, sizeof(startup_info));
     std::memset(&process_info, 0, sizeof(process_info));
     startup_info.cb = sizeof(startup_info);
+    startup_info.hStdError = input_pipe_handle_wr;
+    startup_info.hStdOutput = input_pipe_handle_wr;
+    startup_info.hStdInput = output_pipe_handle_rd;
+    startup_info.dwFlags |= STARTF_USESTDHANDLES;
+
+
 
     std::string cmd = "\"" + executable.string() + "\"";
     for (size_t i = 0; i < args.size(); i++) {
@@ -136,15 +167,21 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     WTRY(CreateProcessA(
         NULL,                       // No module name (use command line)
         (char*)cmd.c_str(),         // Command line
-        NULL,                       // Process handle not inheritable
-        NULL,                       // Thread handle not inheritable
-        FALSE,                      // Set handle inheritance to FALSE
-        0,                          // No creation flags
-        NULL,                       // Use parent's environment block
-        NULL,                       // Use parent's starting directory
+        NULL,                       // Process security attributes 
+        NULL,                       // Primary thread security attributes 
+        TRUE,                       // Handles are inherited 
+        0,                          // Creation flags 
+        NULL,                       // Use parent's environment 
+        NULL,                       // Use parent's current directory 
         &startup_info,              // Pointer to STARTUPINFO structure
         &process_info               // Pointer to PROCESS_INFORMATION structure
     ))
+
+
+    // Close unused pipe ends.
+    CloseHandle(output_pipe_handle_rd);
+    CloseHandle(input_pipe_handle_wr);
+
 
     state_started = true;
     update_state();
@@ -222,6 +259,7 @@ inline void apf::process::kill() {
 
 inline void apf::process::send(std::string str) {
     if(running()) {
+        WTRY(WriteFile(output_pipe_handle, str.c_str(), str.size(), NULL, NULL));
     }
 }
 
