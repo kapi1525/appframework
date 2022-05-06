@@ -42,9 +42,9 @@ namespace apf {
         bool finished();
 
         // Finish
-        int join();         // Wait for a process to finish (To avoid infinite loop use interrupt or other command before)
-        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process
-        void terminate();   // Sends terminate request to a process
+        int join();         // Wait for a process to finish (To avoid endless waiting use interrupt or other function before)
+        void interrupt();   // Sends keyboard interrupt (Ctrl+C) signal to a process    (Acts like kill() in Windows!)
+        void terminate();   // Sends terminate request to a process                     (Acts like kill() in Windows!)
         void kill();        // Kill a child                          (process)
 
         // Process communication
@@ -59,13 +59,26 @@ namespace apf {
         bool state_ended   = false;
         void update_state();
 
+        void process_start(std::filesystem::path executable, std::vector<std::string> args);
+
+
+        #ifdef APF_WINDOWS
+            STARTUPINFOA startup_info;
+            PROCESS_INFORMATION process_info;           // Holds child process handle
+            
+            HANDLE output_pipe_handle = NULL;   // Child STDIN
+            HANDLE input_pipe_handle = NULL;    // Child STDOUT
+        #endif
+
         #ifdef APF_POSIX
             pid_t child_pid;
-            int output_pipe_fd, input_pipe_fd;
-            void process_start(std::filesystem::path executable, std::vector<std::string> args);
+            int output_pipe_fd;                 // Child STDIN
+            int input_pipe_fd;                  // Child STDOUT
         #endif
     };
 }
+
+
 
 
 
@@ -80,6 +93,232 @@ inline apf::process::process() {
 inline apf::process::~process() {
 
 }
+
+
+
+
+
+/////////////////////////////////////////////////////
+// Function definitions for Windows.
+/////////////////////////////////////////////////////
+
+#ifdef APF_WINDOWS
+
+#define WERR std::stringstream ss; ss << __FUNCTION__ << "() inside: " << __FILE__ << ":" << __LINE__ << ". Something went wrong, error: " << GetLastError() << ".\n"; std::cerr << ss.str(); abort();
+#define WTRY(x) if(x == FALSE) { WERR }
+
+
+inline apf::process::process(std::filesystem::path executable, std::vector<std::string> args) {
+    process_start(executable, args);
+}
+
+inline apf::process::process(std::string command) {
+    process_start(command, {});
+}
+
+
+inline void apf::process::process_start(std::filesystem::path executable, std::vector<std::string> args) {
+    state_started = false;
+    state_running = false;
+    state_ended   = false;
+
+
+
+    SECURITY_ATTRIBUTES security_attributes;    // Atributes of child process, used to allow child to inherit pipe handles
+    
+    std::memset(&security_attributes, 0, sizeof(security_attributes));
+    security_attributes.nLength = sizeof(security_attributes);
+    security_attributes.bInheritHandle = true;  // Allow child to inherit pipe handles. 
+    security_attributes.lpSecurityDescriptor = NULL;
+
+
+    // Pipe ends that will be inherited by child process
+    HANDLE output_pipe_handle_rd;
+    HANDLE input_pipe_handle_wr;
+
+    
+    // Create pipes for childs STDIN and STDOUT.
+    WTRY(CreatePipe(&output_pipe_handle_rd, &output_pipe_handle, &security_attributes, 0))
+    WTRY(CreatePipe(&input_pipe_handle, &input_pipe_handle_wr, &security_attributes, 0))
+
+    // Ensure the right pipe ends are not inherited.
+    WTRY(SetHandleInformation(output_pipe_handle, HANDLE_FLAG_INHERIT, 0))
+    WTRY(SetHandleInformation(input_pipe_handle, HANDLE_FLAG_INHERIT, 0))
+
+
+
+    std::memset(&startup_info, 0, sizeof(startup_info));
+    std::memset(&process_info, 0, sizeof(process_info));
+    startup_info.cb = sizeof(startup_info);
+    startup_info.hStdError = input_pipe_handle_wr;
+    startup_info.hStdOutput = input_pipe_handle_wr;
+    startup_info.hStdInput = output_pipe_handle_rd;
+    startup_info.dwFlags |= STARTF_USESTDHANDLES;
+
+
+
+    std::string cmd = "\"" + executable.string() + "\"";
+    for (size_t i = 0; i < args.size(); i++) {
+        cmd = cmd + " " + args[i].c_str();
+    }
+
+    std::cout << cmd;
+
+    WTRY(CreateProcessA(
+        NULL,                       // No module name (use command line)
+        (char*)cmd.c_str(),         // Command line
+        NULL,                       // Process security attributes 
+        NULL,                       // Primary thread security attributes 
+        TRUE,                       // Handles are inherited 
+        0,                          // Creation flags 
+        NULL,                       // Use parent's environment 
+        NULL,                       // Use parent's current directory 
+        &startup_info,              // Pointer to STARTUPINFO structure
+        &process_info               // Pointer to PROCESS_INFORMATION structure
+    ))
+
+
+    // Close unused pipe ends.
+    WTRY(CloseHandle(output_pipe_handle_rd));
+    WTRY(CloseHandle(input_pipe_handle_wr));
+
+
+    state_started = true;
+    update_state();
+}
+
+
+
+inline bool apf::process::running() {
+    update_state();
+    return state_running;
+}
+
+inline bool apf::process::finished() {
+    update_state();
+    return state_ended;
+}
+
+
+
+inline int apf::process::join() {
+    update_state();
+    if(!state_ended) {
+        {
+            DWORD ret = WaitForSingleObject(process_info.hProcess, INFINITE);
+
+            if(ret == WAIT_OBJECT_0) {
+                state_running = false;
+                state_ended = true;
+                
+                DWORD a;
+                WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+                exit_code = a;
+            }
+
+            else {
+                WERR
+            }
+        }  
+
+        state_ended = true;
+        state_running = false;
+
+        WTRY(CloseHandle(process_info.hProcess));
+        WTRY(CloseHandle(process_info.hThread));
+
+        WTRY(CloseHandle(output_pipe_handle));
+        WTRY(CloseHandle(input_pipe_handle));
+
+        return exit_code;
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+    return exit_code;
+}
+
+inline void apf::process::interrupt() {
+    kill();
+}
+
+inline void apf::process::terminate() {
+    kill();
+}
+
+inline void apf::process::kill() {
+    update_state();
+    if(!state_ended) {
+        WTRY(TerminateProcess(process_info.hProcess, 0));
+    }
+    if(!state_started) {
+        std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
+        abort();
+    }
+}
+
+
+
+inline void apf::process::send(std::string str) {
+    if(running()) {
+        WTRY(WriteFile(output_pipe_handle, str.c_str(), (DWORD)str.size(), NULL, NULL));
+    }
+}
+
+inline std::string apf::process::get() {
+    const size_t buffer_size = 4096;
+    char buffer[buffer_size];
+    std::string str;
+    DWORD read;
+
+    while (true) {
+        if(ReadFile(input_pipe_handle, buffer, buffer_size, &read, NULL) == -1 || read == 0) {
+            break;
+        }
+        str.append(buffer);
+    }
+        
+    return str;
+}
+
+
+
+inline void apf::process::update_state() {
+    if(state_ended || !state_started) {
+        return;
+    }
+    
+
+    {
+        DWORD ret = WaitForSingleObject(process_info.hProcess, 0);
+
+        if(ret == WAIT_TIMEOUT) {
+            state_running = true;
+            state_ended = false;
+        }
+
+        else if(ret == WAIT_OBJECT_0) {
+            state_running = false;
+            state_ended = true;
+            
+            DWORD a;
+            WTRY(GetExitCodeProcess(process_info.hProcess, &a))
+            exit_code = a;
+        }
+
+        else {
+            WERR
+        }
+    }
+}
+
+#undef WERR
+#undef WTRY
+
+#endif
+
+
 
 
 
@@ -227,7 +466,7 @@ inline void apf::process::kill() {
 
 inline void apf::process::send(std::string str) {
     if(running()) {
-        write(output_pipe_fd, str.c_str(), str.size());
+        PTRY(write(output_pipe_fd, str.c_str(), str.size()));
     }
 }
 

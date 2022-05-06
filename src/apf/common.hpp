@@ -54,8 +54,8 @@
 
 // windows stuff
 #ifdef APF_WINDOWS
-    //#define WIN32_LEAN_AND_MEAN
-    //#include <windows.h>
+    #define WIN32_LEAN_AND_MEAN
+    #include <windows.h>
 
     #ifdef _MSC_VER
         #include <BaseTsd.h> // for SSIZE_T
