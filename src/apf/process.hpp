@@ -259,7 +259,7 @@ inline void apf::process::kill() {
 
 inline void apf::process::send(std::string str) {
     if(running()) {
-        WTRY(WriteFile(output_pipe_handle, str.c_str(), str.size(), NULL, NULL));
+        WTRY(WriteFile(output_pipe_handle, str.c_str(), (DWORD)str.size(), NULL, NULL));
     }
 }
 
