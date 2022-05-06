@@ -63,7 +63,7 @@ namespace apf {
 
 
         #ifdef APF_WINDOWS
-            STARTUPINFO startup_info;
+            STARTUPINFOA startup_info;
             PROCESS_INFORMATION process_info;           // Holds child process handle
             
             HANDLE output_pipe_handle = NULL;   // Child STDIN
@@ -143,7 +143,7 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
 
     // Ensure the right pipe ends are not inherited.
     WTRY(SetHandleInformation(output_pipe_handle, HANDLE_FLAG_INHERIT, 0))
-    WTRY(SetHandleInformation(input_pipe_handle_wr, HANDLE_FLAG_INHERIT, 0))
+    WTRY(SetHandleInformation(input_pipe_handle, HANDLE_FLAG_INHERIT, 0))
 
 
 
@@ -264,7 +264,20 @@ inline void apf::process::send(std::string str) {
 }
 
 inline std::string apf::process::get() {
-    return "";
+    const size_t buffer_size = 4096;
+    char buffer[buffer_size];
+    std::string str;
+    DWORD read;
+
+    while (true) {
+        WTRY(ReadFile(input_pipe_handle, buffer, buffer_size, &read, NULL));
+        if(read == 0) {
+            break;
+        }
+        str.append(buffer);
+    }
+        
+    return str;
 }
 
 

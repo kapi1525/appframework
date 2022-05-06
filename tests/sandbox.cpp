@@ -11,8 +11,8 @@ public:
     void start() {
         apf::process p("test.exe", {});
         std::this_thread::sleep_for(1s);
-        p.send("stop\n");
         p.join();
+        std::cout << "p.get(): " << p.get() << "\n";
     }
 
     int run() {
