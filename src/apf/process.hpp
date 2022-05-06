@@ -179,8 +179,8 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
 
 
     // Close unused pipe ends.
-    CloseHandle(output_pipe_handle_rd);
-    CloseHandle(input_pipe_handle_wr);
+    WTRY(CloseHandle(output_pipe_handle_rd));
+    WTRY(CloseHandle(input_pipe_handle_wr));
 
 
     state_started = true;
@@ -224,6 +224,9 @@ inline int apf::process::join() {
         state_ended = true;
         state_running = false;
 
+        WTRY(CloseHandle(output_pipe_handle));
+        WTRY(CloseHandle(input_pipe_handle));
+
         WTRY(CloseHandle(process_info.hProcess));
         WTRY(CloseHandle(process_info.hThread));
 
@@ -247,7 +250,7 @@ inline void apf::process::terminate() {
 inline void apf::process::kill() {
     update_state();
     if(!state_ended) {
-        TerminateProcess(process_info.hProcess, 0);
+        WTRY(TerminateProcess(process_info.hProcess, 0));
     }
     if(!state_started) {
         std::cerr << "You cannot call " << __FUNCTION__ << " when process is not even started yet!\n";
