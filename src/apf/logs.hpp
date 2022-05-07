@@ -18,13 +18,13 @@ namespace apf {
 
     class log {
     public:
-        static void fatal(std::string message);
-        static void error(std::string message);
-        static void warn(std::string message);
-        static void info(std::string message);
-        static void note(std::string message);
+        static void fatal(std::string_view message);
+        static void error(std::string_view message);
+        static void warn(std::string_view message);
+        static void info(std::string_view message);
+        static void note(std::string_view message);
 
-        static void custom(std::string log_label, std::string message, log_level lvl = log_level::max, rgb label_color = {255, 255, 255}, rgb label_back_color = {0, 0, 0});
+        static void custom(std::string_view log_label, std::string_view message, log_level lvl = log_level::max, rgb label_color = {255, 255, 255}, rgb label_back_color = {0, 0, 0});
 
         static void set_level(log_level lvl);
         static log_level get_level();
@@ -51,7 +51,7 @@ inline apf::log& apf::log::get() {
  * 
  * @param message 
  */
-inline void apf::log::fatal(std::string message) {
+inline void apf::log::fatal(std::string_view message) {
     custom("fatal", message, log_level::fatal, {0, 0, 0}, {255, 0, 0});
 }
 
@@ -60,7 +60,7 @@ inline void apf::log::fatal(std::string message) {
  * 
  * @param message 
  */
-inline void apf::log::error(std::string message) {
+inline void apf::log::error(std::string_view message) {
     custom("error", message, log_level::error, {255, 0, 0});
 }
 
@@ -69,7 +69,7 @@ inline void apf::log::error(std::string message) {
  * 
  * @param message 
  */
-inline void apf::log::warn(std::string message) {
+inline void apf::log::warn(std::string_view message) {
     custom("warn", message, log_level::warn, {255, 255, 0});
 }
 
@@ -78,7 +78,7 @@ inline void apf::log::warn(std::string message) {
  * 
  * @param message 
  */
-inline void apf::log::info(std::string message) {
+inline void apf::log::info(std::string_view message) {
     custom("info", message, log_level::info);
 }
 
@@ -87,7 +87,7 @@ inline void apf::log::info(std::string message) {
  * 
  * @param message 
  */
-inline void apf::log::note(std::string message) {
+inline void apf::log::note(std::string_view message) {
     custom("note", message, log_level::max);
 }
 
@@ -101,7 +101,7 @@ inline void apf::log::note(std::string message) {
  * @param label_color 
  * @param label_back_color 
  */
-inline void apf::log::custom(std::string log_label, std::string message, log_level lvl, rgb label_color, rgb label_back_color) {
+inline void apf::log::custom(std::string_view log_label, std::string_view message, log_level lvl, rgb label_color, rgb label_back_color) {
     if(get_level() < lvl) {
         return;
     }
@@ -112,12 +112,8 @@ inline void apf::log::custom(std::string log_label, std::string message, log_lev
         apf::term::back_color(label_back_color);
     }
 
-    if(message[message.size()-1] != '.') {
-        message.append(".");
-    }
 
-
-    std::printf("[%s] %s", log_label.c_str(), message.c_str());
+    std::printf("[%s] %s", log_label.data(), message.data());
     apf::term::reset();
     std::printf("\n");
 }
