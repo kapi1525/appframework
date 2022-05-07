@@ -8,12 +8,14 @@ Any modern C++17 compiler should work, but these were tested to work on github a
 - clang 13   on MacOS
 
 To compile you also need mesonbuild system, use these commands to compile:
-```shell
+
+```bash
 $ meson bin
 $ meson compile -C bin
 ```
 
 Use this command to run tests:
-```
+
+```bash
 $ meson test -C bin
 ```
