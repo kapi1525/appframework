@@ -9,10 +9,12 @@ using namespace std::chrono_literals;
 class sandbox : public apf::app {
 public:
     void start() {
-        apf::process p("test.exe", {});
-        std::this_thread::sleep_for(1s);
-        p.join();
-        std::cout << "p.get(): " << p.get() << "\n";
+        apf::log::set_level(apf::log_level::error);
+        apf::log::fatal("fghjkghj");
+        apf::log::error("fdgjghjk");
+        apf::log::warn("fdgjghjk");
+        apf::log::info("fdgjghjk");
+        apf::log::note("fdgjghjk");
     }
 
     int run() {

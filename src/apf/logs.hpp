@@ -18,8 +18,6 @@ namespace apf {
 
     class log {
     public:
-        static log& get();
-
         static void fatal(std::string message);
         static void error(std::string message);
         static void warn(std::string message);
@@ -34,9 +32,8 @@ namespace apf {
 
     private:
         log() = default;
-
-        void set_level_impl(log_level lvl);
-        log_level get_level_impl();
+        
+        static log& get();
 
         log_level level = log_level::max;
     };
@@ -136,11 +133,7 @@ inline void apf::log::custom(std::string log_label, std::string message, log_lev
  * @param lvl 
  */
 inline void apf::log::set_level(log_level lvl) {
-    get().set_level_impl(lvl);
-}
-
-inline void apf::log::set_level_impl(log_level lvl) {
-    level = lvl;
+    get().level = lvl;
 }
 
 
@@ -150,9 +143,5 @@ inline void apf::log::set_level_impl(log_level lvl) {
  * @return apf::log_level 
  */
 inline apf::log_level apf::log::get_level() {
-    return get().get_level_impl();
-}
-
-inline apf::log_level apf::log::get_level_impl() {
-    return level;
+    return get().level;
 }
