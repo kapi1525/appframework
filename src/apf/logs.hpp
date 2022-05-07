@@ -40,10 +40,6 @@ namespace apf {
 }
 
 
-
-/**
- * @brief Get log class instance.
- */
 inline apf::log& apf::log::get() {
     static apf::log instance;
     return instance;
