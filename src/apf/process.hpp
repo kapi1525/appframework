@@ -113,6 +113,7 @@ inline void apf::process::process_start(std::filesystem::path executable, std::v
     STARTUPINFOA startup_info;
     PROCESS_INFORMATION process_info;           // Holds process and thread handle
 
+
     // Pipe ends that will be inherited by child process
     HANDLE output_pipe_handle_rd;
     HANDLE input_pipe_handle_wr;
