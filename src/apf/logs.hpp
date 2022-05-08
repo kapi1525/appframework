@@ -108,7 +108,7 @@ inline void apf::log::custom(std::string_view log_label, std::string_view messag
 
     apf::term::color(label_color);
 
-    if (label_back_color.red != 0 || label_back_color.green != 0 || label_back_color.blue != 0) {
+    if(label_back_color.red != 0 || label_back_color.green != 0 || label_back_color.blue != 0) {
         apf::term::back_color(label_back_color);
     }
 
@@ -117,7 +117,6 @@ inline void apf::log::custom(std::string_view log_label, std::string_view messag
     } else {
         std::printf("[%s] %s.", log_label.data(), message.data());
     }
-
 
     apf::term::reset();
     std::printf("\n");
