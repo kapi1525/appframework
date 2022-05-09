@@ -242,22 +242,18 @@ inline void apf::term::reset() {
 /////////////////////////////
 
 inline void apf::term::color(rgb color) {
-    // std::cout << "\x1B[38;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
     std::printf("\x1B[38;2;%hhu;%hhu;%hhum", color.red, color.green, color.blue);
 }
 
 inline void apf::term::back_color(rgb color) {
-    // std::cout << "\x1B[48;2;" << static_cast<int>(color.red) << ";" << static_cast<int>(color.green) << ";" << static_cast<int>(color.blue) << "m";
     std::printf("\x1B[48;2;%hhu;%hhu;%hhum", color.red, color.green, color.blue);
 }
 
 
 inline void apf::term::default_color() {
-    // std::cout << "\x1B[39m";
     std::printf("\x1B[39m");
 }
 
 inline void apf::term::default_back_color() {
-    // std::cout << "\x1B[49m";
     std::printf("\x1B[49m");
 }
