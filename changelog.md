@@ -1,5 +1,25 @@
 ## Changes since last release:
-- Removed cross_linux_to_windows.ini cross file
+- Removed cross_linux_to_windows.ini cross file.
+- vec2_t, vec3_t, vec4_t have now new optional template argument modyfing type, by default its float.
+- i_vec2_t, i_vec3_t, i_vec4_t is now vector<int>
+- u_vec2_t, u_vec3_t, u_vec4_t is now vector<unsigned int>
+- Added new vectors:
+  - f_vec2_t
+  - f_vec3_t
+  - f_vec4_t
+  - im_vec2_t
+  - im_vec3_t
+  - im_vec4_t
+  - iz_vec2_t
+  - iz_vec3_t
+  - iz_vec4_t
+  - um_vec2_t
+  - um_vec3_t
+  - um_vec4_t
+  - uz_vec2_t
+  - uz_vec3_t
+  - uz_vec4_t
+
 
 ## v0.4.0 Changelog:
 - Added apf::process class, as name suggests it abstracts from you creating and controlling child processes using pipes.

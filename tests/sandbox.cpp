@@ -12,7 +12,7 @@ public:
         apf::log::set_level(apf::log_level::error);
         auto start = std::chrono::system_clock::now();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 10; i++) {
             apf::log::fatal("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
             apf::log::error("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
             apf::log::warn("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");

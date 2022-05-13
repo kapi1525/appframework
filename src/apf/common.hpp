@@ -58,7 +58,8 @@
     #include <windows.h>
 
     #ifdef _MSC_VER
-        #include <BaseTsd.h> // for SSIZE_T
+        #include <BaseTsd.h>        // for SSIZE_T
+        using ssize_t = SSIZE_T;    // For convenience
     #endif // _MSC_VER
 
 #endif // APF_WINDOWS
@@ -70,11 +71,9 @@
 #endif // APF_POSIX
 
 
-
 // linux stuff
 #ifdef APF_LINUX
 #endif // APF_LINUX
-
 
 
 // mac stuff
@@ -130,54 +129,66 @@ struct rgba {
 
 
 // Vector templates
-template<typename _T>
+template<typename type = float>
 struct vector2 {
-    _T x;
-    _T y;
+    type x, y;
 };
 
-template<typename _T>
+template<typename type = float>
 struct vector3 {
-    _T x;
-    _T y;
-    _T z;
+    type x, y, z;
 };
 
-template<typename _T>
+template<typename type = float>
 struct vector4 {
-    _T x;
-    _T y;
-    _T z;
-    _T w;
+    type x, y, z, w;
 };
 
 
 
 // vector types
-typedef vector2<float> vec2_t;
-typedef vector3<float> vec3_t;
-typedef vector4<float> vec4_t;
+template<typename type = float> using vec2_t = vector2<type>;
+template<typename type = float> using vec3_t = vector3<type>;
+template<typename type = float> using vec4_t = vector4<type>;
 
-typedef vector2<double> d_vec2_t;
-typedef vector3<double> d_vec3_t;
-typedef vector4<double> d_vec4_t;
 
-typedef vector2<size_t> u_vec2_t;
-typedef vector3<size_t> u_vec3_t;
-typedef vector4<size_t> u_vec4_t;
+using f_vec2_t = vector2<float>;
+using f_vec3_t = vector3<float>;
+using f_vec4_t = vector4<float>;
 
-#ifdef _MSC_VER
-    // ssize_t is non standard and it isnt defined if using MSVC.
-    // But MSVC has SSIZE_T macro so typedef that macro to ssize_t for convenience.
-    typedef SSIZE_T ssize_t;
-#endif
+using d_vec2_t = vector2<double>;
+using d_vec3_t = vector3<double>;
+using d_vec4_t = vector4<double>;
 
-typedef vector2<ssize_t> i_vec2_t;
-typedef vector3<ssize_t> i_vec3_t;
-typedef vector4<ssize_t> i_vec4_t;
 
+using i_vec2_t = vector2<int>;
+using i_vec3_t = vector3<int>;
+using i_vec4_t = vector4<int>;
+
+using im_vec2_t = vector2<intmax_t>;
+using im_vec3_t = vector3<intmax_t>;
+using im_vec4_t = vector4<intmax_t>;
+
+using iz_vec2_t = vector2<ssize_t>;
+using iz_vec3_t = vector3<ssize_t>;
+using iz_vec4_t = vector4<ssize_t>;
+
+
+using u_vec2_t = vector2<unsigned int>;
+using u_vec3_t = vector3<unsigned int>;
+using u_vec4_t = vector4<unsigned int>;
+
+using um_vec2_t = vector2<uintmax_t>;
+using um_vec3_t = vector3<uintmax_t>;
+using um_vec4_t = vector4<uintmax_t>;
+
+using uz_vec2_t = vector2<size_t>;
+using uz_vec3_t = vector3<size_t>;
+using uz_vec4_t = vector4<size_t>;
 
 
 /////////////////////////////
 // Common functions
 /////////////////////////////
+
+// Nothing ;)
