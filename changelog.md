@@ -1,5 +1,5 @@
 ## Changes since last release:
-- none
+- Removed cross_linux_to_windows.ini cross file
 
 ## v0.4.0 Changelog:
 - Added apf::process class, as name suggests it abstracts from you creating and controlling child processes using pipes.
