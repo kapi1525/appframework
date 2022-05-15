@@ -115,7 +115,7 @@ inline void apf::log::custom(std::string_view log_label, std::string_view messag
     if(message[message.size()-1] != '.') {
         std::printf("[%s] %s.", log_label.data(), message.data());
     } else {
-        std::printf("[%s] %s.", log_label.data(), message.data());
+        std::printf("[%s] %s", log_label.data(), message.data());
     }
 
     apf::term::reset();

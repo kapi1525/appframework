@@ -13,11 +13,8 @@ public:
         auto start = std::chrono::system_clock::now();
 
         for (int i = 0; i < 10; i++) {
-            apf::log::fatal("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
-            apf::log::error("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
-            apf::log::warn("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
-            apf::log::info("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
-            apf::log::note("jrfdyhojkfgojhnflkjgnhlkdjfgnhljkdfnglkhjndflkgjhnldfknghlkdnfglkhndlfkgnhljdmfn vikbjnritgbiusrbfgiubvhdrfgiuhbirjfgbh");
+            apf::log::fatal("test");
+            apf::log::error("test.");
         }
         auto end = std::chrono::system_clock::now();
 

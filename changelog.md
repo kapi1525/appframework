@@ -19,6 +19,7 @@
   - uz_vec2_t
   - uz_vec3_t
   - uz_vec4_t
+- Fixed: Dot was always added at the end of log messages, now its only added when dot is missing.
 
 
 ## v0.4.0 Changelog:
