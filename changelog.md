@@ -1,4 +1,8 @@
 ## Changes since last release:
+- None
+
+
+## v0.4.1 Changelog:
 - Removed cross_linux_to_windows.ini cross file.
 - vec2_t, vec3_t, vec4_t have now new optional template argument modyfing type, by default its float.
 - i_vec2_t, i_vec3_t, i_vec4_t is now vector<int>
