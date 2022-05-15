@@ -3,9 +3,9 @@ If you want to use this, [here](https://github.com/kapigames/apf_template) you'l
 This framework should work with Windows and any posix os aka Linux, MacOS and other unix like OS'es.
 
 Any modern C++17 compiler should work, but these were tested to work on github actions:
-- MSVC 19.31 on Windows
-- g++ 9.4    on linux
-- clang 13   on MacOS
+- MSVC  on Windows
+- g++   on linux
+- clang on MacOS
 
 To compile you also need mesonbuild system, use these commands to compile:
 
