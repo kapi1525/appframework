@@ -11,6 +11,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <deque>
 #include <thread>
 #include <chrono>
 
