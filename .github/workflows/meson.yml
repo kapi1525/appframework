@@ -45,6 +45,7 @@ jobs:
     - uses: actions/setup-python@v3
       with:
         cache: 'pip'
+        python-version: '3.x'
 
     - name: Install meson
       run: pip install meson ninja -r requirements.txt
