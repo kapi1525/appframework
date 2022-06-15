@@ -250,7 +250,7 @@ inline void apf::process::kill() {
 
 inline void apf::process::send(std::string_view sv) {
     if(running()) {
-        WTRY(WriteFile(output_pipe_handle, sv.data(), (DWORD)str.size(), NULL, NULL));
+        WTRY(WriteFile(output_pipe_handle, sv.data(), (DWORD)sv.size(), NULL, NULL));
     }
 }
 
