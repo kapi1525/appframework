@@ -58,11 +58,8 @@ namespace apf {
             void send(std::string str);
             std::string get();
         #else
-            // Experiments
             void send(std::string_view sv); // Send string to process STDIN
             std::string get();              // Read process STDOUT
-            std::string getln();            // Read line from process STDOUT
-            std::string getlnw();           // Read line from process STDOUT or wait if theres nothing to read
         #endif
 
     private:
