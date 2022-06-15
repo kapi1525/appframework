@@ -37,6 +37,7 @@ namespace apf {
         process(std::filesystem::path executable, std::vector<std::string> args);
         process(std::string command);
 
+
         // State
         bool running();
         bool finished();

@@ -10,8 +10,9 @@ class sandbox : public apf::app {
 public:
     void start() {
         apf::process p("./test.sh");
-        std::cout << "exit code: " << p.join() << "\n";
-        std::cout << p.get() << "\n";
+        std::this_thread::sleep_for(1s);
+        std::cout << p.get() << std::endl;
+        std::cout << "exit code: " << p.join() << std::endl;
     }
 
     int run() {
