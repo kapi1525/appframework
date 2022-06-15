@@ -54,13 +54,8 @@ namespace apf {
         #endif
 
         // Process communication
-        #ifndef APF_POSIX
-            void send(std::string str);
-            std::string get();
-        #else
-            void send(std::string_view sv); // Send string to process STDIN
-            std::string get();              // Read process STDOUT
-        #endif
+        void send(std::string_view sv); // Send string to process STDIN
+        std::string get();              // Read process STDOUT
 
     private:
         int exit_code = 0;
@@ -253,9 +248,9 @@ inline void apf::process::kill() {
 
 
 
-inline void apf::process::send(std::string str) {
+inline void apf::process::send(std::string_view sv) {
     if(running()) {
-        WTRY(WriteFile(output_pipe_handle, str.c_str(), (DWORD)str.size(), NULL, NULL));
+        WTRY(WriteFile(output_pipe_handle, sv.data(), (DWORD)str.size(), NULL, NULL));
     }
 }
 
