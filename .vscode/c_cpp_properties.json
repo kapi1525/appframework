@@ -1,17 +1,15 @@
 {
     "configurations": [
         {
-            "name": "Win32",
-            "cStandard": "c17",
+            "name": "debug",
+            "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-gcc-x64",
             "compileCommands": "./${config:mesonbuild.buildFolder}/compile_commands.json"
         },
         {
-            "name": "Linux",
-            "cStandard": "c17",
+            "name": "release",
+            "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "linux-gcc-x64",
             "compileCommands": "./${config:mesonbuild.buildFolder}/compile_commands.json"
         }
     ],
