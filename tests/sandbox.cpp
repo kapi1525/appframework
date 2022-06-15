@@ -9,18 +9,9 @@ using namespace std::chrono_literals;
 class sandbox : public apf::app {
 public:
     void start() {
-        apf::log::set_level(apf::log_level::error);
-        auto start = std::chrono::system_clock::now();
-
-        for (int i = 0; i < 10; i++) {
-            apf::log::fatal("test");
-            apf::log::error("test.");
-        }
-        auto end = std::chrono::system_clock::now();
-
-        std::chrono::duration<double> diff = end - start;
-
-        std::cout << "\n\nThis took " << diff.count() << "s\n";
+        apf::process p("./test.sh");
+        std::cout << "exit code: " << p.join() << "\n";
+        std::cout << p.get() << "\n";
     }
 
     int run() {

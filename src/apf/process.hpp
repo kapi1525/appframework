@@ -47,14 +47,22 @@ namespace apf {
 
 
         #ifdef APF_POSIX
-            void send_signal(int sig);  // Send signal to process (only LINUX and other posix OS'es)
+            void send_signal(int sig);           // Send signal to a process
         #else
             void send_signal(int sig) = delete;  // posix and linux exclusive :)
         #endif
 
         // Process communication
-        void send(std::string str);
-        std::string get();
+        #ifndef APF_POSIX
+            void send(std::string str);
+            std::string get();
+        #else
+            // Experiments
+            void send(std::string_view sv); // Send string to process STDIN
+            std::string get();              // Read process STDOUT
+            std::string getln();            // Read line from process STDOUT
+            std::string getlnw();           // Read line from process STDOUT or wait if theres nothing to read
+        #endif
 
     private:
         int exit_code = 0;
@@ -254,7 +262,7 @@ inline void apf::process::send(std::string str) {
 }
 
 inline std::string apf::process::get() {
-    const size_t buffer_size = 4096;
+    const size_t buffer_size = 1024;
     char buffer[buffer_size];
     std::string str;
     DWORD read;
@@ -429,21 +437,20 @@ inline void apf::process::kill() {
 
 
 
-inline void apf::process::send(std::string str) {
+inline void apf::process::send(std::string_view str) {
     if(running()) {
-        PTRY(write(output_pipe_fd, str.c_str(), str.size()));
+        PTRY(write(output_pipe_fd, str.data(), str.size()));
     }
 }
 
 inline std::string apf::process::get() {
-    const size_t buffer_size = 1000000;     // FIXME: Dont create ~1MB buffer for read(), btw 10MB buffer segfaults lol.
+    const int buffer_size = 1024;
     char buffer[buffer_size];
     std::string str;
 
-
     while (true) {
-        memset(buffer, 0, buffer_size);
-        int result = read(input_pipe_fd, buffer, buffer_size);
+        std::memset(buffer, 0, buffer_size);
+        int result = read(input_pipe_fd, &buffer, buffer_size);
 
         if (result == -1 && errno != EAGAIN) {
             PTRY(-1);
@@ -453,7 +460,12 @@ inline std::string apf::process::get() {
             break;
         }
 
-        str.append(buffer);
+        str.append(buffer, result);
+
+        // One syscall less
+        if (result != buffer_size) {
+            break;
+        }
     }
 
     return str;
