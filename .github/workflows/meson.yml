@@ -42,7 +42,7 @@ jobs:
       with:
         key: ${{ matrix.os }}-${{ matrix.target-arch }}
     
-    - uses: actions/setup-python@v3
+    - uses: actions/setup-python@v4
       with:
         cache: 'pip'
         python-version: '3.x'
