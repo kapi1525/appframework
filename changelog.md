@@ -1,4 +1,8 @@
 ## Changes since last release:
+- None
+
+
+## v0.4.2 Changelog:
 - Updated meson.build to allow `dependency('appframework')` in projects using apf.
 - Updated requirements.txt
 - Added `#include <deque>` inside apf/common.hpp
