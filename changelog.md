@@ -1,5 +1,11 @@
 ## Changes since last release:
-- None
+- Updated meson.build to allow `dependency('appframework')` in projects using apf.
+- Updated requirements.txt
+- Added `#include <deque>` inside apf/common.hpp
+- Updated comments in apf/process.hpp
+- `apf::process::send()` now uses std::stringview instead of std::string for better performance.
+- Fixed: `apf::process::get()` isnt allocating ~1MB on stack to read processes STDOUT on linux anymore.
+- Buffer in `apf::process::get()` on windows for reading processes STDOUT is now smaller.
 
 
 ## v0.4.1 Changelog:
