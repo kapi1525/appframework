@@ -4,6 +4,8 @@
 // Terminal functions are inline so their definitions are at the bottom of this file.
 
 #include "common.hpp"
+#include "color.hpp"
+#include "vector.hpp"
 
 
 

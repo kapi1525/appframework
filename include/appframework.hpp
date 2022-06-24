@@ -5,6 +5,7 @@
 
 #include "apf/common.hpp"
 #include "apf/args.hpp"
+#include "apf/version.hpp"
 
 
 
