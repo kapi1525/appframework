@@ -12,7 +12,7 @@ files = files(
 )
 
 includes = include_directories(
-  'src'
+  'include'
 )
 
 deps = [
