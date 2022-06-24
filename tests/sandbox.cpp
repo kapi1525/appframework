@@ -26,7 +26,7 @@ public:
 
 
 private:
-    version sandbox_version = {1,2,3};
+    apf::version sandbox_version = {1,2,3};
 };
 
 

@@ -1,5 +1,8 @@
 #pragma once
 #include "common.hpp"
+#include <sstream>
+#include <filesystem>
+#include <vector>
 #include <cstdio>
 #include <cstring>
 

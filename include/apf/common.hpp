@@ -1,23 +1,5 @@
 #pragma once
-// This header contains includes used by rest of appframework
-
-
-
-// TODO: Remove all includes
-// Standard C++ stuff
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <filesystem>
-#include <string>
-#include <string_view>
-#include <vector>
-#include <deque>
-#include <thread>
-#include <chrono>
-
-// Standard C stuff
-#include <cassert>
+// This header contains macros used by rest of apf
 
 
 

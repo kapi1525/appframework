@@ -3,6 +3,8 @@
 // This header contains declarations for terminal and loggin functions.
 // Terminal functions are inline so their definitions are at the bottom of this file.
 
+#include <iostream>
+
 #include "common.hpp"
 #include "color.hpp"
 #include "vector.hpp"
@@ -75,7 +77,7 @@ namespace apf::term {
 /////////////////////////////
 
 // TODO: apf::term::cursor::get_pos()
-inline u_vec2_t apf::term::cursor::get_pos() {
+inline apf::u_vec2_t apf::term::cursor::get_pos() {
     return {0,0};
 }
 

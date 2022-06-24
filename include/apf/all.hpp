@@ -8,3 +8,7 @@
 #include "logs.hpp"
 #include "process.hpp"
 #include "tree.hpp"
+
+#include "color.hpp"
+#include "version.hpp"
+#include "vector.hpp"
