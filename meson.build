@@ -8,7 +8,7 @@ project(
 
 
 files = files(
-
+  'src/logs.cpp'
 )
 
 includes = include_directories(
@@ -23,7 +23,7 @@ deps = [
 apf_dep = declare_dependency(
   dependencies: deps,
   include_directories: includes,
-  # sources: files
+  sources: files
 )
 
 

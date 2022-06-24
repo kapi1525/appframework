@@ -41,25 +41,9 @@
     #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 
-    #ifdef _MSC_VER
+    #ifdef APF_MSVC
         #include <BaseTsd.h>        // for SSIZE_T
         using ssize_t = SSIZE_T;    // For convenience
-    #endif // _MSC_VER
+    #endif // APF_MSVC
 
 #endif // APF_WINDOWS
-
-
-
-// posix stuff
-#ifdef APF_POSIX
-#endif // APF_POSIX
-
-
-// linux stuff
-#ifdef APF_LINUX
-#endif // APF_LINUX
-
-
-// mac stuff
-#ifdef APF_MAC
-#endif // APF_MAC
