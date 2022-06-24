@@ -1,5 +1,9 @@
 ## Changes since last release:
-- None
+- Removed `apf/file.hpp`
+- `apf/common.hpp` doesnt include random useless C and C++ headers, required headers are included in other apf headers that actualy need them.
+- Moved everything from `src` to `include`, src will be for .cpp files.
+- Moved `apf::log` class implementation from `logs.hpp` to `logs.cpp` to marginaly improve compile times.
+- Moved structures like version from `common.hpp` to other separate headers and they are now part of apf namespace.
 
 
 ## v0.4.2 Changelog:
