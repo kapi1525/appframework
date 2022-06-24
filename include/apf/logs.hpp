@@ -22,7 +22,7 @@ namespace apf {
         static void info(std::string_view message);
         static void note(std::string_view message);
 
-        static void custom(std::string_view log_label, std::string_view message, log_level lvl = log_level::max, apf::rgb label_color = apf::color::white, apf::rgb label_back_color = apf::color::black);
+        static void custom(std::string_view log_label, std::string_view message, log_level lvl = log_level::max, apf::rgb label_color = {255, 255, 255}, apf::rgb label_back_color = {0, 0, 0});
 
         static void set_level(log_level lvl);
         static log_level get_level();

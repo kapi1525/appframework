@@ -23,18 +23,6 @@ namespace apf {
         uint8_t green;
         uint8_t blue;
         uint8_t alpha;
-    };
-
-
-    namespace color {
-
-        static rgb black    = {  0,   0,   0};
-        static rgb white    = {255, 255, 255};
-
-        static rgb red      = {255,   0,   0};
-        static rgb green    = {  0, 255,   0};
-        static rgb blue     = {  0,   0, 255};
-        static rgb yellow   = {255, 255,   0};
-    }
+    };   
 
 }
