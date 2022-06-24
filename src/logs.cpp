@@ -14,7 +14,7 @@ apf::log& apf::log::get() {
  * @param message 
  */
 void apf::log::fatal(std::string_view message) {
-    custom("fatal", message, log_level::fatal, {0, 0, 0}, {255, 0, 0});
+    custom("fatal", message, log_level::fatal, apf::color::black, apf::color::red);
 }
 
 /**
@@ -23,7 +23,7 @@ void apf::log::fatal(std::string_view message) {
  * @param message 
  */
 void apf::log::error(std::string_view message) {
-    custom("error", message, log_level::error, {255, 0, 0});
+    custom("error", message, log_level::error, apf::color::red);
 }
 
 /**
@@ -32,7 +32,7 @@ void apf::log::error(std::string_view message) {
  * @param message 
  */
 void apf::log::warn(std::string_view message) {
-    custom("warn", message, log_level::warn, {255, 255, 0});
+    custom("warn", message, log_level::warn, apf::color::yellow);
 }
 
 /**
