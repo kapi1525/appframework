@@ -49,15 +49,6 @@ if not meson.is_subproject()
 
 
   test(
-    'files',
-    executable(
-      'test_files',
-      files('tests/files/test.cpp'),
-      dependencies: apf_dep
-    )
-  )
-  
-  test(
     'tree',
     executable(
       'test_tree',

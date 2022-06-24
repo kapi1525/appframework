@@ -4,7 +4,6 @@
 #include "../appframework.hpp"
 
 #include "args.hpp"
-#include "file.hpp"
 #include "term.hpp"
 #include "logs.hpp"
 #include "process.hpp"
