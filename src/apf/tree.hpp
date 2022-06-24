@@ -1,8 +1,6 @@
 #pragma once
 #include <deque>
-#include <memory>       // Wow clangd is 100000x better than vscode intelisense, it even added this header for me lol.
-#include "common.hpp"
-
+#include <memory>
 
 
 
