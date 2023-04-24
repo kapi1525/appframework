@@ -34,7 +34,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - uses: ilammy/msvc-dev-cmd@v1.12.0
+    - uses: ilammy/msvc-dev-cmd@v1.12.1
       if: matrix.os-fancy-name == 'windows'
     
     - uses: hendrikmuhs/ccache-action@v1
